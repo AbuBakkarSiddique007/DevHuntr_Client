@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { fetcher } from "@/lib/fetcher";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://devhuntrserver.onrender.com/api/v1";
 
 export type Role = "USER" | "MODERATOR" | "ADMIN";
 
@@ -32,13 +32,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const checkSession = async () => {
     setIsLoading(true);
     try {
-      const response = await fetcher("/users/me");
+      const res = await fetch(`${API_BASE}/users/me`, {
+        method: "GET",
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const response = await res.json();
       setUser(response.data || response.user || response);
 
-    } catch (error) {
+    } catch {
       console.log("No active logged-in session.");
       setUser(null);
-      
+
     } finally {
       setIsLoading(false);
     }
@@ -50,7 +55,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     try {
-      await fetcher("/auth/logout", { method: "POST" });
+      await fetch(`${API_BASE}/auth/logout`, { method: "POST", credentials: "include" });
     } catch (err) {
       console.warn("Logout request failed, clearing local state anyway.", err);
     }

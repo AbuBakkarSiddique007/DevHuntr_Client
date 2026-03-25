@@ -1,0 +1,89 @@
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://devhuntrserver.onrender.com/api/v1";
+
+export interface Tag {
+  id: string;
+  name: string;
+}
+
+export interface ProductTag {
+  id: string;
+  tagId: string;
+  productId: string;
+  tag: Tag;
+}
+
+export interface Product {
+  id: string;
+  name: string;
+  image: string;
+  description: string;
+  externalLink?: string;
+  upvoteCount: number;
+  downvoteCount: number;
+  status: "PENDING" | "ACCEPTED" | "REJECTED";
+  isFeatured: boolean;
+  tags?: ProductTag[];
+}
+
+export const ProductService = {
+
+  getProducts: async ({ page = 1, limit = 10, search = "", tag = "" } = {}) => {
+    let url = `${API_BASE}/products?page=${page}&limit=${limit}`;
+
+    if (search) url += `&search=${encodeURIComponent(search)}`;
+
+    if (tag) url += `&tag=${encodeURIComponent(tag)}`;
+
+    const res = await fetch(url, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
+    }
+    return res.json();
+  },
+
+
+  getProductById: async (id: string) => {
+    const res = await fetch(`${API_BASE}/products/${id}`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
+    }
+    return res.json();
+  },
+
+  getFeaturedProducts: async () => {
+    const res = await fetch(`${API_BASE}/products/featured`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
+    }
+    return res.json();
+  },
+
+  getTrendingProducts: async () => {
+    const res = await fetch(`${API_BASE}/products/trending`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
+    }
+    return res.json();
+    
+  },
+};

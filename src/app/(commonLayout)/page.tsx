@@ -1,6 +1,8 @@
 import Link from "next/link";
-import { Ghost, ArrowRight, Sparkles, Zap, Shield, Search } from "lucide-react";
+import { ArrowRight, Sparkles, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { TrendingGrid } from "./_components/TrendingGrid";
+import { FeaturedGrid } from "./_components/FeaturedGrid";
 
 export default function HomePage() {
   return (
@@ -49,6 +51,8 @@ export default function HomePage() {
         </div>
       </section>
 
+      <FeaturedGrid />
+
       <section className="py-20 bg-black/50 border-y border-border/30 relative z-10">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between mb-12">
@@ -64,29 +68,7 @@ export default function HomePage() {
           </div>
 
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="group relative rounded-2xl border border-border/50 bg-background/50 p-6 hover:shadow-2xl hover:shadow-purple-500/10 hover:border-purple-500/30 transition-all duration-300">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center border border-white/10 group-hover:scale-110 transition-transform">
-                    <Ghost className="h-6 w-6 text-purple-400" />
-                  </div>
-                  <div className="flex flex-col items-center bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-purple-500/20 hover:border-purple-500/50 transition-colors">
-                    <span className="text-xs font-semibold text-purple-200">▲</span>
-                    <span className="text-sm font-bold text-white">12{i}</span>
-                  </div>
-                </div>
-                <h3 className="text-xl font-bold mb-2 group-hover:text-purple-400 transition-colors">Project Name {i}</h3>
-                <p className="text-muted-foreground text-sm line-clamp-2 mb-4">
-                  An incredible AI-powered application that seamlessly integrates with your workflow to boost productivity 10x.
-                </p>
-                <div className="flex gap-2">
-                  <span className="text-xs px-2 py-1 rounded-md bg-white/5 border border-white/10 text-muted-foreground">#AI</span>
-                  <span className="text-xs px-2 py-1 rounded-md bg-white/5 border border-white/10 text-muted-foreground">#Productivity</span>
-                </div>
-              </div>
-            ))}
-          </div>
+          <TrendingGrid />
         </div>
       </section>
 
