@@ -86,4 +86,28 @@ export const ProductService = {
     return res.json();
     
   },
+
+  createProduct: async (payload: {
+    name: string;
+    image: string;
+    description: string;
+    externalLink: string;
+    tagIds?: string[];
+  }) => {
+    const res = await fetch(`${API_BASE}/products`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
+    }
+
+    return res.json();
+  },
 };
