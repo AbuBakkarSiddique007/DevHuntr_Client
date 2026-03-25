@@ -1,0 +1,73 @@
+"use client";
+
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { fetcher } from "@/lib/fetcher";
+
+export type Role = "USER" | "MODERATOR" | "ADMIN";
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: Role;
+  photoUrl?: string;
+  isSubscribed: boolean;
+  createdAt: string;
+}
+
+interface AuthContextType {
+  user: User | null;
+  isLoading: boolean;
+  setUser: (user: User | null) => void;
+  logout: () => Promise<void>;
+  checkSession: () => Promise<void>;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const checkSession = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetcher("/users/me");
+      setUser(response.data || response.user || response);
+
+    } catch (error) {
+      console.log("No active logged-in session.");
+      setUser(null);
+      
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    checkSession();
+  }, []);
+
+  const logout = async () => {
+    try {
+      await fetcher("/auth/logout", { method: "POST" });
+    } catch (err) {
+      console.warn("Logout request failed, clearing local state anyway.", err);
+    }
+    setUser(null);
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, isLoading, setUser, logout, checkSession }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+}
