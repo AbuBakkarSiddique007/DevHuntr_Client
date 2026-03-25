@@ -34,11 +34,11 @@ export default function LaunchProductPage() {
           <Sparkles className="h-4 w-4" />
           <span>Showcase your creation</span>
         </div>
-        
+
         <h1 className="text-5xl md:text-6xl font-black tracking-tight bg-clip-text text-transparent bg-linear-to-b from-white to-white/60">
           Launch your project
         </h1>
-        
+
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           Share your innovation with the community and get the recognition it deserves.
         </p>
@@ -48,18 +48,18 @@ export default function LaunchProductPage() {
 
         <div className="absolute -top-24 -left-24 w-64 h-64 bg-purple-500/10 rounded-full blur-[100px] -z-10 animate-pulse"></div>
         <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-indigo-500/10 rounded-full blur-[100px] -z-10 animate-pulse delay-700"></div>
-        
+
         <ProductForm />
       </div>
 
       <div className="mt-20 p-8 glass rounded-[2rem] text-center border-white/5">
         <h2 className="text-xl font-bold mb-4 flex items-center justify-center gap-2">
-            <Rocket className="h-5 w-5 text-purple-400" />
-            What happens after I launch?
+          <Rocket className="h-5 w-5 text-purple-400" />
+          What happens after I launch?
         </h2>
         <p className="text-muted-foreground max-w-xl mx-auto leading-relaxed">
-            Your product will be reviewed by our moderators. Once accepted, it will appear on the 
-            <span className="text-foreground animate-pulse font-medium"> New Products</span> list and can be featured or trend based on community votes!
+          Your product will be reviewed by our moderators. Once accepted, it will appear on the
+          <span className="text-foreground animate-pulse font-medium"> New Products</span> list and can be featured or trend based on community votes!
         </p>
       </div>
     </div>

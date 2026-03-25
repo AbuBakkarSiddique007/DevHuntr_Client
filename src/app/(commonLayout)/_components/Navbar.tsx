@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
-import { Ghost, LogOut, Menu, UserCircle } from "lucide-react";
+import { Ghost, LogOut, Menu, UserCircle, LayoutDashboard, ChevronDown } from "lucide-react";
 import { useState } from "react";
 
 export function Navbar() {
   const { user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-background/70 backdrop-blur-xl supports-backdrop-filter:bg-background/40 transition-all duration-300">
@@ -37,21 +38,53 @@ export function Navbar() {
         {/* AUTH ACTIONS */}
         <div className="hidden md:flex items-center gap-4">
           {user ? (
-            <div className="flex items-center gap-4">
+            <>
               <Link href="/products/launch">
                 <Button size="sm" className="hidden lg:flex rounded-full bg-linear-to-r from-purple-600 to-pink-600 hover:opacity-90 shadow-lg shadow-purple-500/25 border-none transition-all hover:-translate-y-0.5">
                   Launch App
                 </Button>
               </Link>
-              <Link href="/dashboard" className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors group">
-                <UserCircle className="h-5 w-5 group-hover:text-purple-500 transition-colors" />
-                <span>{user.name}</span>
-              </Link>
-              <Button onClick={() => logout()} variant="outline" size="sm" className="rounded-full border-white/20 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30 transition-all">
-                <LogOut className="h-4 w-4 mr-2" />
-                Logout
-              </Button>
-            </div>
+
+              {/* USER DROPDOWN */}
+              <div className="relative">
+                <button
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  onBlur={() => setTimeout(() => setIsUserMenuOpen(false), 200)}
+                  className="flex items-center gap-2 p-1 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all group"
+                >
+                  {user?.photoUrl ? (
+                    <img src={user.photoUrl} alt={user?.name || "User"} className="h-8 w-8 rounded-full object-cover border border-white/10" />
+                  ) : (
+                    <div className="h-8 w-8 rounded-full bg-linear-to-br from-purple-500/20 to-indigo-500/20 flex items-center justify-center border border-white/10">
+                      <UserCircle className="h-5 w-5 text-purple-400" />
+                    </div>
+                  )}
+                  <ChevronDown className={`h-4 w-4 text-muted-foreground group-hover:text-foreground transition-transform duration-300 ${isUserMenuOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {isUserMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-background/95 backdrop-blur-2xl border border-white/10 shadow-2xl p-2 animate-in fade-in zoom-in-95 duration-200">
+                    <div className="px-3 py-2 border-b border-white/5 mb-1">
+                      <p className="text-xs font-semibold text-purple-400 uppercase tracking-wider">{user?.role} Console</p>
+                      <p className="text-sm font-bold truncate">{user?.name}</p>
+                    </div>
+
+                    <Link href="/dashboard" className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors group">
+                      <LayoutDashboard className="h-4 w-4 group-hover:text-purple-500 transition-colors" />
+                      Dashboard
+                    </Link>
+
+                    <button
+                      onClick={() => logout()}
+                      className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors group"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            </>
           ) : (
             <>
               <Link href="/login">
@@ -83,11 +116,18 @@ export function Navbar() {
           <div className="h-px bg-border my-2" />
           {user ? (
             <>
-              <Link href="/products/launch" className="px-4 py-2 font-medium bg-linear-to-r from-purple-600 to-pink-600 rounded-lg text-white text-center">Launch App</Link>
-              <Link href="/dashboard" className="px-4 py-2 font-medium hover:bg-white/5 rounded-lg transition-colors">Dashboard</Link>
-              <Button onClick={() => logout()} variant="destructive" className="w-full justify-start mt-2">
+              <Link href="/products/launch" className="px-4 py-2 font-medium bg-linear-to-r from-purple-600 to-pink-600 rounded-lg text-white text-center shadow-lg shadow-purple-500/20">Launch App</Link>
+              <Link href="/dashboard" className="flex items-center gap-3 px-4 py-3 font-medium hover:bg-white/5 rounded-xl transition-colors group">
+                <LayoutDashboard className="h-5 w-5 text-purple-400" />
+                Dashboard
+              </Link>
+              <button
+                onClick={() => logout()}
+                className="flex items-center gap-3 w-full px-4 py-3 font-medium text-destructive hover:bg-destructive/10 rounded-xl transition-colors"
+              >
+                <LogOut className="h-5 w-5" />
                 Logout
-              </Button>
+              </button>
             </>
           ) : (
             <div className="flex flex-col gap-2">

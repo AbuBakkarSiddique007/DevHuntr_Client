@@ -12,11 +12,9 @@ export function FeaturedGrid() {
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        const res = await ProductService.getFeaturedProducts();
-
-        const extractedData = res?.data?.data || res?.data || res;
-
-        setProducts(Array.isArray(extractedData) ? extractedData : []);
+        const response = await ProductService.getFeaturedProducts();
+        const productsData = response?.data?.products || [];
+        setProducts(Array.isArray(productsData) ? productsData : []);
       } catch (err) {
         console.error("Failed to fetch featured products", err);
       } finally {
@@ -67,7 +65,7 @@ export function FeaturedGrid() {
                 {product.image ? (
                   <img src={product.image} alt={product.name} className="h-16 w-16 rounded-2xl object-cover border border-white/10 group-hover:scale-105 transition-transform shadow-lg" />
                 ) : (
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-yellow-500/20 to-orange-500/20 flex items-center justify-center border border-white/10 group-hover:scale-105 transition-transform shadow-lg">
+                  <div className="h-16 w-16 rounded-2xl bg-linear-to-br from-yellow-500/20 to-orange-500/20 flex items-center justify-center border border-white/10 group-hover:scale-105 transition-transform shadow-lg">
                     <Ghost className="h-8 w-8 text-yellow-500" />
                   </div>
                 )}

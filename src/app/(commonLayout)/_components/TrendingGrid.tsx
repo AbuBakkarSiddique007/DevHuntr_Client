@@ -12,11 +12,9 @@ export function TrendingGrid() {
   useEffect(() => {
     const fetchTrending = async () => {
       try {
-        const res = await ProductService.getTrendingProducts();
-
-        const extractedData = res?.data?.data || res?.data || res;
-
-        setProducts(Array.isArray(extractedData) ? extractedData : []);
+        const response = await ProductService.getTrendingProducts();
+        const productsData = response?.data?.products || [];
+        setProducts(Array.isArray(productsData) ? productsData : []);
 
       } catch (err) {
         console.error("Failed to fetch trending products", err);
@@ -46,7 +44,7 @@ export function TrendingGrid() {
             {product.image ? (
               <img src={product.image} alt={product.name} className="h-14 w-14 rounded-2xl object-cover border border-white/10 group-hover:scale-105 transition-transform" />
             ) : (
-              <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center border border-white/10 group-hover:scale-105 transition-transform">
+              <div className="h-14 w-14 rounded-2xl bg-linear-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center border border-white/10 group-hover:scale-105 transition-transform">
                 <Ghost className="h-6 w-6 text-purple-400" />
               </div>
             )}
@@ -57,7 +55,7 @@ export function TrendingGrid() {
           </div>
 
           <h3 className="text-xl font-bold mb-2 group-hover:text-purple-400 transition-colors line-clamp-1">{product.name}</h3>
-          <p className="text-muted-foreground text-sm line-clamp-2 mb-4 flex-grow">
+          <p className="text-muted-foreground text-sm line-clamp-2 mb-4 grow">
             {product.description}
           </p>
 
