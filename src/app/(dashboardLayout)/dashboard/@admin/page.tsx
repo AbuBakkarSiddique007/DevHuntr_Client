@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import {
    Users,
    Package,
@@ -9,8 +8,6 @@ import {
    Zap,
    TrendingUp,
    Globe,
-   Database,
-   ArrowRight,
    ShieldAlert
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -24,7 +21,7 @@ export default function AdminDashboard() {
    ];
 
    return (
-      <div className="space-y-8 max-w-6xl mx-auto shadow-2xl p-6 bg-white/[0.01] rounded-3xl border border-white/5 animate-in fade-in duration-700">
+      <div className="space-y-8 max-w-6xl mx-auto shadow-2xl p-6 bg-white/1 rounded-3xl border border-white/5 animate-in fade-in duration-700">
          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
                <h1 className="text-3xl font-extrabold tracking-tight flex items-center gap-3">
@@ -36,8 +33,8 @@ export default function AdminDashboard() {
          </div>
 
          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {stats.map((stat, i) => (
-               <div key={i} className="p-6 rounded-2xl border border-white/5 bg-white/[0.02] backdrop-blur-sm hover:bg-white/[0.04] transition-all group">
+            {stats.map((stat) => (
+               <div key={stat.title} className="p-6 rounded-2xl border border-white/5 bg-white/2 backdrop-blur-sm hover:bg-white/4 transition-all group">
                   <div className="p-3 w-fit rounded-xl bg-white/5 group-hover:bg-blue-500/10 transition-colors mb-4">
                      <stat.Icon className="h-5 w-5 text-blue-400" />
                   </div>
@@ -49,7 +46,7 @@ export default function AdminDashboard() {
 
          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-8">
-               <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-8 shadow-2xl relative overflow-hidden group">
+               <div className="rounded-2xl border border-white/5 bg-white/2 p-8 shadow-2xl relative overflow-hidden group">
                   <div className="flex items-start justify-between mb-10">
                      <div>
                         <h3 className="text-2xl font-bold mb-2 text-foreground">Platform Performance</h3>
@@ -86,7 +83,7 @@ export default function AdminDashboard() {
                </div>
             </div>
 
-            <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-6 backdrop-blur-sm h-fit">
+            <div className="rounded-2xl border border-white/5 bg-white/2 p-6 backdrop-blur-sm h-fit">
                <h3 className="text-lg font-bold mb-6 flex items-center justify-between">
                   Audit logs
                   <ShieldAlert className="h-5 w-5 text-red-500" />

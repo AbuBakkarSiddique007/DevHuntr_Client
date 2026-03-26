@@ -1,10 +1,9 @@
 "use client";
 
-import React from "react";
-import { 
-  ClipboardCheck, 
-  Hourglass, 
-  ShieldCheck, 
+import {
+  ClipboardCheck,
+  Hourglass,
+  ShieldCheck,
   AlertCircle,
   Clock,
   ArrowRight,
@@ -28,7 +27,7 @@ export default function ModeratorDashboard() {
   ];
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto shadow-2xl p-4 bg-white/[0.01] rounded-3xl border border-white/5 animate-in fade-in duration-700">
+    <div className="space-y-8 max-w-6xl mx-auto shadow-2xl p-4 bg-white/1 rounded-3xl border border-white/5 animate-in fade-in duration-700">
       <div>
         <h1 className="text-3xl font-extrabold tracking-tight">Review Console</h1>
         <p className="text-muted-foreground mt-1 text-lg">Evaluate new submissions and maintain platform code quality standards.</p>
@@ -36,7 +35,7 @@ export default function ModeratorDashboard() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, i) => (
-          <div key={i} className="p-6 rounded-2xl border border-white/5 bg-white/[0.02] backdrop-blur-sm hover:bg-white/[0.04] transition-all group">
+          <div key={i} className="p-6 rounded-2xl border border-white/5 bg-white/2 backdrop-blur-sm hover:bg-white/4 transition-all group">
             <div className="p-3 w-fit rounded-xl bg-white/5 group-hover:bg-purple-500/10 transition-colors mb-4">
               <stat.Icon className="h-5 w-5 text-purple-400" />
             </div>
@@ -46,7 +45,7 @@ export default function ModeratorDashboard() {
         ))}
       </div>
 
-      <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-6 backdrop-blur-sm">
+      <div className="rounded-2xl border border-white/5 bg-white/2 p-6 backdrop-blur-sm">
         <h3 className="text-xl font-bold mb-8">Priority Review Queue</h3>
         <div className="overflow-x-auto">
           <table className="w-full text-left">
@@ -59,7 +58,7 @@ export default function ModeratorDashboard() {
             </thead>
             <tbody className="divide-y divide-white/5">
               {reviewQueue.map((item, i) => (
-                <tr key={i} className="group hover:bg-white/[0.01] transition-colors">
+                <tr key={i} className="group hover:bg-white/1 transition-colors">
                   <td className="py-4">
                     <span className="font-bold text-foreground group-hover:text-purple-400 transition-colors">{item.name}</span>
                   </td>

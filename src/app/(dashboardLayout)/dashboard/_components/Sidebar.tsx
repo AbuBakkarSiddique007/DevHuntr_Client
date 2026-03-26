@@ -3,10 +3,8 @@
 import React, { useState } from "react";
 import {
   Home,
-  ChevronDown,
   ChevronsRight,
   Settings,
-  HelpCircle,
   PlusCircle,
   ListOrdered,
   CheckCircle,
@@ -48,7 +46,7 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
       default: // USER
         return [
           { Icon: Home, title: "My Dashboard", href: "/dashboard" },
-          { Icon: PlusCircle, title: "Add Product", href: "/products/launch" },
+          { Icon: PlusCircle, title: "Add Product", href: "/dashboard/launch" },
           { Icon: ListOrdered, title: "My Products", href: "/dashboard/my-products" },
         ];
     }
@@ -78,23 +76,11 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
       </div>
 
       <div className="border-t border-white/10 pt-4 pb-20 space-y-2">
-        {open && (
-          <div className="px-3 py-2 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
-            Support
-          </div>
-        )}
         <NavItem
           Icon={Settings}
           title="Profile Settings"
           href="/dashboard/profile"
           selected={pathname === "/dashboard/profile"}
-          open={open}
-        />
-        <NavItem
-          Icon={HelpCircle}
-          title="Help Center"
-          href="/help"
-          selected={pathname === "/help"}
           open={open}
         />
       </div>

@@ -39,7 +39,7 @@ export function Navbar() {
         <div className="hidden md:flex items-center gap-4">
           {user ? (
             <>
-              <Link href="/products/launch">
+              <Link href="/dashboard/launch">
                 <Button size="sm" className="hidden lg:flex rounded-full bg-linear-to-r from-purple-600 to-pink-600 hover:opacity-90 shadow-lg shadow-purple-500/25 border-none transition-all hover:-translate-y-0.5">
                   Launch App
                 </Button>
@@ -116,7 +116,7 @@ export function Navbar() {
           <div className="h-px bg-border my-2" />
           {user ? (
             <>
-              <Link href="/products/launch" className="px-4 py-2 font-medium bg-linear-to-r from-purple-600 to-pink-600 rounded-lg text-white text-center shadow-lg shadow-purple-500/20">Launch App</Link>
+              <Link href="/dashboard/launch" className="px-4 py-2 font-medium bg-linear-to-r from-purple-600 to-pink-600 rounded-lg text-white text-center shadow-lg shadow-purple-500/20">Launch App</Link>
               <Link href="/dashboard" className="flex items-center gap-3 px-4 py-3 font-medium hover:bg-white/5 rounded-xl transition-colors group">
                 <LayoutDashboard className="h-5 w-5 text-purple-400" />
                 Dashboard

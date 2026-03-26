@@ -3,7 +3,14 @@
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Loader2, Bell, Sun, Moon, User as UserIcon, Search } from "lucide-react";
+import { 
+  Bell, 
+  Search, 
+  PlusCircle,
+  Sun, Moon, User as UserIcon, Loader2
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Sidebar } from "./_components/Sidebar";
 
@@ -67,7 +74,13 @@ export default function DashboardLayout({
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
+            <Link href="/dashboard/launch">
+              <Button className="hidden md:flex rounded-xl bg-linear-to-r from-purple-600 to-indigo-600 hover:opacity-90 gap-2 font-bold shadow-lg shadow-purple-500/20">
+                <PlusCircle className="h-4 w-4" /> Launch Product
+              </Button>
+            </Link>
+            <div className="h-10 w-px bg-white/10 hidden md:block mx-1" />
             <button className="relative p-2.5 rounded-xl bg-white/5 border border-white/10 text-muted-foreground hover:text-foreground transition-all hover:bg-white/10">
               <Bell className="h-5 w-5" />
               <span className="absolute top-2 right-2 h-2 w-2 bg-purple-500 rounded-full border-2 border-background"></span>

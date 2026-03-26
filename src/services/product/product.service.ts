@@ -40,8 +40,8 @@ export const ProductService = {
     });
 
     if (!res.ok) {
-        const errorData = await res.json().catch(() => ({}));
-        throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
     }
     return res.json();
   },
@@ -54,8 +54,8 @@ export const ProductService = {
     });
 
     if (!res.ok) {
-        const errorData = await res.json().catch(() => ({}));
-        throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
     }
     return res.json();
   },
@@ -67,8 +67,8 @@ export const ProductService = {
     });
 
     if (!res.ok) {
-        const errorData = await res.json().catch(() => ({}));
-        throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
     }
     return res.json();
   },
@@ -80,11 +80,11 @@ export const ProductService = {
     });
 
     if (!res.ok) {
-        const errorData = await res.json().catch(() => ({}));
-        throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
     }
     return res.json();
-    
+
   },
 
   createProduct: async (payload: {
@@ -104,10 +104,63 @@ export const ProductService = {
     });
 
     if (!res.ok) {
-        const errorData = await res.json().catch(() => ({}));
-        throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
     }
 
+    return res.json();
+  },
+
+  getMyProducts: async ({ page = 1, limit = 10 } = {}) => {
+    const res = await fetch(`${API_BASE}/products/my-products?page=${page}&limit=${limit}`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+
+      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
+    }
+
+    return res.json();
+  },
+
+  updateProduct: async (id: string, payload: Partial<{
+    name: string;
+    image: string;
+    description: string;
+    externalLink: string;
+    tagIds: string[];
+  }>) => {
+    const res = await fetch(`${API_BASE}/products/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+      credentials: "include",
+
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
+    }
+    
+    return res.json();
+  },
+
+  deleteProduct: async (id: string) => {
+    const res = await fetch(`${API_BASE}/products/${id}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
+    }
     return res.json();
   },
 };

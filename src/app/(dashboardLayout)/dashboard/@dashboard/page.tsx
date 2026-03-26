@@ -1,11 +1,8 @@
 "use client";
 
-import React from "react";
-import { 
-  TrendingUp, 
-  Package, 
-  Activity, 
-  Sparkles,
+import {
+  TrendingUp,
+  Package,
   MessageSquare,
   ThumbsUp,
   PlusCircle
@@ -28,16 +25,16 @@ export default function UserDashboard() {
           <h1 className="text-3xl font-extrabold tracking-tight">User Console</h1>
           <p className="text-muted-foreground mt-1 text-lg">Manage your creations and track your community engagement.</p>
         </div>
-        <Link href="/products/launch">
-          <Button className="rounded-xl bg-linear-to-r from-purple-600 to-pink-600 hover:opacity-90 shadow-lg shadow-purple-500/20 px-6">
-            <PlusCircle className="mr-2 h-4 w-4" /> Launch New Product
+        <Link href="/dashboard/launch">
+          <Button className="rounded-xl bg-linear-to-r from-purple-600 to-indigo-600 hover:opacity-90 gap-2 font-bold shadow-lg shadow-purple-500/20">
+            <PlusCircle className="h-4 w-4" /> Launch Product
           </Button>
         </Link>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, i) => (
-          <div key={i} className="p-6 rounded-2xl border border-white/5 bg-white/[0.02] backdrop-blur-sm hover:bg-white/[0.04] transition-all group">
+        {stats.map((stat) => (
+          <div key={stat.title} className="p-6 rounded-2xl border border-white/5 bg-white/2 backdrop-blur-sm hover:bg-white/4 transition-all group">
             <div className={`p-3 w-fit rounded-xl bg-white/5 group-hover:bg-purple-500/10 transition-colors mb-4`}>
               <stat.Icon className="h-5 w-5 text-purple-400" />
             </div>
