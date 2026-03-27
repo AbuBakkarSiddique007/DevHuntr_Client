@@ -12,15 +12,17 @@ export function ProductsList() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
 
   const loadProducts = async () => {
     setLoading(true);
     try {
-      const response = await ProductService.getProducts({ page, limit: 12, search });
+      const response = await ProductService.getProducts({ page, limit: 10, search });
       const productsData = response?.data?.products || [];
       setProducts(Array.isArray(productsData) ? productsData : []);
+      setTotalPages(response?.data?.meta?.totalPages || 1);
     } catch (err) {
       console.error("Failed to load products", err);
     } finally {
@@ -123,24 +125,39 @@ export function ProductsList() {
             ))}
           </div>
 
-          <div className="flex items-center justify-center gap-4 mt-16">
+          <div className="flex flex-wrap items-center justify-center gap-2 mt-16">
             <Button
               variant="outline"
-              className="rounded-full glass"
+              className="rounded-full glass h-10 px-4"
               onClick={() => setPage(p => Math.max(1, p - 1))}
               disabled={page === 1}
             >
-              <ChevronLeft className="mr-2 h-4 w-4" /> Previous
+              <ChevronLeft className="mr-1 h-4 w-4" /> Previous
             </Button>
-            <span className="text-sm font-medium px-4 py-2 glass rounded-full">
-              Page {page}
-            </span>
+
+            <div className="flex items-center gap-2">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                <Button
+                  key={pageNum}
+                  variant={page === pageNum ? "default" : "outline"}
+                  className={`h-10 w-10 rounded-full glass border-none transition-all ${page === pageNum
+                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-110"
+                    : "hover:bg-white/10"
+                    }`}
+                  onClick={() => setPage(pageNum)}
+                >
+                  {pageNum}
+                </Button>
+              ))}
+            </div>
+
             <Button
               variant="outline"
-              className="rounded-full glass"
-              onClick={() => setPage(p => p + 1)}
+              className="rounded-full glass h-10 px-4"
+              onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+              disabled={page === totalPages}
             >
-              Next <ChevronRight className="ml-2 h-4 w-4" />
+              Next <ChevronRight className="ml-1 h-4 w-4" />
             </Button>
           </div>
         </>
