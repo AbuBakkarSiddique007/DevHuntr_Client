@@ -5,13 +5,22 @@ export interface Statistics {
   totalProducts: number;
   totalComments: number;
   totalVotes: number;
-  totalReports: number;
-  featuredProducts: number;
-  products: {
+  featuredProducts?: number;
+  products?: {
     pending: number;
     accepted: number;
     rejected: number;
-  }
+  };
+}
+
+export interface ModeratorStats {
+  pendingReviews: number;
+  activeReports: number;
+  resolvedToday: number;
+  dismissedToday: number;
+  acceptedToday: number;
+  rejectedToday: number;
+  totalActionsToday: number;
 }
 
 export const StatisticsService = {
@@ -21,11 +30,25 @@ export const StatisticsService = {
     });
 
     if (!res.ok) {
+      throw new Error("Failed to fetch statistics");
+    }
+
+    const { data } = await res.json();
+    return data;
+  },
+
+  getModeratorStats: async (): Promise<ModeratorStats> => {
+    const res = await fetch(`${API_BASE}/statistics/moderator`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (!res.ok) {
       const errorData = await res.json().catch(() => ({}));
       throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
     }
 
-    const result = await res.json();
-    return result.data || result;
+    const { data } = await res.json();
+    return data;
   },
 };

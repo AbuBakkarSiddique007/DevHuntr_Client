@@ -19,6 +19,7 @@ import { ReportService, Report } from "@/services/report/report.service";
 import { toast } from "sonner";
 import Link from "next/link";
 import Image from "next/image";
+import { StatisticsService, ModeratorStats } from "@/services/statistics/statistics.service";
 
 export default function ModeratorDashboard() {
   const [pendingProducts, setPendingProducts] = useState<Product[]>([]);
@@ -27,6 +28,7 @@ export default function ModeratorDashboard() {
   const [actionLoading, setActionLoading] = useState<{ id: string; action: "ACCEPT" | "REJECT" | "REPORT" } | null>(null);
   const [rejectingProduct, setRejectingProduct] = useState<Product | null>(null);
   const [rejectionReason, setRejectionReason] = useState("");
+  const [moderatorStats, setModeratorStats] = useState<ModeratorStats | null>(null);
 
   const fetchData = async () => {
     setLoading(true);
@@ -38,6 +40,10 @@ export default function ModeratorDashboard() {
       const reportRes = await ReportService.getReports({ status: "OPEN" });
       const fetchedReports = reportRes.data || reportRes.reports || [];
       setReports(Array.isArray(fetchedReports) ? fetchedReports : []);
+
+      const stats = await StatisticsService.getModeratorStats();
+      setModeratorStats(stats);
+      
     } catch (err) {
       console.error("Failed to fetch moderator data", err);
       toast.error("Failed to load moderation queues");
@@ -61,6 +67,7 @@ export default function ModeratorDashboard() {
       toast.error(error.message || "Action failed");
     } finally {
       setActionLoading(null);
+      fetchData();
     }
   };
 
@@ -75,6 +82,7 @@ export default function ModeratorDashboard() {
       toast.error(error.message || "Action failed");
     } finally {
       setActionLoading(null);
+      fetchData();
     }
   };
 
@@ -87,10 +95,10 @@ export default function ModeratorDashboard() {
   }
 
   const stats = [
-    { title: "Pending Reviews", value: (pendingProducts?.length || 0).toString(), Icon: Hourglass, color: "text-orange-400" },
-    { title: "Active Reports", value: (reports?.length || 0).toString(), Icon: AlertCircle, color: "text-red-400" },
-    { title: "Resolved Today", value: "0", Icon: ShieldCheck, color: "text-green-400" },
-    { title: "Dismissed Today", value: "0", Icon: ClipboardCheck, color: "text-blue-400" },
+    { title: "Pending Reviews", value: (moderatorStats?.pendingReviews ?? pendingProducts?.length ?? 0).toString(), Icon: Hourglass, color: "text-orange-400" },
+    { title: "Active Reports", value: (moderatorStats?.activeReports ?? reports?.length ?? 0).toString(), Icon: AlertCircle, color: "text-red-400" },
+    { title: "Resolved Today", value: (moderatorStats?.resolvedToday ?? 0).toString(), Icon: ShieldCheck, color: "text-green-400" },
+    { title: "Dismissed Today", value: (moderatorStats?.dismissedToday ?? 0).toString(), Icon: ClipboardCheck, color: "text-blue-400" },
   ];
 
   return (
@@ -158,21 +166,21 @@ export default function ModeratorDashboard() {
                         <Eye className="h-4 w-4" />
                       </Button>
                     </Link>
-                    <Button 
+                    <Button
                       onClick={() => handleProductStatus(product.id, "ACCEPTED")}
                       disabled={!!actionLoading}
-                      size="icon" 
+                      size="icon"
                       className="h-9 w-9 rounded-lg bg-green-500/10 text-green-500 hover:bg-green-500 hover:text-white border border-green-500/20"
                     >
                       {actionLoading?.id === product.id && actionLoading.action === "ACCEPT" ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
                     </Button>
-                    <Button 
+                    <Button
                       onClick={() => {
                         setRejectingProduct(product);
                         setRejectionReason("");
                       }}
                       disabled={!!actionLoading}
-                      size="icon" 
+                      size="icon"
                       className="h-9 w-9 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white border border-red-500/20"
                     >
                       {actionLoading?.id === product.id && actionLoading.action === "REJECT" ? <Loader2 className="h-4 w-4 animate-spin" /> : <XCircle className="h-4 w-4" />}
@@ -220,16 +228,16 @@ export default function ModeratorDashboard() {
                   <div className="flex justify-between items-center pt-2">
                     <span className="text-[10px] text-muted-foreground">Reporter: {report.reporter?.name}</span>
                     <div className="flex gap-2">
-                      <Button 
+                      <Button
                         onClick={() => handleReportStatus(report.id, "DISMISSED")}
                         disabled={!!actionLoading}
-                        size="sm" 
-                        variant="ghost" 
+                        size="sm"
+                        variant="ghost"
                         className="h-8 rounded-lg text-xs font-bold hover:bg-white/10"
                       >
                         Dismiss
                       </Button>
-                      <Button 
+                      <Button
                         onClick={() => handleReportStatus(report.id, "RESOLVED")}
                         disabled={!!actionLoading}
                         className="h-8 rounded-lg text-xs font-bold bg-red-500 hover:bg-red-600 text-white"
