@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://devhuntrserver.onrender.com/api/v1";
 
 export type Role = "USER" | "MODERATOR" | "ADMIN";
@@ -30,31 +30,63 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const checkSession = async () => {
+  const refreshSession = useCallback(async (): Promise<boolean> => {
+    try {
+      const res = await fetch(`${API_BASE}/auth/refresh`, {
+        method: "POST",
+        credentials: "include",
+      });
+      return res.ok;
+    } catch {
+      return false;
+    }
+  }, []);
+
+  const checkSession = useCallback(async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/users/me`, {
-        method: "GET",
-        credentials: "include",
+      const runMe = async () => {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
 
-      });
+        try {
+          return await fetch(`${API_BASE}/users/me`, {
+            method: "GET",
+            credentials: "include",
+            cache: "no-store",
+            signal: controller.signal,
+          });
+        } finally {
+          clearTimeout(timeoutId);
+        }
+      };
+
+      let res = await runMe();
+
+      if (res.status === 401) {
+        const refreshed = await refreshSession();
+        if (refreshed) {
+          res = await runMe();
+        }
+      }
+
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const response = await res.json();
 
       setUser(response.data || response.user || response);
 
-    } catch {
-      console.log("No active logged-in session.");
+    } catch (err) {
+      console.log("No active logged-in session.", err);
       setUser(null);
 
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [refreshSession]);
 
   useEffect(() => {
     checkSession();
-  }, []);
+  }, [checkSession]);
 
   const logout = async () => {
     try {
@@ -87,7 +119,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const updatedUser = response.data || response.user || response;
 
       setUser(updatedUser);
-      
+
     } catch (err) {
       console.error("Profile update failed", err);
       throw err;

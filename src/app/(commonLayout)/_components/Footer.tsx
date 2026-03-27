@@ -21,7 +21,7 @@ export function Footer() {
             <h3 className="font-semibold text-sm tracking-wider uppercase text-foreground/80">Platform</h3>
             <div className="flex flex-col gap-2">
               <Link href="/products" className="text-sm text-muted-foreground hover:text-purple-400 transition-colors">Explore Products</Link>
-              <Link href="/dashboard/submit" className="text-sm text-muted-foreground hover:text-purple-400 transition-colors">Submit an App</Link>
+              <Link href="/user-dashboard/launch" className="text-sm text-muted-foreground hover:text-purple-400 transition-colors">Submit an App</Link>
               <Link href="/#trending" className="text-sm text-muted-foreground hover:text-purple-400 transition-colors">Trending Now</Link>
             </div>
           </div>
@@ -41,7 +41,7 @@ export function Footer() {
             © {new Date().getFullYear()} DevHuntr. All rights reserved.
           </p>
           <div className="flex gap-4">
-            {/* Social Icons could go here */}
+            
             <div className="h-8 w-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 cursor-pointer transition-colors">
               <span className="text-xs">𝕏</span>
             </div>

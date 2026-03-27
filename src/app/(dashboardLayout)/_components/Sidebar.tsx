@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Home,
   ChevronsRight,
@@ -11,11 +11,17 @@ import {
   XCircle,
   Users,
   LineChart,
-  Ghost
+  Ghost,
+  ArrowLeft,
+  LucideIcon,
+  LogOut,
+  Tag as TagIcon,
+  Ticket
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Role } from "@/context/AuthContext";
+import { Role, useAuth } from "@/context/AuthContext";
+import { ProductService } from "@/services/product/product.service";
 
 interface SidebarProps {
   role: Role | undefined;
@@ -25,29 +31,57 @@ interface SidebarProps {
 export const Sidebar = ({ role, userName }: SidebarProps) => {
   const [open, setOpen] = useState(true);
   const pathname = usePathname();
+  const { logout } = useAuth();
+  const [pendingCount, setPendingCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (role === "MODERATOR") {
+      const fetchCount = async () => {
+        try {
+          const res = await ProductService.getQueueProducts({ page: 1, limit: 1 });
+          setPendingCount(res.data?.meta?.total || res.meta?.total || 0);
+        } catch (err) {
+          console.error("Failed to fetch queue count", err);
+        }
+      };
+      fetchCount();
+
+      // Optional: Poll every 60 seconds
+      const interval = setInterval(fetchCount, 60000);
+
+      return () => clearInterval(interval);
+    }
+  }, [role]);
+
 
   // Role-based Navigation Items
   const getNavItems = () => {
     switch (role) {
       case "ADMIN":
         return [
-          { Icon: Home, title: "Overview", href: "/dashboard" },
-          { Icon: Users, title: "Manage Users", href: "/dashboard/users" },
-          { Icon: LineChart, title: "Analytics", href: "/dashboard/analytics" },
-          { Icon: Settings, title: "Global Settings", href: "/dashboard/settings" },
+          { Icon: ArrowLeft, title: "Back to Home", href: "/" },
+          { Icon: Home, title: "Overview", href: "/admin-dashboard" },
+          { Icon: Users, title: "Manage Users", href: "/admin-dashboard/users" },
+          { Icon: TagIcon, title: "Manage Tags", href: "/admin-dashboard/tags" },
+          { Icon: Ticket, title: "Manage Coupons", href: "/admin-dashboard/coupons" },
+          { Icon: LineChart, title: "Analytics", href: "/admin-dashboard/analytics" },
         ];
+
       case "MODERATOR":
         return [
-          { Icon: Home, title: "Overview", href: "/dashboard" },
-          { Icon: ListOrdered, title: "Review Queue", href: "/dashboard/queue", notifs: 5 },
-          { Icon: CheckCircle, title: "Accepted", href: "/dashboard/accepted" },
-          { Icon: XCircle, title: "Rejected", href: "/dashboard/rejected" },
+          { Icon: ArrowLeft, title: "Back to Home", href: "/" },
+          { Icon: Home, title: "Overview", href: "/moderator-dashboard" },
+          { Icon: ListOrdered, title: "Review Queue", href: "/moderator-dashboard/queue", notifs: pendingCount ?? 0 },
+          { Icon: CheckCircle, title: "Accepted", href: "/moderator-dashboard/accepted" },
+          { Icon: XCircle, title: "Rejected", href: "/moderator-dashboard/rejected" },
         ];
+        
       default: // USER
         return [
-          { Icon: Home, title: "My Dashboard", href: "/dashboard" },
-          { Icon: PlusCircle, title: "Add Product", href: "/dashboard/launch" },
-          { Icon: ListOrdered, title: "My Products", href: "/dashboard/my-products" },
+          { Icon: ArrowLeft, title: "Back to Home", href: "/" },
+          { Icon: Home, title: "My Dashboard", href: "/user-dashboard" },
+          { Icon: PlusCircle, title: "Add Product", href: "/user-dashboard/launch" },
+          { Icon: ListOrdered, title: "My Products", href: "/user-dashboard/my-products" },
         ];
     }
   };
@@ -79,10 +113,23 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
         <NavItem
           Icon={Settings}
           title="Profile Settings"
-          href="/dashboard/profile"
-          selected={pathname === "/dashboard/profile"}
+          href={role === "ADMIN" ? "/admin-dashboard/profile" : role === "MODERATOR" ? "/moderator-dashboard/profile" : "/user-dashboard/profile"}
+          selected={pathname.endsWith("/profile")}
           open={open}
         />
+        <button
+          onClick={() => logout()}
+          className={`relative flex h-12 w-full items-center rounded-xl transition-all duration-300 text-red-500 hover:bg-red-500/10`}
+        >
+          <div className="grid h-full w-14 place-content-center shrink-0">
+            <LogOut className="h-5 w-5" />
+          </div>
+          <span
+            className={`text-sm font-semibold whitespace-nowrap transition-all duration-300 overflow-hidden ${open ? 'w-32 opacity-100' : 'w-0 opacity-0'}`}
+          >
+            Logout
+          </span>
+        </button>
       </div>
 
       <ToggleClose open={open} setOpen={setOpen} />
@@ -90,7 +137,16 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
   );
 };
 
-const NavItem = ({ Icon, title, href, selected, open, notifs }: any) => {
+interface NavItemProps {
+  Icon: LucideIcon;
+  title: string;
+  href: string;
+  selected: boolean;
+  open: boolean;
+  notifs?: number;
+}
+
+const NavItem = ({ Icon, title, href, selected, open, notifs }: NavItemProps) => {
   return (
     <Link
       href={href}
@@ -123,7 +179,13 @@ const NavItem = ({ Icon, title, href, selected, open, notifs }: any) => {
   );
 };
 
-const TitleSection = ({ open, userName, role }: any) => {
+interface TitleSectionProps {
+  open: boolean;
+  userName: string;
+  role: Role | undefined;
+}
+
+const TitleSection = ({ open, userName, role }: TitleSectionProps) => {
   return (
     <div className="mb-4 border-b border-white/10 pb-4 mt-2">
       <div className="flex items-center gap-3 px-2">
@@ -149,7 +211,12 @@ const Logo = () => {
   );
 };
 
-const ToggleClose = ({ open, setOpen }: any) => {
+interface ToggleCloseProps {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}
+
+const ToggleClose = ({ open, setOpen }: ToggleCloseProps) => {
   return (
     <button
       onClick={() => setOpen(!open)}

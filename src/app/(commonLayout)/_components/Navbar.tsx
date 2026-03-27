@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Ghost, LogOut, Menu, UserCircle, LayoutDashboard, ChevronDown } from "lucide-react";
@@ -39,11 +40,13 @@ export function Navbar() {
         <div className="hidden md:flex items-center gap-4">
           {user ? (
             <>
-              <Link href="/dashboard/launch">
-                <Button size="sm" className="hidden lg:flex rounded-full bg-linear-to-r from-purple-600 to-pink-600 hover:opacity-90 shadow-lg shadow-purple-500/25 border-none transition-all hover:-translate-y-0.5">
-                  Launch App
-                </Button>
-              </Link>
+              {user.role === "USER" && (
+                <Link href="/user-dashboard/launch">
+                  <Button size="sm" className="hidden lg:flex rounded-full bg-linear-to-r from-purple-600 to-pink-600 hover:opacity-90 shadow-lg shadow-purple-500/25 border-none transition-all hover:-translate-y-0.5">
+                    Launch App
+                  </Button>
+                </Link>
+              )}
 
               {/* USER DROPDOWN */}
               <div className="relative">
@@ -53,7 +56,13 @@ export function Navbar() {
                   className="flex items-center gap-2 p-1 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all group"
                 >
                   {user?.photoUrl ? (
-                    <img src={user.photoUrl} alt={user?.name || "User"} className="h-8 w-8 rounded-full object-cover border border-white/10" />
+                    <Image
+                      src={user.photoUrl}
+                      alt={user?.name || "User"}
+                      width={32}
+                      height={32}
+                      className="h-8 w-8 rounded-full object-cover border border-white/10"
+                    />
                   ) : (
                     <div className="h-8 w-8 rounded-full bg-linear-to-br from-purple-500/20 to-indigo-500/20 flex items-center justify-center border border-white/10">
                       <UserCircle className="h-5 w-5 text-purple-400" />
@@ -69,7 +78,7 @@ export function Navbar() {
                       <p className="text-sm font-bold truncate">{user?.name}</p>
                     </div>
 
-                    <Link href="/dashboard" className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors group">
+                    <Link href={`/${user?.role?.toLowerCase()}-dashboard`} className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors group">
                       <LayoutDashboard className="h-4 w-4 group-hover:text-purple-500 transition-colors" />
                       Dashboard
                     </Link>
@@ -116,8 +125,10 @@ export function Navbar() {
           <div className="h-px bg-border my-2" />
           {user ? (
             <>
-              <Link href="/dashboard/launch" className="px-4 py-2 font-medium bg-linear-to-r from-purple-600 to-pink-600 rounded-lg text-white text-center shadow-lg shadow-purple-500/20">Launch App</Link>
-              <Link href="/dashboard" className="flex items-center gap-3 px-4 py-3 font-medium hover:bg-white/5 rounded-xl transition-colors group">
+              {user.role === "USER" && (
+                <Link href="/user-dashboard/launch" className="px-4 py-2 font-medium bg-linear-to-r from-purple-600 to-pink-600 rounded-lg text-white text-center shadow-lg shadow-purple-500/20">Launch App</Link>
+              )}
+              <Link href={`/${user?.role?.toLowerCase()}-dashboard`} className="flex items-center gap-3 px-4 py-3 font-medium hover:bg-white/5 rounded-xl transition-colors group">
                 <LayoutDashboard className="h-5 w-5 text-purple-400" />
                 Dashboard
               </Link>

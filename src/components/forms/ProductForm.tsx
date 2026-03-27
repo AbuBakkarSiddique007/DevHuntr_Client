@@ -77,9 +77,7 @@ export function ProductForm() {
     try {
       await ProductService.createProduct(data);
       toast.success("Product launched successfully!");
-      router.push("/dashboard/my-products"); 
-      
-      router.refresh();
+      router.push("/user-dashboard/my-products");
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Failed to launch product";
       toast.error(message);

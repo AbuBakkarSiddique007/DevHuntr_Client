@@ -20,4 +20,23 @@ export const TagService = {
     const result = await res.json();
     return result.data.tags || result.tags || [];
   },
+
+  createTag: async (name: string): Promise<Tag> => {
+    const res = await fetch(`${API_BASE}/tags`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name }),
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
+    }
+
+    const result = await res.json();
+    return result.data || result;
+  },
 };

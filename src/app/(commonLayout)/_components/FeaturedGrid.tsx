@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { ProductService, Product } from "@/services/product/product.service";
 import Link from "next/link";
+import Image from "next/image";
 import { Ghost, Star } from "lucide-react";
 
 export function FeaturedGrid() {
@@ -63,7 +64,13 @@ export function FeaturedGrid() {
 
               <div className="flex justify-between items-start mb-6">
                 {product.image ? (
-                  <img src={product.image} alt={product.name} className="h-16 w-16 rounded-2xl object-cover border border-white/10 group-hover:scale-105 transition-transform shadow-lg" />
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    width={64}
+                    height={64}
+                    className="h-16 w-16 rounded-2xl object-cover border border-white/10 group-hover:scale-105 transition-transform shadow-lg"
+                  />
                 ) : (
                   <div className="h-16 w-16 rounded-2xl bg-linear-to-br from-yellow-500/20 to-orange-500/20 flex items-center justify-center border border-white/10 group-hover:scale-105 transition-transform shadow-lg">
                     <Ghost className="h-8 w-8 text-yellow-500" />

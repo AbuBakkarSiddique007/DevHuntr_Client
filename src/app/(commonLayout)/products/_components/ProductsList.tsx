@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { ProductService, Product } from "@/services/product/product.service";
 import Link from "next/link";
+import Image from "next/image";
 import { Ghost, Search, ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -83,7 +84,13 @@ export function ProductsList() {
 
                 <div className="flex justify-between items-start mb-6">
                   {product.image ? (
-                    <img src={product.image} alt={product.name} className="h-14 w-14 rounded-2xl object-cover border border-white/10 group-hover:scale-105 transition-transform" />
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      width={56}
+                      height={56}
+                      className="h-14 w-14 rounded-2xl object-cover border border-white/10 group-hover:scale-105 transition-transform"
+                    />
                   ) : (
                     <div className="h-14 w-14 rounded-2xl bg-linear-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center border border-white/10 group-hover:scale-105 transition-transform">
                       <Ghost className="h-6 w-6 text-purple-400" />

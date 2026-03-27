@@ -126,6 +126,40 @@ export const ProductService = {
     return res.json();
   },
 
+  getQueueProducts: async ({ page = 1, limit = 10 } = {}) => {
+    const res = await fetch(`${API_BASE}/products/queue?page=${page}&limit=${limit}`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
+    }
+
+    return res.json();
+  },
+
+  getModerationProducts: async ({ page = 1, limit = 10, status }: { page?: number; limit?: number; status: "ACCEPTED" | "REJECTED" }) => {
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: String(limit),
+      status,
+    });
+
+    const res = await fetch(`${API_BASE}/products/moderation?${params.toString()}`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
+    }
+
+    return res.json();
+  },
+
   updateProduct: async (id: string, payload: Partial<{
     name: string;
     image: string;
@@ -147,7 +181,7 @@ export const ProductService = {
       const errorData = await res.json().catch(() => ({}));
       throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
     }
-    
+
     return res.json();
   },
 
@@ -157,6 +191,32 @@ export const ProductService = {
       credentials: "include",
     });
 
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
+    }
+    return res.json();
+  },
+
+  updateProductStatus: async (id: string, status: "ACCEPTED" | "REJECTED", rejectionReason?: string) => {
+    const res = await fetch(`${API_BASE}/products/${id}/status`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ status, rejectionReason }),
+    });
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
+    }
+    return res.json();
+  },
+
+  toggleFeatured: async (id: string) => {
+    const res = await fetch(`${API_BASE}/products/${id}/feature`, {
+      method: "PATCH",
+      credentials: "include",
+    });
     if (!res.ok) {
       const errorData = await res.json().catch(() => ({}));
       throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);

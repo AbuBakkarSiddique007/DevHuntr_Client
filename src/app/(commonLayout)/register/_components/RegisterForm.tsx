@@ -41,7 +41,6 @@ export function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<RegisterFormValues>({
-    // @ts-expect-error - zod version mismatch in hookform resolver
     resolver: zodResolver(registerSchema),
     defaultValues: {
       firstName: "",
@@ -58,8 +57,8 @@ export function RegisterForm() {
       const res = await fetch(`${API_BASE}/auth/register`, {
         method: "POST",
         credentials: "include",
-        headers: { 
-          "Content-Type": "application/json" 
+        headers: {
+          "Content-Type": "application/json"
         },
 
         body: JSON.stringify({
@@ -75,9 +74,10 @@ export function RegisterForm() {
       }
 
       toast.success("Account created successfully!");
+      toast.success("Registration successful!");
       await checkSession();
-      router.push("/dashboard");
-      
+      router.push("/user-dashboard");
+
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Registration failed. Try again.");
     } finally {

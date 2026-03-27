@@ -1,5 +1,6 @@
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { RegisterForm } from "./_components/RegisterForm";
 
 export default function RegisterPage() {
@@ -20,10 +21,13 @@ export default function RegisterPage() {
 
           <div className="absolute inset-0">
             
-            <img
+            <Image
               src="https://i.ibb.co/dJxBbFks/brandasset.png"
               alt="Brand Asset"
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
+              sizes="(min-width: 768px) 50vw, 100vw"
+              priority
             />
 
             <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent mix-blend-multiply" />

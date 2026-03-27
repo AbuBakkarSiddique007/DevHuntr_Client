@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://devhuntrserver.onrender.com/api/v1";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
@@ -30,12 +31,13 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { checkSession } = useAuth();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<LoginFormValues>({
-    // @ts-expect-error - zod version mismatch in hookform resolver
+
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
@@ -59,7 +61,13 @@ export function LoginForm() {
 
       toast.success("Login successful!");
       await checkSession();
-      router.push("/");
+
+      const callback = searchParams.get("callback");
+      if (callback && callback.startsWith("/")) {
+        router.push(callback);
+      } else {
+        router.push("/");
+      }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to login. Check your credentials.");
     } finally {
