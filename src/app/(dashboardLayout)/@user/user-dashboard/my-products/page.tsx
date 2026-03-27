@@ -30,6 +30,7 @@ export default function MyProductsPage() {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
   const [deleteProduct, setDeleteProduct] = useState<Product | null>(null);
+  const [viewingReason, setViewingReason] = useState<Product | null>(null);
 
   const fetchMyProducts = async () => {
     try {
@@ -78,8 +79,8 @@ export default function MyProductsPage() {
     fetchTags();
   }, []);
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
+  const getStatusBadge = (product: Product) => {
+    switch (product.status) {
       case "ACCEPTED":
         return (
           <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-500/10 text-green-500 text-xs font-bold border border-green-500/20">
@@ -144,6 +145,7 @@ export default function MyProductsPage() {
                 <th className="py-5 px-6">Product</th>
                 <th className="py-5 px-4 text-center">Engagement</th>
                 <th className="py-5 px-4 text-center">Status</th>
+                <th className="py-5 px-4 text-center">Feedback</th>
                 <th className="py-5 px-6 text-right">Actions</th>
               </tr>
             </thead>
@@ -188,8 +190,20 @@ export default function MyProductsPage() {
                     </td>
                     <td className="py-6 px-4 text-center">
                       <div className="flex justify-center">
-                        {getStatusBadge(product.status)}
+                        {getStatusBadge(product)}
                       </div>
+                    </td>
+                    <td className="py-6 px-4 text-center">
+                      {product.status === "REJECTED" && (
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="h-8 rounded-xl border-red-500/20 bg-red-500/10 text-red-500 text-[10px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all"
+                          onClick={() => setViewingReason(product)}
+                        >
+                          View Reason
+                        </Button>
+                      )}
                     </td>
                     <td className="py-6 px-6 text-right">
                       <div className="flex items-center justify-end gap-2">
@@ -439,6 +453,59 @@ export default function MyProductsPage() {
                 }}
               >
                 {processingId === deleteProduct.id ? <Loader2 className="h-4 w-4 animate-spin" /> : "Delete"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* REJECTION REASON MODAL */}
+      {viewingReason && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300"
+          onClick={() => setViewingReason(null)}
+        >
+          <div
+            className="w-full max-w-lg bg-[#0d1117] border border-red-500/20 rounded-[2.5rem] shadow-2xl shadow-red-500/10 overflow-hidden animate-in zoom-in-95 duration-300"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-8 border-b border-white/5 bg-red-500/5 items-center flex gap-4">
+              <div className="h-12 w-12 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
+                 <XCircle className="h-6 w-6 text-red-500" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-black uppercase tracking-tight text-white">Rejection Details</h2>
+                <p className="text-[10px] text-red-400 font-bold uppercase tracking-widest leading-none mt-1">
+                   Moderation Feedback for: {viewingReason.name}
+                </p>
+              </div>
+            </div>
+
+            <div className="p-8 space-y-6">
+              <div className="space-y-3">
+                <label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] ml-1">
+                   Moderator Note
+                </label>
+                <div className="p-6 rounded-3xl bg-white/2 border border-white/5 text-sm text-foreground leading-relaxed italic">
+                  &quot;{viewingReason.rejectionReason || "No specific reason provided by moderator."}&quot;
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-white/5 border border-white/5 space-y-2">
+                 <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest text-center">
+                    What does this mean?
+                 </p>
+                 <p className="text-xs text-muted-foreground text-center">
+                    Your product was not accepted into the main directory due to a violation of our submission guidelines. 
+                    You can still see your product here, but it won&apos;t be visible to the public.
+                 </p>
+              </div>
+
+              <Button
+                className="w-full rounded-2xl h-14 font-black uppercase tracking-widest bg-white/5 hover:bg-white/10 text-white transition-all"
+                onClick={() => setViewingReason(null)}
+              >
+                Close Feedback
               </Button>
             </div>
           </div>

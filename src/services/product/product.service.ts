@@ -23,6 +23,7 @@ export interface Product {
   status: "PENDING" | "ACCEPTED" | "REJECTED";
   isFeatured: boolean;
   tags?: ProductTag[];
+  rejectionReason?: string;
   owner?: {
     id: string;
     name: string;

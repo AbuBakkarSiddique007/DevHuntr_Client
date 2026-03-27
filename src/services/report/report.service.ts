@@ -7,7 +7,7 @@ export interface Report {
   reason: string;
   status: ReportStatus;
   createdAt: string;
-  product: { id: string; name: string };
+  product: { id: string; name: string; image?: string };
   reporter: { id: string; name: string };
 }
 
@@ -38,12 +38,17 @@ export const ReportService = {
     return res.json();
   },
 
-  updateReportStatus: async (reportId: string, status: "RESOLVED" | "DISMISSED") => {
+  updateReportStatus: async (
+    reportId: string, 
+    status: "RESOLVED" | "DISMISSED", 
+    rejectProduct?: boolean, 
+    rejectionReason?: string
+  ) => {
     const res = await fetch(`${API_BASE}/reports/${reportId}/status`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ status }),
+      body: JSON.stringify({ status, rejectProduct, rejectionReason }),
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));

@@ -16,12 +16,14 @@ import {
   LucideIcon,
   LogOut,
   Tag as TagIcon,
-  Ticket
+  Ticket,
+  ShieldAlert
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Role, useAuth } from "@/context/AuthContext";
 import { ProductService } from "@/services/product/product.service";
+import { ReportService } from "@/services/report/report.service";
 
 interface SidebarProps {
   role: Role | undefined;
@@ -33,21 +35,26 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
   const pathname = usePathname();
   const { logout } = useAuth();
   const [pendingCount, setPendingCount] = useState<number | null>(null);
+  const [reportCount, setReportCount] = useState<number | null>(null);
 
   useEffect(() => {
     if (role === "MODERATOR") {
-      const fetchCount = async () => {
+      const fetchCounts = async () => {
         try {
-          const res = await ProductService.getQueueProducts({ page: 1, limit: 1 });
-          setPendingCount(res.data?.meta?.total || res.meta?.total || 0);
+          const [queueRes, reportRes] = await Promise.all([
+            ProductService.getQueueProducts({ page: 1, limit: 1 }),
+            ReportService.getReports({ page: 1, limit: 1, status: "OPEN" })
+          ]);
+          setPendingCount(queueRes.data?.meta?.total || queueRes.meta?.total || 0);
+          setReportCount(reportRes.data?.meta?.total || reportRes.meta?.total || 0);
         } catch (err) {
-          console.error("Failed to fetch queue count", err);
+          console.error("Failed to fetch dashboard counts", err);
         }
       };
-      fetchCount();
+      fetchCounts();
 
       // Optional: Poll every 60 seconds
-      const interval = setInterval(fetchCount, 60000);
+      const interval = setInterval(fetchCounts, 60000);
 
       return () => clearInterval(interval);
     }
@@ -72,10 +79,11 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
           { Icon: ArrowLeft, title: "Back to Home", href: "/" },
           { Icon: Home, title: "Overview", href: "/moderator-dashboard" },
           { Icon: ListOrdered, title: "Review Queue", href: "/moderator-dashboard/queue", notifs: pendingCount ?? 0 },
+          { Icon: ShieldAlert, title: "Reports", href: "/moderator-dashboard/reports", notifs: reportCount ?? 0 },
           { Icon: CheckCircle, title: "Accepted", href: "/moderator-dashboard/accepted" },
           { Icon: XCircle, title: "Rejected", href: "/moderator-dashboard/rejected" },
         ];
-        
+
       default: // USER
         return [
           { Icon: ArrowLeft, title: "Back to Home", href: "/" },

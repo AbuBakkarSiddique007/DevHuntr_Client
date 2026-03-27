@@ -123,7 +123,7 @@ function VotingPanel({ product, onVote }: {
       const downDelta = (prev === "DOWNVOTE" ? 1 : 0) - (newVote === "DOWNVOTE" ? 1 : 0);
 
       onVote({ up: upDelta, down: downDelta });
-      
+
     } finally {
       setVoting(false);
     }
