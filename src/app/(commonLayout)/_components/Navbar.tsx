@@ -31,9 +31,6 @@ export function Navbar() {
           <Link href="/products" className="text-sm font-medium text-muted-foreground hover:text-foreground hover:scale-105 transition-all">
             Products
           </Link>
-          <Link href="/#trending" className="text-sm font-medium text-muted-foreground hover:text-foreground hover:scale-105 transition-all">
-            Trending
-          </Link>
         </nav>
 
         {/* AUTH ACTIONS */}
@@ -121,7 +118,6 @@ export function Navbar() {
       {isMobileMenuOpen && (
         <div className="md:hidden absolute top-16 left-0 w-full bg-background/95 backdrop-blur-3xl border-b border-border p-4 flex flex-col gap-4 animate-in slide-in-from-top-4 fade-in-90">
           <Link href="/products" className="px-4 py-2 font-medium hover:bg-white/5 rounded-lg transition-colors">Products</Link>
-          <Link href="/#trending" className="px-4 py-2 font-medium hover:bg-white/5 rounded-lg transition-colors">Trending</Link>
           <div className="h-px bg-border my-2" />
           {user ? (
             <>

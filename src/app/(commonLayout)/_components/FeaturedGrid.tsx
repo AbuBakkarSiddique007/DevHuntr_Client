@@ -77,8 +77,22 @@ export function FeaturedGrid() {
                   </div>
                 )}
 
-                <div className="flex flex-col items-center bg-yellow-500/10 border border-yellow-500/20 rounded-xl px-3 py-1.5">
-                  <span className="text-[10px] font-bold text-yellow-500">FEATURED</span>
+                <div className="flex flex-col items-end gap-2">
+                  <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-3 py-1.5 hover:bg-white/10 transition-colors shadow-inner h-fit">
+                    <div className="flex items-center gap-1">
+                      <span className="text-xs font-semibold text-green-400">▲</span>
+                      <span className="text-sm font-bold text-foreground">{product.upvoteCount}</span>
+                    </div>
+                    <div className="w-px h-3 bg-white/20" />
+                    <div className="flex items-center gap-1">
+                      <span className="text-xs font-semibold text-red-400">▼</span>
+                      <span className="text-sm font-bold text-foreground">{product.downvoteCount}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col items-center bg-yellow-500/10 border border-yellow-500/20 rounded-xl px-3 py-1.5 h-fit">
+                    <span className="text-[10px] font-bold text-yellow-500">FEATURED</span>
+                  </div>
                 </div>
               </div>
 

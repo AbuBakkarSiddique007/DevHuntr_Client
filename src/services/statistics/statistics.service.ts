@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://devhuntrserver.onrender.com/api/v1";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
 
 export interface Statistics {
   totalUsers: number;
@@ -16,9 +16,8 @@ export interface Statistics {
 
 export const StatisticsService = {
   getStatistics: async (): Promise<Statistics> => {
-    const res = await fetch(`${API_BASE}/statistics`, {
+    const res = await fetch(`${API_BASE}/statistics/public`, {
       method: "GET",
-      credentials: "include",
     });
 
     if (!res.ok) {

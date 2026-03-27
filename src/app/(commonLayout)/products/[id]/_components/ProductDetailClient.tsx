@@ -10,7 +10,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   ArrowLeft, ExternalLink, Ghost, MessageSquare, ShieldAlert,
-  ChevronUp, ChevronDown, Loader2, Send, X, User as UserIcon
+  ChevronUp, ChevronDown, Loader2, Send, X, User as UserIcon, Mail
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -130,8 +130,8 @@ function VotingPanel({ product, onVote }: {
           onClick={() => handleVote("UPVOTE")}
           disabled={!user || loading || voting}
           className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border font-bold text-sm transition-all duration-200 ${myVote === "UPVOTE"
-              ? "bg-green-500/20 border-green-500/40 text-green-400"
-              : "bg-white/5 border-white/10 text-muted-foreground hover:bg-green-500/10 hover:border-green-500/30 hover:text-green-400"
+            ? "bg-green-500/20 border-green-500/40 text-green-400"
+            : "bg-white/5 border-white/10 text-muted-foreground hover:bg-green-500/10 hover:border-green-500/30 hover:text-green-400"
             }`}
         >
           <ChevronUp className="h-4 w-4" /> {product.upvoteCount}
@@ -140,8 +140,8 @@ function VotingPanel({ product, onVote }: {
           onClick={() => handleVote("DOWNVOTE")}
           disabled={!user || loading || voting}
           className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border font-bold text-sm transition-all duration-200 ${myVote === "DOWNVOTE"
-              ? "bg-red-500/20 border-red-500/40 text-red-400"
-              : "bg-white/5 border-white/10 text-muted-foreground hover:bg-red-500/10 hover:border-red-500/30 hover:text-red-400"
+            ? "bg-red-500/20 border-red-500/40 text-red-400"
+            : "bg-white/5 border-white/10 text-muted-foreground hover:bg-red-500/10 hover:border-red-500/30 hover:text-red-400"
             }`}
         >
           <ChevronDown className="h-4 w-4" /> {product.downvoteCount}
@@ -165,8 +165,8 @@ function CommentsSection({ productId }: { productId: string }) {
 
   const fetchComments = useCallback(async () => {
     try {
-      const res = await CommentService.getComments(productId);
-      setComments(res.data ?? res ?? []);
+      const data = await CommentService.getComments(productId);
+      setComments(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error(err);
     } finally {
@@ -181,7 +181,7 @@ function CommentsSection({ productId }: { productId: string }) {
     setPosting(true);
     try {
       const res = await CommentService.postComment(productId, text.trim());
-      const newComment: Comment = res.data ?? res;
+      const newComment: Comment = res.data || res;
       setComments((prev) => [newComment, ...prev]);
       setText("");
     } catch (err) {
@@ -253,18 +253,18 @@ function CommentsSection({ productId }: { productId: string }) {
         </div>
       ) : comments.length === 0 ? (
         <p className="text-center text-muted-foreground py-8 text-sm">
-          No comments yet. Be the first to share your thoughts!
+          {loading ? "Loading comments..." : "No comments yet. Be the first to share your thoughts!"}
         </p>
       ) : (
         <div className="space-y-5 divide-y divide-white/5">
           {comments.map((c) => (
             <div key={c.id} className="flex gap-3 pt-5 first:pt-0">
               <div className="h-9 w-9 shrink-0 rounded-full bg-white/10 flex items-center justify-center border border-white/10 overflow-hidden">
-                {c.user?.photoUrl
+                {c.author?.photoUrl
                   ? (
                     <Image
-                      src={c.user.photoUrl}
-                      alt={c.user.name}
+                      src={c.author.photoUrl}
+                      alt={c.author.name}
                       width={36}
                       height={36}
                       className="h-full w-full object-cover"
@@ -274,12 +274,12 @@ function CommentsSection({ productId }: { productId: string }) {
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-sm font-bold">{c.user?.name ?? "Anonymous"}</span>
+                  <span className="text-sm font-bold">{c.author?.name ?? "Anonymous"}</span>
                   <span className="text-xs text-muted-foreground">
                     {new Date(c.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                   </span>
                 </div>
-                <p className="text-sm text-muted-foreground leading-relaxed">{c.content}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{c.description}</p>
               </div>
             </div>
           ))}
@@ -371,7 +371,7 @@ export function ProductDetailClient({ id }: { id: string }) {
             <div className="flex gap-2 flex-wrap pb-4 border-b border-border/40">
               {product.tags?.map((tagObj: ProductTag) => (
                 <span key={tagObj.id} className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-muted-foreground">
-                  #{tagObj.tag.name}
+                  #{tagObj.tag?.name || (tagObj as unknown as { name: string }).name}
                 </span>
               ))}
             </div>
@@ -387,7 +387,34 @@ export function ProductDetailClient({ id }: { id: string }) {
           <CommentsSection productId={product.id} />
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-6">
+          {/* Meet the Maker Section */}
+          <div className="glass p-6 rounded-3xl border border-white/10 shadow-xl space-y-4">
+            <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Meet the Maker</h3>
+            <div className="flex items-center gap-4">
+              {product.owner?.photoUrl ? (
+                <Image
+                  src={product.owner.photoUrl}
+                  alt={product.owner.name}
+                  width={48}
+                  height={48}
+                  className="h-12 w-12 rounded-2xl object-cover border border-white/10"
+                />
+              ) : (
+                <div className="h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10">
+                  <UserIcon className="h-6 w-6 text-muted-foreground" />
+                </div>
+              )}
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-foreground truncate">{product.owner?.name || "Anonymous Maker"}</p>
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-0.5">
+                  <Mail className="h-3 w-3" />
+                  <span className="truncate">{product.owner?.email || "No email provided"}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <VotingPanel product={product} onVote={handleVoteDelta} />
 
           <button

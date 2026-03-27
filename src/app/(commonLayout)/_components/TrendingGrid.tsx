@@ -55,9 +55,16 @@ export function TrendingGrid() {
                 <Ghost className="h-6 w-6 text-purple-400" />
               </div>
             )}
-            <div className="flex flex-col items-center bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 hover:bg-purple-500/20 transition-colors">
-              <span className="text-xs font-semibold text-purple-200">▲</span>
-              <span className="text-sm font-bold text-white">{product.upvoteCount - product.downvoteCount}</span>
+            <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-3 py-1.5 hover:bg-white/10 transition-colors">
+              <div className="flex items-center gap-1">
+                <span className="text-xs font-semibold text-green-400">▲</span>
+                <span className="text-sm font-bold text-foreground">{product.upvoteCount}</span>
+              </div>
+              <div className="w-px h-3 bg-white/20" />
+              <div className="flex items-center gap-1">
+                <span className="text-xs font-semibold text-red-400">▼</span>
+                <span className="text-sm font-bold text-foreground">{product.downvoteCount}</span>
+              </div>
             </div>
           </div>
 

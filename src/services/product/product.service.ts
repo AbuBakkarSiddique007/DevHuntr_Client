@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://devhuntrserver.onrender.com/api/v1";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
 
 export interface Tag {
   id: string;
@@ -23,6 +23,12 @@ export interface Product {
   status: "PENDING" | "ACCEPTED" | "REJECTED";
   isFeatured: boolean;
   tags?: ProductTag[];
+  owner?: {
+    id: string;
+    name: string;
+    email: string;
+    photoUrl?: string;
+  };
 }
 
 export const ProductService = {
