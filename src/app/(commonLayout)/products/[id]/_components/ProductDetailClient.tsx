@@ -108,12 +108,22 @@ function VotingPanel({ product, onVote }: {
     setMyVote(newVote);
 
     try {
-      await VoteService.castVote(product.id, type);
       const upDelta = (newVote === "UPVOTE" ? 1 : 0) - (prev === "UPVOTE" ? 1 : 0);
       const downDelta = (newVote === "DOWNVOTE" ? 1 : 0) - (prev === "DOWNVOTE" ? 1 : 0);
+
+      // update: optimistic update
       onVote({ up: upDelta, down: downDelta });
+
+      await VoteService.castVote(product.id, type);
     } catch {
+      // update: revert if failed
       setMyVote(prev);
+      const upDelta = (prev === "UPVOTE" ? 1 : 0) - (newVote === "UPVOTE" ? 1 : 0);
+
+      const downDelta = (prev === "DOWNVOTE" ? 1 : 0) - (newVote === "DOWNVOTE" ? 1 : 0);
+
+      onVote({ up: upDelta, down: downDelta });
+      
     } finally {
       setVoting(false);
     }
