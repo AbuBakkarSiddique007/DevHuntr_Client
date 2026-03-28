@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { ProductService, Product } from "@/services/product/product.service";
 import Link from "next/link";
 import Image from "next/image";
-import { Ghost, Search, ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react";
+import { Ghost, Search, ChevronLeft, ChevronRight, ArrowUpRight, Crown, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -112,9 +112,21 @@ export function ProductsList() {
                   </div>
                 </div>
 
+                {/* Premium Badge */}
+                {product.pricingType === "PREMIUM" && (
+                  <div className="absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-400 text-xs font-bold">
+                    <Crown className="h-3 w-3" />
+                    Premium
+                  </div>
+                )}
+
                 <h3 className="text-xl font-bold mb-2 group-hover:text-purple-400 transition-colors line-clamp-1">{product.name}</h3>
                 <p className="text-muted-foreground text-sm line-clamp-3 mb-6 grow">
-                  {product.description}
+                  {product.description || (
+                    <span className="flex items-center gap-1.5 text-amber-400/70 italic">
+                      <Lock className="h-3 w-3" /> Premium content
+                    </span>
+                  )}
                 </p>
 
                 <div className="flex items-center text-xs font-semibold text-primary group-hover:text-primary/80 mt-auto">

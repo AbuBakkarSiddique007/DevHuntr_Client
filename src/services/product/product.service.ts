@@ -21,7 +21,9 @@ export interface Product {
   upvoteCount: number;
   downvoteCount: number;
   status: "PENDING" | "ACCEPTED" | "REJECTED";
+  pricingType: "FREE" | "PREMIUM";
   isFeatured: boolean;
+  isLocked?: boolean;
   tags?: ProductTag[];
   rejectionReason?: string;
   owner?: {
@@ -100,6 +102,7 @@ export const ProductService = {
     description: string;
     externalLink: string;
     tagIds?: string[];
+    pricingType?: "FREE" | "PREMIUM";
   }) => {
     const res = await fetch(`${API_BASE}/products`, {
       method: "POST",

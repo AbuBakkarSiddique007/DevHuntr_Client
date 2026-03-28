@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { toast } from "sonner";
-import { User, Camera, Shield, Mail, Calendar, Loader2, CheckCircle } from "lucide-react";
+import { User, Camera, Shield, Mail, Calendar, Loader2, CheckCircle, Crown, Zap, Lock } from "lucide-react";
 import Image from "next/image";
 
 export default function ProfilePage() {
@@ -76,6 +76,16 @@ export default function ProfilePage() {
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 text-purple-400 text-[10px] font-bold uppercase tracking-widest mt-2 border border-purple-500/20">
                 <Shield className="h-3 w-3" /> {user.role}
               </div>
+              
+              {/* Membership badge */}
+              <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mt-2 ml-2 border ${
+                user.isSubscribed
+                  ? "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                  : "bg-white/5 text-muted-foreground border-white/10"
+              }`}>
+                {user.isSubscribed ? <Crown className="h-3 w-3" /> : <Zap className="h-3 w-3" />}
+                {user.isSubscribed ? "Premium" : "Free"}
+              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/5">
@@ -91,6 +101,28 @@ export default function ProfilePage() {
               </div>
             </div>
           </div>
+
+          {/* Membership Card */}
+          {user.isSubscribed ? (
+            <div className="relative overflow-hidden rounded-3xl border border-amber-500/30 bg-amber-500/5 p-6 text-center shadow-lg shadow-amber-500/5">
+              <div className="absolute top-0 left-0 w-full h-0.5 bg-linear-to-r from-amber-500 to-yellow-400" />
+              <div className="mx-auto mb-3 h-12 w-12 rounded-2xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center">
+                <Crown className="h-6 w-6 text-amber-400" />
+              </div>
+              <p className="text-xs font-bold text-amber-400 uppercase tracking-widest mb-1">Membership</p>
+              <p className="text-lg font-extrabold text-white">Lifetime Premium</p>
+              <p className="text-xs text-muted-foreground mt-1">Unlimited access to all premium products.</p>
+            </div>
+          ) : (
+            <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/2 p-6 text-center">
+              <div className="mx-auto mb-3 h-12 w-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
+                <Lock className="h-6 w-6 text-muted-foreground" />
+              </div>
+              <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">Membership</p>
+              <p className="text-lg font-extrabold text-white">Free Plan</p>
+              <p className="text-xs text-muted-foreground mt-1">Visit a premium product to unlock full access.</p>
+            </div>
+          )}
         </div>
 
 

@@ -5,12 +5,14 @@ import { ProductService, Product, ProductTag } from "@/services/product/product.
 import { CommentService, Comment } from "@/services/comment/comment.service";
 import { VoteService, VoteType } from "@/services/vote/vote.service";
 import { ReportService } from "@/services/report/report.service";
+import { PaymentService } from "@/services/payment/payment.service";
 import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
 import Image from "next/image";
 import {
   ArrowLeft, ExternalLink, Ghost, MessageSquare, ShieldAlert,
-  ChevronUp, ChevronDown, Loader2, Send, X, User as UserIcon, Mail
+  ChevronUp, ChevronDown, Loader2, Send, X, User as UserIcon, Mail,
+  Crown, Lock
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -76,6 +78,88 @@ function ReportModal({ productId, onClose }: { productId: string; onClose: () =>
             </div>
           </>
         )}
+      </div>
+    </div>
+  );
+}
+
+function SubscriptionModal({ productName, onClose }: { productName: string; onClose: () => void }) {
+  const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
+
+  const handleSubscribe = async () => {
+    if (!user) {
+      window.location.href = "/login";
+      return;
+    }
+    setLoading(true);
+    try {
+      const origin = window.location.origin;
+      const result = await PaymentService.createCheckoutSession({
+        successUrl: `${origin}/payment/success`,
+        cancelUrl: `${origin}/payment/cancel`,
+      });
+      const sessionUrl = result?.data?.sessionUrl || result?.sessionUrl;
+      if (sessionUrl) {
+        window.location.href = sessionUrl;
+      }
+    } catch (err) {
+      console.error("Failed to create checkout session", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
+      <div className="w-full max-w-sm rounded-3xl border border-amber-500/20 bg-[#0d0d12] p-8 shadow-2xl shadow-amber-500/10 animate-in fade-in zoom-in-95 duration-200 text-center">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 p-2 rounded-xl hover:bg-white/5 text-muted-foreground transition-all"
+        >
+          <X className="h-4 w-4" />
+        </button>
+
+        {/* Icon */}
+        <div className="mx-auto mb-6 h-20 w-20 rounded-3xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center">
+          <Lock className="h-10 w-10 text-amber-400" />
+        </div>
+
+        <div className="mb-1 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold">
+          <Crown className="h-3 w-3" /> Premium Content
+        </div>
+
+        <h2 className="text-2xl font-extrabold mt-4 mb-2">
+          Unlock &ldquo;{productName}&rdquo;
+        </h2>
+        <p className="text-muted-foreground text-sm mb-8 leading-relaxed">
+          This is a premium product. Get <span className="text-amber-400 font-semibold">lifetime access</span> to all premium products on DevHuntr for a one-time payment.
+        </p>
+
+        <div className="rounded-2xl bg-white/5 border border-white/10 p-5 mb-6">
+          <p className="text-4xl font-black text-white">$50</p>
+          <p className="text-xs text-muted-foreground mt-1">One-time · Lifetime Access · All Premium Products</p>
+        </div>
+
+        <Button
+          onClick={handleSubscribe}
+          disabled={loading}
+          className="w-full rounded-2xl h-12 text-base font-bold bg-amber-500 hover:bg-amber-400 text-black transition-all shadow-lg shadow-amber-500/25"
+        >
+          {loading ? (
+            <Loader2 className="h-5 w-5 animate-spin" />
+          ) : user ? (
+            <span className="flex items-center gap-2">
+              <Crown className="h-4 w-4" /> Unlock for $50
+            </span>
+          ) : (
+            "Log in to Subscribe"
+          )}
+        </Button>
+
+        <p className="text-xs text-muted-foreground mt-4">
+          Secured by <span className="text-white font-medium">Stripe</span>. Cancel anytime.
+        </p>
       </div>
     </div>
   );
@@ -303,6 +387,7 @@ export function ProductDetailClient({ id }: { id: string }) {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [showReport, setShowReport] = useState(false);
+  const [showSubscription, setShowSubscription] = useState(false);
 
   useEffect(() => {
     ProductService.getProductById(id)
@@ -339,9 +424,68 @@ export function ProductDetailClient({ id }: { id: string }) {
     );
   }
 
+  // Full-Lock State for Premium products:
+  if (product.isLocked) {
+    return (
+      <div className="container mx-auto px-4 py-20 min-h-[calc(100vh-100px)] flex flex-col items-center justify-center text-center">
+        {showSubscription && (
+          <SubscriptionModal
+            productName={product.name}
+            onClose={() => setShowSubscription(false)}
+          />
+        )}
+
+
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10">
+          <div className="h-[500px] w-[500px] rounded-full bg-amber-500/5 blur-[120px]" />
+        </div>
+
+        {product.image && (
+          <div className="mb-6 relative">
+            <Image
+              src={product.image}
+              alt={product.name}
+              width={120}
+              height={120}
+              className="h-28 w-28 rounded-3xl object-cover border border-amber-500/20 shadow-2xl shadow-amber-500/10"
+            />
+            <div className="absolute -bottom-2 -right-2 h-8 w-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center">
+              <Lock className="h-4 w-4 text-amber-400" />
+            </div>
+          </div>
+        )}
+
+        <div className="mb-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold">
+          <Crown className="h-3 w-3" /> Premium Product
+        </div>
+        <h1 className="text-4xl font-extrabold tracking-tight mb-4">{product.name}</h1>
+        <p className="text-muted-foreground max-w-md mb-8 leading-relaxed">
+          This is a premium product. Subscribe to get lifetime access to all premium content on DevHuntr.
+        </p>
+
+        <Button
+          onClick={() => setShowSubscription(true)}
+          className="rounded-2xl h-14 px-8 text-base font-bold bg-amber-500 hover:bg-amber-400 text-black shadow-lg shadow-amber-500/25 transition-all"
+        >
+          <Crown className="mr-2 h-5 w-5" /> Unlock for $50 Lifetime
+        </Button>
+
+        <Link href="/products" className="mt-6 text-sm text-muted-foreground hover:text-foreground transition-colors">
+          ← Back to Explore
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto px-4 py-12 md:py-20 min-h-[calc(100vh-100px)]">
       {showReport && <ReportModal productId={product.id} onClose={() => setShowReport(false)} />}
+      {showSubscription && (
+        <SubscriptionModal
+          productName={product.name}
+          onClose={() => setShowSubscription(false)}
+        />
+      )}
 
       {/* Hero card */}
       <div className="relative overflow-hidden rounded-[2rem] glass p-8 md:p-12 mb-12 shadow-2xl shadow-purple-500/10 border border-border/50 group">
@@ -398,7 +542,7 @@ export function ProductDetailClient({ id }: { id: string }) {
         </div>
 
         <div className="space-y-6">
-          {/* Meet the Maker Section */}
+
           <div className="glass p-6 rounded-3xl border border-white/10 shadow-xl space-y-4">
             <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Meet the Maker</h3>
             <div className="flex items-center gap-4">
