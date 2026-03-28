@@ -90,7 +90,7 @@ export default function AdminDashboard() {
                   <AlertCircle className="h-5 w-5 text-yellow-500" />
                   <h3 className="font-bold">Pending Review</h3>
                </div>
-               <p className="text-3xl font-black text-foreground">{stats?.products.pending || 0}</p>
+               <p className="text-3xl font-black text-foreground">{stats?.products?.pending || 0}</p>
                <p className="text-xs text-muted-foreground mt-1 text-uppercase tracking-wider">Awaiting moderation</p>
             </div>
 

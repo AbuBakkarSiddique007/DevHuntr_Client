@@ -5,6 +5,7 @@ export interface Statistics {
   totalProducts: number;
   totalComments: number;
   totalVotes: number;
+  totalReports: number;
   featuredProducts?: number;
   products?: {
     pending: number;
