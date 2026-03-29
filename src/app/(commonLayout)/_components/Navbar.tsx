@@ -36,6 +36,9 @@ export function Navbar() {
           <Link href="/featured" className={`text-sm font-medium hover:scale-105 transition-all flex items-center gap-1.5 ${pathname === '/featured' ? 'text-yellow-500 drop-shadow-[0_0_10px_rgba(234,179,8,0.5)]' : 'text-muted-foreground hover:text-yellow-500'}`}>
             Featured
           </Link>
+          <Link href="/about" className={`text-sm font-medium hover:scale-105 transition-all ${pathname === '/about' ? 'text-blue-400 drop-shadow-[0_0_10px_rgba(96,165,250,0.5)]' : 'text-muted-foreground hover:text-foreground'}`}>
+            About Us
+          </Link>
         </nav>
 
         {/* AUTH ACTIONS */}
@@ -126,6 +129,7 @@ export function Navbar() {
 
 
           <Link href="/featured" onClick={() => setIsMobileMenuOpen(false)} className={`px-4 py-2 font-medium rounded-lg transition-colors ${pathname === '/featured' ? 'bg-yellow-500/20 text-yellow-500' : 'hover:bg-white/5 text-muted-foreground hover:text-yellow-500'}`}>Featured</Link>
+          <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className={`px-4 py-2 font-medium rounded-lg transition-colors ${pathname === '/about' ? 'bg-blue-500/20 text-blue-400' : 'hover:bg-white/5'}`}>About Us</Link>
 
 
           <div className="h-px bg-border my-2" />
