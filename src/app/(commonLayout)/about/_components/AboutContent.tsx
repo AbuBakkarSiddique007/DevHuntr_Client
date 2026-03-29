@@ -71,7 +71,7 @@ export function AboutContent() {
             <div key={step.id} className="group relative flex gap-8 md:gap-16 mb-24 last:mb-0">
               
               {index !== steps.length - 1 && (
-                <div className="absolute left-6 md:left-[2.25rem] top-12 bottom-[-4rem] w-px bg-linear-to-b from-white/10 to-transparent -z-10" />
+                <div className="absolute left-6 md:left-9 top-12 -bottom-16 w-px bg-linear-to-b from-white/10 to-transparent -z-10" />
               )}
 
              

@@ -98,7 +98,7 @@ export function RegisterForm() {
               <FormItem>
                 <FormLabel className="font-semibold text-foreground/80">First Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="John" className="h-12 bg-background/50 border-input rounded-xl focus-visible:ring-primary" {...field} />
+                  <Input placeholder="First Name" className="h-12 bg-background/50 border-input rounded-xl focus-visible:ring-primary" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -111,7 +111,7 @@ export function RegisterForm() {
               <FormItem>
                 <FormLabel className="font-semibold text-foreground/80">Last Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Doe" className="h-12 bg-background/50 border-input rounded-xl focus-visible:ring-primary" {...field} />
+                  <Input placeholder="Last Name" className="h-12 bg-background/50 border-input rounded-xl focus-visible:ring-primary" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -126,9 +126,9 @@ export function RegisterForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="font-semibold text-foreground/80">Email Address</FormLabel>
-              <FormControl>
-                <Input type="email" placeholder="john@example.com" className="h-12 bg-background/50 border-input rounded-xl focus-visible:ring-primary" {...field} />
-              </FormControl>
+                <FormControl>
+                  <Input type="email" placeholder="name@email.com" className="h-12 bg-background/50 border-input rounded-xl focus-visible:ring-primary" {...field} />
+                </FormControl>
               <FormMessage />
             </FormItem>
           )}
