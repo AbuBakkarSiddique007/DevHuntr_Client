@@ -10,7 +10,23 @@ export default function PaymentSuccessPage() {
   const { checkSession } = useAuth();
 
   useEffect(() => {
+    // Check session immediately:
     checkSession();
+
+    // Poll every 1.5 seconds for 5 times (total 7.5 seconds)
+    // Stripe webhooks usually take 1-3 seconds to reach local server
+    let count = 0;
+    
+    const interval = setInterval(() => {
+      count++;
+      if (count >= 5) {
+        clearInterval(interval);
+      }
+      
+      checkSession();
+    }, 1500);
+
+    return () => clearInterval(interval);
   }, [checkSession]);
 
   return (

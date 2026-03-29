@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://devhuntrserver.onrender.com/api/v1";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
 import { Eye, EyeOff } from "lucide-react";

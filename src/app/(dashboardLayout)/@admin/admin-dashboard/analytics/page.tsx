@@ -5,7 +5,7 @@ import { Activity, Loader2, LineChart, Users, Package, Info } from "lucide-react
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://devhuntrserver.onrender.com/api/v1";
 
 type Stats = {
   totalUsers?: number;

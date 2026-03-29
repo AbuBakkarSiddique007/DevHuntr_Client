@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://devhuntrserver.onrender.com/api/v1";
 
 export interface Tag {
   id: string;
@@ -36,12 +36,14 @@ export interface Product {
 
 export const ProductService = {
 
-  getProducts: async ({ page = 1, limit = 10, search = "", tag = "" } = {}) => {
+  getProducts: async ({ page = 1, limit = 10, search = "", tag = "", pricingType = "" } = {}) => {
     let url = `${API_BASE}/products?page=${page}&limit=${limit}`;
 
     if (search) url += `&search=${encodeURIComponent(search)}`;
 
     if (tag) url += `&tag=${encodeURIComponent(tag)}`;
+
+    if (pricingType) url += `&pricingType=${encodeURIComponent(pricingType)}`;
 
     const res = await fetch(url, {
       method: "GET",
@@ -69,8 +71,8 @@ export const ProductService = {
     return res.json();
   },
 
-  getFeaturedProducts: async () => {
-    const res = await fetch(`${API_BASE}/products/featured`, {
+  getFeaturedProducts: async ({ page = 1, limit = 10 } = {}) => {
+    const res = await fetch(`${API_BASE}/products/featured?page=${page}&limit=${limit}`, {
       method: "GET",
       credentials: "include",
     });

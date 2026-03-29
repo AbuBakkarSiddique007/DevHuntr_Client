@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { ProductService, Product } from "@/services/product/product.service";
+import { TagService, Tag } from "@/services/tag/tag.service";
 import Link from "next/link";
 import Image from "next/image";
-import { Ghost, Search, ChevronLeft, ChevronRight, ArrowUpRight, Crown, Lock } from "lucide-react";
+import { Ghost, Search, ChevronLeft, ChevronRight, ArrowUpRight, Crown, Lock, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -15,14 +16,19 @@ export function ProductsList() {
   const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
+  const [tags, setTags] = useState<Tag[]>([]);
+  const [selectedTag, setSelectedTag] = useState("");
+  const [pricingType, setPricingType] = useState("");
 
   const loadProducts = async () => {
     setLoading(true);
     try {
-      const response = await ProductService.getProducts({ page, limit: 10, search });
+      const response = await ProductService.getProducts({ page, limit: 10, search, tag: selectedTag, pricingType });
       const productsData = response?.data?.products || [];
       setProducts(Array.isArray(productsData) ? productsData : []);
-      setTotalPages(response?.data?.meta?.totalPages || 1);
+      const meta = response?.data?.meta;
+      const calculatedPages = meta?.total ? Math.ceil(meta.total / 10) : 1;
+      setTotalPages(meta?.totalPages || calculatedPages);
     } catch (err) {
       console.error("Failed to load products", err);
     } finally {
@@ -31,9 +37,13 @@ export function ProductsList() {
   };
 
   useEffect(() => {
+    TagService.getTags().then(setTags).catch(console.error);
+  }, []);
+
+  useEffect(() => {
     loadProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, search]);
+  }, [page, search, selectedTag, pricingType]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,7 +55,7 @@ export function ProductsList() {
     <div className="container mx-auto px-4 py-12 md:py-20 min-h-[calc(100vh-100px)]">
 
       {/* Header & Search */}
-      <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-16">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-8">
         <div>
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-2 text-transparent bg-clip-text bg-linear-to-r from-purple-400 to-indigo-400">
             Explore Products
@@ -69,6 +79,50 @@ export function ProductsList() {
             Search
           </Button>
         </form>
+      </div>
+
+      {/* Filters (Tags & Pricing) */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+        <div className="relative w-full md:w-64 shrink-0">
+          <select
+            value={selectedTag}
+            onChange={(e) => { setSelectedTag(e.target.value); setPage(1); }}
+            className="flex h-10 w-full items-center justify-between rounded-full border border-white/10 bg-white/5 px-4 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-background appearance-none cursor-pointer glass backdrop-blur-md transition-colors hover:bg-white/10 text-foreground"
+          >
+            <option value="" className="bg-[#1a1a2e] text-foreground p-2">All Categories</option>
+            {tags.map(t => (
+              <option key={t.id} value={t.name} className="bg-[#1a1a2e] text-foreground p-2">{t.name}</option>
+            ))}
+          </select>
+          <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 opacity-50 pointer-events-none" />
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0 bg-white/5 p-1.5 rounded-full border border-white/10 w-full sm:w-auto justify-center">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => { setPricingType(""); setPage(1); }}
+            className={`rounded-full px-4 h-8 transition-colors ${!pricingType ? 'bg-white/10 font-bold text-white' : 'text-muted-foreground hover:text-white hover:bg-white/5'}`}
+          >
+            All
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => { setPricingType("FREE"); setPage(1); }}
+            className={`rounded-full px-4 h-8 transition-colors ${pricingType === "FREE" ? 'bg-white/10 font-bold text-white' : 'text-muted-foreground hover:text-white hover:bg-white/5'}`}
+          >
+            Free
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => { setPricingType("PREMIUM"); setPage(1); }}
+            className={`rounded-full px-4 h-8 flex items-center gap-1.5 transition-colors ${pricingType === "PREMIUM" ? 'bg-amber-500/20 text-amber-400 font-bold hover:bg-amber-500/30 border border-amber-500/20' : 'text-muted-foreground hover:text-amber-400 hover:bg-amber-500/10'}`}
+          >
+            <Crown className="h-3 w-3" /> Premium
+          </Button>
+        </div>
       </div>
 
       {/* Grid */}
@@ -140,9 +194,9 @@ export function ProductsList() {
           <div className="flex flex-wrap items-center justify-center gap-2 mt-16">
             <Button
               variant="outline"
-              className="rounded-full glass h-10 px-4"
+              className="rounded-full glass h-10 px-4 disabled:opacity-50"
               onClick={() => setPage(p => Math.max(1, p - 1))}
-              disabled={page === 1}
+              disabled={page <= 1}
             >
               <ChevronLeft className="mr-1 h-4 w-4" /> Previous
             </Button>
@@ -165,9 +219,9 @@ export function ProductsList() {
 
             <Button
               variant="outline"
-              className="rounded-full glass h-10 px-4"
+              className="rounded-full glass h-10 px-4 disabled:opacity-50"
               onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-              disabled={page === totalPages}
+              disabled={page >= totalPages}
             >
               Next <ChevronRight className="ml-1 h-4 w-4" />
             </Button>

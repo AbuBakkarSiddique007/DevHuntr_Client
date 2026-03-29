@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Ghost, LogOut, Menu, UserCircle, LayoutDashboard, ChevronDown } from "lucide-react";
 import { useState } from "react";
 
 export function Navbar() {
+  const pathname = usePathname();
   const { user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -28,8 +30,11 @@ export function Navbar() {
 
         {/* DESKTOP NAV */}
         <nav className="hidden md:flex items-center gap-8">
-          <Link href="/products" className="text-sm font-medium text-muted-foreground hover:text-foreground hover:scale-105 transition-all">
-            Products
+          <Link href="/products" className={`text-sm font-medium hover:scale-105 transition-all ${pathname === '/products' ? 'text-primary drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]' : 'text-muted-foreground hover:text-foreground'}`}>
+            Explore
+          </Link>
+          <Link href="/featured" className={`text-sm font-medium hover:scale-105 transition-all flex items-center gap-1.5 ${pathname === '/featured' ? 'text-yellow-500 drop-shadow-[0_0_10px_rgba(234,179,8,0.5)]' : 'text-muted-foreground hover:text-yellow-500'}`}>
+            Featured
           </Link>
         </nav>
 
@@ -117,7 +122,12 @@ export function Navbar() {
       {/* MOBILE NAV */}
       {isMobileMenuOpen && (
         <div className="md:hidden absolute top-16 left-0 w-full bg-background/95 backdrop-blur-3xl border-b border-border p-4 flex flex-col gap-4 animate-in slide-in-from-top-4 fade-in-90">
-          <Link href="/products" className="px-4 py-2 font-medium hover:bg-white/5 rounded-lg transition-colors">Products</Link>
+          <Link href="/products" onClick={() => setIsMobileMenuOpen(false)} className={`px-4 py-2 font-medium rounded-lg transition-colors ${pathname === '/products' ? 'bg-primary/20 text-primary' : 'hover:bg-white/5'}`}>Explore</Link>
+
+
+          <Link href="/featured" onClick={() => setIsMobileMenuOpen(false)} className={`px-4 py-2 font-medium rounded-lg transition-colors ${pathname === '/featured' ? 'bg-yellow-500/20 text-yellow-500' : 'hover:bg-white/5 text-muted-foreground hover:text-yellow-500'}`}>Featured</Link>
+
+
           <div className="h-px bg-border my-2" />
           {user ? (
             <>
@@ -128,6 +138,7 @@ export function Navbar() {
                 <LayoutDashboard className="h-5 w-5 text-purple-400" />
                 Dashboard
               </Link>
+              
               <button
                 onClick={() => logout()}
                 className="flex items-center gap-3 w-full px-4 py-3 font-medium text-destructive hover:bg-destructive/10 rounded-xl transition-colors"
