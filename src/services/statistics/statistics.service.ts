@@ -52,4 +52,19 @@ export const StatisticsService = {
     const { data } = await res.json();
     return data;
   },
+
+  getAdminStatistics: async (): Promise<Statistics> => {
+    const res = await fetch(`${API_BASE}/statistics`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
+    }
+
+    const { data } = await res.json();
+    return data;
+  },
 };

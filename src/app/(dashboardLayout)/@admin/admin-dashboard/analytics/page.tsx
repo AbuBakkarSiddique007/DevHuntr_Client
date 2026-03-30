@@ -4,14 +4,18 @@ import { useEffect, useState } from "react";
 import { Activity, Loader2, LineChart, Users, Package, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://devhuntrserver.onrender.com/api/v1";
+import { StatisticsService } from "@/services/statistics/statistics.service";
 
 type Stats = {
   totalUsers?: number;
   totalProducts?: number;
-  pendingProducts?: number;
-  reportsOpen?: number;
+  featuredProducts?: number;
+  totalReports?: number;
+  products?: {
+    pending: number;
+    accepted: number;
+    rejected: number;
+  };
 };
 
 export default function AdminAnalyticsPage() {
@@ -23,18 +27,7 @@ export default function AdminAnalyticsPage() {
     const run = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`${API_BASE}/statistics`, {
-          method: "GET",
-          credentials: "include",
-        });
-
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({}));
-          throw new Error(err.error || err.message || `HTTP ${res.status}`);
-        }
-
-        const json = await res.json();
-        const data = json?.data || json;
+        const data = await StatisticsService.getAdminStatistics();
         setStats(data ?? null);
       } catch (err) {
         const error = err as Error;
@@ -51,8 +44,9 @@ export default function AdminAnalyticsPage() {
   const cards = [
     { title: "Total Users", value: stats?.totalUsers, Icon: Users },
     { title: "Total Products", value: stats?.totalProducts, Icon: Package },
-    { title: "Pending Products", value: stats?.pendingProducts, Icon: LineChart },
-    { title: "Open Reports", value: stats?.reportsOpen, Icon: Activity },
+    { title: "Featured Products", value: stats?.featuredProducts, Icon: Package },
+    { title: "Pending Reviews", value: stats?.products?.pending, Icon: LineChart },
+    { title: "Total Reports", value: stats?.totalReports, Icon: Activity },
   ];
 
   return (

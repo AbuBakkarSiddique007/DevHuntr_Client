@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import { Loader2, Users, Info, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://devhuntrserver.onrender.com/api/v1";
+import { UserService } from "@/services/user/user.service";
 
 type UserRow = {
     id: string;
@@ -28,17 +27,7 @@ export default function AdminUsersPage() {
         const run = async () => {
             setLoading(true);
             try {
-                const res = await fetch(`${API_BASE}/users?page=1&limit=50`, {
-                    method: "GET",
-                    credentials: "include",
-                });
-
-                if (!res.ok) {
-                    const err = await res.json().catch(() => ({}));
-                    throw new Error(err.error || err.message || `HTTP ${res.status}`);
-                }
-
-                const json = await res.json();
+                const json = await UserService.listUsers({ page: 1, limit: 50 });
                 const data = json?.data?.users || json?.users || [];
                 const list = Array.isArray(data) ? data : [];
                 setUsers(list);
@@ -68,17 +57,7 @@ export default function AdminUsersPage() {
 
         setSavingUserId(userId);
         try {
-            const res = await fetch(`${API_BASE}/users/${userId}/role`, {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-                body: JSON.stringify({ role }),
-            });
-
-            if (!res.ok) {
-                const err = await res.json().catch(() => ({}));
-                throw new Error(err.error || err.message || `HTTP ${res.status}`);
-            }
+            await UserService.updateUserRole(userId, role);
 
             toast.success("Role updated");
             setUsers((prev) => prev.map((u) => (u.id === userId ? { ...u, role } : u)));

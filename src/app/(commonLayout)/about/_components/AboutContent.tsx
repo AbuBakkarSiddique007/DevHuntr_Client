@@ -1,6 +1,6 @@
 "use client";
 
-import { Ghost, Sparkles, Rocket, Users, Target, ArrowRight, ShieldCheck, TrendingUp } from "lucide-react";
+import { Ghost, Sparkles, Rocket, Users, ShieldCheck, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 

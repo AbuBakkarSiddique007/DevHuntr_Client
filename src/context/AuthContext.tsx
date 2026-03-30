@@ -1,7 +1,8 @@
 "use client";
 
 import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://devhuntrserver.onrender.com/api/v1";
+import { AuthService } from "@/services/auth/auth.service";
+import { UserService } from "@/services/user/user.service";
 
 export type Role = "USER" | "MODERATOR" | "ADMIN";
 
@@ -32,11 +33,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const refreshSession = useCallback(async (): Promise<boolean> => {
     try {
-      const res = await fetch(`${API_BASE}/auth/refresh`, {
-        method: "POST",
-        credentials: "include",
-      });
-      return res.ok;
+      await AuthService.refreshSession();
+      return true;
     } catch {
       return false;
     }
@@ -45,38 +43,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const checkSession = useCallback(async () => {
     setIsLoading(true);
     try {
-      const runMe = async () => {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000);
-
-        try {
-          return await fetch(`${API_BASE}/users/me`, {
-            method: "GET",
-            credentials: "include",
-            cache: "no-store",
-            signal: controller.signal,
-          });
-        } finally {
-          clearTimeout(timeoutId);
-        }
-      };
-
-      let res = await runMe();
-
-      if (res.status === 401) {
-        const refreshed = await refreshSession();
-        if (refreshed) {
-          res = await runMe();
+      let data;
+      try {
+        const response = await UserService.getMe();
+        data = response.data || response.user || response;
+      } catch (err: unknown) {
+        const error = err as Error;
+        if (error.message?.includes("401")) {
+          const refreshed = await refreshSession();
+          if (refreshed) {
+            const response = await UserService.getMe();
+            data = response.data || response.user || response;
+          } else {
+            throw err;
+          }
+        } else {
+          throw err;
         }
       }
 
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const response = await res.json();
-
-      setUser(response.data || response.user || response);
-
-    } catch (err) {
-      console.log("No active logged-in session.", err);
+      setUser(data);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "No active logged-in session.";
+      console.log(errorMessage);
       setUser(null);
 
     } finally {
@@ -90,11 +79,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     try {
-      await fetch(`${API_BASE}/auth/logout`, {
-        method: "POST",
-        credentials: "include"
-      });
-
+      await AuthService.logout();
     } catch (err) {
       console.warn("Logout request failed, clearing local state anyway.", err);
     }
@@ -103,21 +88,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const updateUser = async (payload: Partial<User>) => {
     try {
-      const res = await fetch(`${API_BASE}/users/update-profile`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-        credentials: "include",
-
-      });
-      if (!res.ok) {
-        const errorData = await res.json().catch(() => ({}));
-
-        throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
-      }
-      const response = await res.json();
+      const response = await UserService.updateProfile(payload);
       const updatedUser = response.data || response.user || response;
-
       setUser(updatedUser);
 
     } catch (err) {

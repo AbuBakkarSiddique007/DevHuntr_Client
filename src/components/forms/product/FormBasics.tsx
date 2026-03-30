@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Ghost } from "lucide-react";
 import { ProductFormValues } from "./types";
+import { ImageUpload } from "./ImageUpload";
 
 export function FormBasics() {
   const { register, formState: { errors } } = useFormContext<ProductFormValues>();
@@ -18,25 +19,31 @@ export function FormBasics() {
         <h3 className="text-xl font-bold uppercase tracking-tight text-foreground">The Basics</h3>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-2">
-          <label className="text-xs font-bold text-muted-foreground uppercase tracking-widest ml-1">Product Name</label>
-          <Input
-            {...register("name")}
-            placeholder="e.g. NextGen SaaS Platform"
-            className="rounded-2xl border-white/10 bg-white/5 h-12 focus:ring-purple-500/50"
-          />
-          {errors.name && <p className="text-xs text-destructive ml-1">{errors.name.message}</p>}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="space-y-6 flex flex-col justify-center">
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-muted-foreground uppercase tracking-widest ml-1">Product Name</label>
+            <Input
+              {...register("name")}
+              placeholder="e.g. NextGen SaaS Platform"
+              className="rounded-2xl border-white/10 bg-white/5 h-12 focus:ring-purple-500/50"
+            />
+            {errors.name && <p className="text-xs text-destructive ml-1">{errors.name.message}</p>}
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-muted-foreground uppercase tracking-widest ml-1">Launch URL / External Link</label>
+            <Input
+              {...register("externalLink")}
+              placeholder="https://yourproduct.com/launch"
+              className="rounded-2xl border-white/10 bg-white/5 h-12"
+            />
+            {errors.externalLink && <p className="text-xs text-destructive ml-1">{errors.externalLink.message}</p>}
+          </div>
         </div>
 
-        <div className="space-y-2">
-          <label className="text-xs font-bold text-muted-foreground uppercase tracking-widest ml-1">Thumbnail URL</label>
-          <Input
-            {...register("image")}
-            placeholder="https://i.ibb.co/product-mockup.png"
-            className="rounded-2xl border-white/10 bg-white/5 h-12"
-          />
-          {errors.image && <p className="text-xs text-destructive ml-1">{errors.image.message}</p>}
+        <div className="flex flex-col justify-end">
+          <ImageUpload />
         </div>
       </div>
 
@@ -48,16 +55,6 @@ export function FormBasics() {
           className="rounded-2xl border-white/10 bg-white/5 min-h-[120px] resize-none"
         />
         {errors.description && <p className="text-xs text-destructive ml-1">{errors.description.message}</p>}
-      </div>
-
-      <div className="space-y-2">
-        <label className="text-xs font-bold text-muted-foreground uppercase tracking-widest ml-1">Launch URL / External Link</label>
-        <Input
-          {...register("externalLink")}
-          placeholder="https://yourproduct.com/launch"
-          className="rounded-2xl border-white/10 bg-white/5 h-12"
-        />
-        {errors.externalLink && <p className="text-xs text-destructive ml-1">{errors.externalLink.message}</p>}
       </div>
     </div>
   );

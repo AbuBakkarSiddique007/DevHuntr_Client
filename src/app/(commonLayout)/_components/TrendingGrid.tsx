@@ -78,9 +78,7 @@ export function TrendingGrid() {
               product.tags
                 .slice(0, 2)
                 .map((tagObj: ProductTag) => {
-                  const tagName =
-                    tagObj?.tag?.name ||
-                    (tagObj as any)?.name;
+                  const tagName = tagObj.tag?.name;
 
                   if (!tagName) return null;
 

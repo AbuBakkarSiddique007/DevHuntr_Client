@@ -56,4 +56,16 @@ export const ReportService = {
     }
     return res.json();
   },
+
+  deleteReport: async (id: string) => {
+    const res = await fetch(`${API_BASE}/reports/${id}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || `HTTP ${res.status}`);
+    }
+    return res.json();
+  },
 };

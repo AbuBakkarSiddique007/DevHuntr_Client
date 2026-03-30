@@ -1,38 +1,85 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
    Users,
    Package,
    MessageSquare,
    ThumbsUp,
    Zap,
-   ShieldAlert,
    Loader2,
+   Activity,
    Star,
-   AlertCircle
+   AlertCircle,
+   CheckCircle,
+   XCircle,
+   RefreshCw,
+   Info
 } from "lucide-react";
-import { StatisticsService, Statistics } from "@/services/statistics/statistics.service";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { StatisticsService } from "@/services/statistics/statistics.service";
+
+type PublicStats = {
+  totalUsers?: number;
+  totalProducts?: number;
+  totalComments?: number;
+  totalVotes?: number;
+};
+
+type AdminStats = {
+  totalReports?: number;
+  featuredProducts?: number;
+  products?: {
+    pending: number;
+    accepted: number;
+    rejected: number;
+  };
+};
 
 export function AdminDashboardContent() {
-   const [stats, setStats] = useState<Statistics | null>(null);
+   const [publicStats, setPublicStats] = useState<PublicStats | null>(null);
+   const [adminStats, setAdminStats] = useState<AdminStats | null>(null);
    const [loading, setLoading] = useState(true);
+   const [refreshKey, setRefreshKey] = useState(0);
+
+   const fetchAllStats = useCallback(async () => {
+      setLoading(true);
+      try {
+         const [publicData, adminData] = await Promise.all([
+            StatisticsService.getStatistics(),
+            StatisticsService.getAdminStatistics(),
+         ]);
+
+         setPublicStats(publicData);
+         setAdminStats(adminData as AdminStats);
+
+      } catch (err) {
+         console.error(err);
+         toast.error("Failed to load dashboard statistics");
+      } finally {
+         setLoading(false);
+      }
+   }, []);
 
    useEffect(() => {
-      const fetchStats = async () => {
-         try {
-            const data = await StatisticsService.getStatistics();
-            setStats(data);
-         } catch (err) {
-            console.error(err);
-            toast.error("Failed to load dashboard statistics");
-         } finally {
-            setLoading(false);
-         }
-      };
-      fetchStats();
-   }, []);
+      fetchAllStats();
+   }, [fetchAllStats, refreshKey]);
+
+   const primaryCards = [
+      { title: "Total Users", value: publicStats?.totalUsers, Icon: Users, color: "text-blue-400", glow: "group-hover:bg-blue-500/10" },
+      { title: "Total Products", value: publicStats?.totalProducts, Icon: Package, color: "text-purple-400", glow: "group-hover:bg-purple-500/10" },
+      { title: "Engagement (Votes)", value: publicStats?.totalVotes, Icon: ThumbsUp, color: "text-green-400", glow: "group-hover:bg-green-500/10" },
+      { title: "Discussions", value: publicStats?.totalComments, Icon: MessageSquare, color: "text-pink-400", glow: "group-hover:bg-pink-500/10" },
+   ];
+
+   const secondaryCards = [
+      { title: "Featured Products", value: adminStats?.featuredProducts, Icon: Star, color: "text-yellow-400", border: "border-l-yellow-500/50" },
+      { title: "Pending Reviews", value: adminStats?.products?.pending, Icon: AlertCircle, color: "text-orange-400", border: "border-l-orange-500/50" },
+      { title: "Accepted Products", value: adminStats?.products?.accepted, Icon: CheckCircle, color: "text-green-400", border: "border-l-green-500/50" },
+      { title: "Rejected Products", value: adminStats?.products?.rejected, Icon: XCircle, color: "text-red-400", border: "border-l-red-500/50" },
+      { title: "Total Reports", value: adminStats?.totalReports, Icon: Activity, color: "text-red-500", border: "border-l-red-600/50" },
+   ];
 
    if (loading) {
       return (
@@ -42,15 +89,12 @@ export function AdminDashboardContent() {
       );
    }
 
-   const statCards = [
-      { title: "Total Users", value: stats?.totalUsers || 0, Icon: Users, color: "text-blue-400" },
-      { title: "Total Products", value: stats?.totalProducts || 0, Icon: Package, color: "text-purple-400" },
-      { title: "Engagement (Votes)", value: stats?.totalVotes || 0, Icon: ThumbsUp, color: "text-green-400" },
-      { title: "Discussions", value: stats?.totalComments || 0, Icon: MessageSquare, color: "text-pink-400" },
-   ];
+   const hasData = publicStats || adminStats;
 
    return (
-      <div className="space-y-8 max-w-6xl mx-auto p-6 bg-white/1 rounded-3xl border border-white/5 animate-in fade-in duration-700">
+      <div className="space-y-10 max-w-6xl mx-auto animate-in fade-in duration-700">
+
+         {/* Header */}
          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
                <h1 className="text-3xl font-extrabold tracking-tight flex items-center gap-3">
@@ -59,50 +103,62 @@ export function AdminDashboardContent() {
                </h1>
                <p className="text-muted-foreground mt-1 text-lg">Real-time platform analytics and system overview.</p>
             </div>
+            <Button
+               variant="outline"
+               className="rounded-xl border-white/10 bg-white/5 flex items-center gap-2"
+               onClick={() => setRefreshKey(k => k + 1)}
+               disabled={loading}
+            >
+               <RefreshCw className="h-4 w-4" /> Refresh
+            </Button>
          </div>
 
-         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {statCards.map((stat) => (
-               <div key={stat.title} className="p-6 rounded-2xl border border-white/5 bg-white/2 backdrop-blur-sm hover:bg-white/4 transition-all group">
-                  <div className="p-3 w-fit rounded-xl bg-white/5 group-hover:bg-blue-500/10 transition-colors mb-4">
-                     <stat.Icon className={`h-5 w-5 ${stat.color}`} />
+         {hasData ? (
+            <>
+               {/* Primary Stats */}
+               <div>
+                  <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Platform Overview</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                     {primaryCards.map((stat) => (
+                        <div key={stat.title} className="p-6 rounded-2xl border border-white/5 bg-white/2 backdrop-blur-sm hover:bg-white/4 transition-all group relative overflow-hidden">
+                           <div className={`absolute top-0 right-0 -z-10 h-24 w-24 rounded-full bg-white/5 blur-2xl ${stat.glow} transition-colors`} />
+                           <div className={`p-3 w-fit rounded-xl bg-white/5 ${stat.glow} transition-colors mb-4`}>
+                              <stat.Icon className={`h-5 w-5 ${stat.color}`} />
+                           </div>
+                           <h3 className="text-sm font-medium text-muted-foreground mb-1">{stat.title}</h3>
+                           <p className="text-2xl font-bold text-foreground tracking-tight">
+                              {typeof stat.value === "number" ? stat.value.toLocaleString() : "—"}
+                           </p>
+                        </div>
+                     ))}
                   </div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-1">{stat.title}</h3>
-                  <p className="text-2xl font-bold text-foreground tracking-tight">
-                     {stat.value.toLocaleString()}
-                  </p>
                </div>
-            ))}
-         </div>
 
-         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-6 rounded-2xl border border-white/5 bg-white/2 backdrop-blur-sm">
-               <div className="flex items-center gap-3 mb-4">
-                  <Star className="h-5 w-5 text-yellow-400" />
-                  <h3 className="font-bold">Featured</h3>
+               {/* Secondary Stats */}
+               <div>
+                  <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Product & Moderation</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                     {secondaryCards.map((stat) => (
+                        <div key={stat.title} className={`p-5 rounded-2xl border border-white/5 bg-white/2 backdrop-blur-sm border-l-4 ${stat.border} hover:bg-white/4 transition-all`}>
+                           <div className="flex items-center gap-2 mb-3">
+                              <stat.Icon className={`h-4 w-4 ${stat.color}`} />
+                              <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{stat.title}</h3>
+                           </div>
+                           <p className="text-3xl font-black text-foreground">
+                              {typeof stat.value === "number" ? stat.value.toLocaleString() : "—"}
+                           </p>
+                        </div>
+                     ))}
+                  </div>
                </div>
-               <p className="text-3xl font-black text-foreground">{stats?.featuredProducts || 0}</p>
-               <p className="text-xs text-muted-foreground mt-1 text-uppercase tracking-wider">Highlighted products</p>
-            </div>
-
-            <div className="p-6 rounded-2xl border border-white/5 bg-white/2 backdrop-blur-sm border-l-4 border-l-yellow-500/50">
-               <div className="flex items-center gap-3 mb-4">
-                  <AlertCircle className="h-5 w-5 text-yellow-500" />
-                  <h3 className="font-bold">Pending Review</h3>
+            </>
+         ) : (
+            <div className="rounded-2xl border border-dashed border-white/10 bg-white/2 p-12 text-center">
+               <div className="inline-flex items-center gap-2 text-muted-foreground">
+                  <Info className="h-4 w-4" /> Statistics not available or unauthorized.
                </div>
-               <p className="text-3xl font-black text-foreground">{stats?.products?.pending || 0}</p>
-               <p className="text-xs text-muted-foreground mt-1 text-uppercase tracking-wider">Awaiting moderation</p>
             </div>
-
-            <div className="p-6 rounded-2xl border border-white/5 bg-white/2 backdrop-blur-sm border-l-4 border-l-red-500/50">
-               <div className="flex items-center gap-3 mb-4">
-                  <ShieldAlert className="h-5 w-5 text-red-500" />
-                  <h3 className="font-bold">Total Reports</h3>
-               </div>
-               <p className="text-3xl font-black text-foreground">{stats?.totalReports || 0}</p>
-               <p className="text-xs text-muted-foreground mt-1 text-uppercase tracking-wider">User safety flags</p>
-            </div>
-         </div>
+         )}
       </div>
    );
 }

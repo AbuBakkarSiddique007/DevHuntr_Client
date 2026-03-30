@@ -25,6 +25,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  skipProxyUrlNormalize: true,
 };
 
 export default nextConfig;

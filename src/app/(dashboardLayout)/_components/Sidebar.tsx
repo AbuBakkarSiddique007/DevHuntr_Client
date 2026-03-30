@@ -10,13 +10,11 @@ import {
   CheckCircle,
   XCircle,
   Users,
-  LineChart,
   Ghost,
   ArrowLeft,
   LucideIcon,
   LogOut,
   Tag as TagIcon,
-  Ticket,
   ShieldAlert
 } from "lucide-react";
 import Link from "next/link";
@@ -70,8 +68,6 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
           { Icon: Home, title: "Overview", href: "/admin-dashboard" },
           { Icon: Users, title: "Manage Users", href: "/admin-dashboard/users" },
           { Icon: TagIcon, title: "Manage Tags", href: "/admin-dashboard/tags" },
-          { Icon: Ticket, title: "Manage Coupons", href: "/admin-dashboard/coupons" },
-          { Icon: LineChart, title: "Analytics", href: "/admin-dashboard/analytics" },
         ];
 
       case "MODERATOR":

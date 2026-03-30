@@ -6,10 +6,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://devhuntrserver.onrender.com/api/v1";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
 import { Eye, EyeOff } from "lucide-react";
+import { AuthService } from "@/services/auth/auth.service";
 
 import {
   Form,
@@ -48,16 +48,7 @@ export function LoginForm() {
   async function onSubmit(data: LoginFormValues) {
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/auth/login`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.message || `HTTP ${res.status}`);
-      }
+      await AuthService.login(data);
 
       toast.success("Login successful!");
       await checkSession();
