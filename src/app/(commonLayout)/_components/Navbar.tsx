@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
-import { Ghost, LogOut, Menu, UserCircle, LayoutDashboard, ChevronDown } from "lucide-react";
+import { Orbit, LogOut, Menu, UserCircle, LayoutDashboard, ChevronDown } from "lucide-react";
 import { useState } from "react";
 
 export function Navbar() {
@@ -16,12 +16,13 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-background/70 backdrop-blur-xl supports-backdrop-filter:bg-background/40 transition-all duration-300">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+      <div className="container mx-auto px-4 h-20 flex items-center justify-between">
 
         {/* LOGO */}
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-br from-indigo-500 via-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/30 group-hover:scale-105 transition-transform duration-300">
-            <Ghost className="h-5 w-5" />
+          <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-tr from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/25 group-hover:scale-110 transition-all duration-300">
+            <Orbit className="h-5 w-5 animate-[spin_5s_linear_infinite]" />
+            <div className="absolute inset-0 rounded-xl bg-white/10 blur-sm opacity-100 transition-opacity" />
           </div>
           <span className="font-bold text-xl tracking-tight bg-clip-text text-transparent bg-linear-to-r from-foreground to-foreground/70">
             DevHuntr
@@ -140,7 +141,7 @@ export function Navbar() {
                 <LayoutDashboard className="h-5 w-5 text-purple-400" />
                 Dashboard
               </Link>
-              
+
               <button
                 onClick={() => logout()}
                 className="flex items-center gap-3 w-full px-4 py-3 font-medium text-destructive hover:bg-destructive/10 rounded-xl transition-colors"

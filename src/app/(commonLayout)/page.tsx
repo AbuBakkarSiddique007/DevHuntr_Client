@@ -62,7 +62,7 @@ export default function HomePage() {
       <section className="py-24 bg-black/50 border-y border-border/30 relative z-10 overflow-hidden">
         <div className="absolute inset-0 bg-purple-500/5 blur-[120px] -z-10"></div>
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center justify-between mb-16 gap-6">
+          <div className="flex flex-col items-center text-center mb-16 gap-6">
             <div>
               <h2 className="text-4xl font-extrabold tracking-tight mb-3">Trending Right Now</h2>
               <p className="text-muted-foreground text-lg">The most upvoted products by the community this week.</p>

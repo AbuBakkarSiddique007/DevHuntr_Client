@@ -38,18 +38,15 @@ export function FeaturedProductsList() {
     <div className="container mx-auto px-4 py-12 md:py-20 min-h-[calc(100vh-100px)]">
 
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-16 text-center md:text-left">
-        <div>
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 flex items-center justify-center md:justify-start gap-4">
-            <Star className="h-10 w-10 text-yellow-500 fill-yellow-500/20" />
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-yellow-400 to-orange-500">
-              Featured Products
-            </span>
-          </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl">
-            Discover the handpicked, top-tier products recognized by the community for their outstanding impact and innovation.
-          </p>
-        </div>
+      <div className="flex flex-col items-center text-center gap-4 mb-16">
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-2 flex items-center justify-center gap-4">
+          <span className="text-transparent bg-clip-text bg-linear-to-r from-yellow-400 to-orange-500">
+            Featured Products
+          </span>
+        </h1>
+        <p className="text-muted-foreground text-lg max-w-2xl">
+          Discover the handpicked, top-tier products recognized by the community for their outstanding impact and innovation.
+        </p>
       </div>
 
       {/* Grid */}
