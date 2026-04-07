@@ -73,17 +73,17 @@ export default function ModeratorQueuePage() {
               placeholder="Search queue..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-9 rounded-xl border-white/10 bg-white/5 h-10 w-full"
+              className="pl-9 rounded-xl border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 h-10 w-full"
             />
           </div>
-          <Button variant="outline" className="rounded-xl border-white/10 bg-white/5 h-10 w-10 p-0">
+          <Button variant="outline" className="rounded-xl border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 h-10 w-10 p-0 text-slate-700 dark:text-foreground">
             <Filter className="h-4 w-4" />
           </Button>
         </div>
       </div>
 
-      <div className="rounded-2xl border border-white/5 bg-white/2 backdrop-blur-sm overflow-hidden">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/5">
+      <div className="rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/2 shadow-sm dark:shadow-none overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-transparent">
           <div className="flex items-center gap-2">
             <div className="h-9 w-9 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center">
               <ListOrdered className="h-5 w-5 text-orange-400" />
@@ -95,7 +95,7 @@ export default function ModeratorQueuePage() {
           </div>
           <Button
             variant="outline"
-            className="rounded-xl border-white/10 bg-white/5"
+            className="rounded-xl border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-700 dark:text-foreground"
             onClick={fetchQueue}
             disabled={loading}
           >
@@ -106,13 +106,13 @@ export default function ModeratorQueuePage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="text-xs font-bold text-muted-foreground uppercase tracking-widest border-b border-white/5">
+              <tr className="text-xs font-bold text-muted-foreground uppercase tracking-widest border-b border-slate-200 dark:border-white/5">
                 <th className="py-5 px-6">Product</th>
                 <th className="py-5 px-4 text-center">Votes</th>
                 <th className="py-5 px-6 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-slate-100 dark:divide-white/5">
               {loading ? (
                 Array.from({ length: 4 }).map((_, i) => (
                   <tr key={i} className="animate-pulse">
@@ -135,10 +135,10 @@ export default function ModeratorQueuePage() {
                 </tr>
               ) : (
                 filtered.map((product) => (
-                  <tr key={product.id} className="group hover:bg-white/2 transition-all">
+                  <tr key={product.id} className="group hover:bg-slate-50 dark:hover:bg-white/2 transition-all">
                     <td className="py-6 px-6">
                       <div className="flex items-center gap-4">
-                        <div className="h-12 w-12 rounded-xl bg-white/5 border border-white/5 overflow-hidden shrink-0">
+                        <div className="h-12 w-12 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5 overflow-hidden shrink-0">
                           {product.image ? (
                             <Image
                               src={product.image}
@@ -158,7 +158,7 @@ export default function ModeratorQueuePage() {
                       </div>
                     </td>
                     <td className="py-6 px-4 text-center">
-                      <div className="inline-flex items-center justify-center gap-3 px-3 py-1.5 rounded-xl bg-white/5 border border-white/5 shadow-sm">
+                      <div className="inline-flex items-center justify-center gap-3 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/5 shadow-sm dark:shadow-none">
                         <span className="text-xs font-bold text-purple-400">+{product.upvoteCount ?? 0}</span>
                         <span className="text-xs font-bold text-muted-foreground">-{product.downvoteCount ?? 0}</span>
                       </div>
@@ -166,7 +166,7 @@ export default function ModeratorQueuePage() {
                     <td className="py-6 px-6 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <Link href={`/products/${product.id}`}>
-                          <Button size="sm" variant="ghost" className="h-9 w-9 p-0 rounded-lg hover:bg-white/10">
+                          <Button size="sm" variant="ghost" className="h-9 w-9 p-0 rounded-lg hover:bg-slate-100 dark:hover:bg-white/10 text-slate-700 dark:text-foreground">
                             <Eye className="h-4 w-4" />
                           </Button>
                         </Link>
@@ -210,19 +210,19 @@ export default function ModeratorQueuePage() {
       {/* REJECT MODAL */}
       {rejectingProduct && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 dark:bg-black/80 backdrop-blur-md animate-in fade-in duration-300"
           onClick={() => {
             if (!actionLoading) setRejectingProduct(null);
           }}
         >
           <div
-            className="w-full max-w-md bg-[#0d1117] border border-white/10 rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300"
+            className="w-full max-w-md bg-white dark:bg-[#0d1117] border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300"
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
           >
-            <div className="p-6 border-b border-white/5 bg-white/2">
-              <h2 className="text-xl font-black tracking-tight text-foreground">Reject product</h2>
+            <div className="p-6 border-b border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-white/2">
+              <h2 className="text-xl font-black tracking-tight text-slate-900 dark:text-foreground">Reject product</h2>
               <p className="text-sm mt-2 text-muted-foreground">
                 Provide a short reason. This will be saved with the rejection.
               </p>
@@ -237,7 +237,7 @@ export default function ModeratorQueuePage() {
                   value={rejectionReason}
                   onChange={(e) => setRejectionReason(e.target.value)}
                   placeholder="e.g. Broken link / incomplete description / spam"
-                  className="w-full min-h-[120px] rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-foreground focus:outline-hidden focus:ring-2 focus:ring-purple-500/20 transition-all resize-none"
+                  className="w-full min-h-[120px] rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 p-4 text-sm text-slate-900 dark:text-foreground focus:outline-hidden focus:ring-2 focus:ring-purple-500/20 transition-all resize-none shadow-sm dark:shadow-none"
                 />
               </div>
 
@@ -245,7 +245,7 @@ export default function ModeratorQueuePage() {
                 <Button
                   type="button"
                   variant="outline"
-                  className="flex-1 rounded-2xl border-white/10"
+                  className="flex-1 rounded-2xl border-slate-200 dark:border-white/10 text-slate-700 dark:text-foreground"
                   disabled={!!actionLoading}
                   onClick={() => setRejectingProduct(null)}
                 >

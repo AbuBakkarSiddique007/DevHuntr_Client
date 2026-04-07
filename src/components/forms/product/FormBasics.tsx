@@ -11,7 +11,7 @@ export function FormBasics() {
   const { register, formState: { errors } } = useFormContext<ProductFormValues>();
 
   return (
-    <div className="bg-white/1 px-4 lg:px-8 py-8 rounded-3xl space-y-6 border border-white/5">
+    <div className="bg-white dark:bg-white/1 px-4 lg:px-8 py-8 rounded-3xl space-y-6 border border-slate-200 dark:border-white/5 shadow-sm dark:shadow-none">
       <div className="flex items-center gap-4 mb-2">
         <div className="h-10 w-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
           <Ghost className="h-5 w-5 text-purple-400" />
@@ -26,7 +26,7 @@ export function FormBasics() {
             <Input
               {...register("name")}
               placeholder="e.g. NextGen SaaS Platform"
-              className="rounded-2xl border-white/10 bg-white/5 h-12 focus:ring-purple-500/50"
+              className="rounded-2xl border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 h-12 focus:ring-purple-500/50"
             />
             {errors.name && <p className="text-xs text-destructive ml-1">{errors.name.message}</p>}
           </div>
@@ -36,7 +36,7 @@ export function FormBasics() {
             <Input
               {...register("externalLink")}
               placeholder="https://yourproduct.com/launch"
-              className="rounded-2xl border-white/10 bg-white/5 h-12"
+              className="rounded-2xl border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 h-12 text-slate-900 dark:text-foreground"
             />
             {errors.externalLink && <p className="text-xs text-destructive ml-1">{errors.externalLink.message}</p>}
           </div>
@@ -52,7 +52,7 @@ export function FormBasics() {
         <Textarea
           {...register("description")}
           placeholder="What does your product do? (min 10 chars)"
-          className="rounded-2xl border-white/10 bg-white/5 min-h-[120px] resize-none"
+          className="rounded-2xl border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 min-h-[120px] resize-none text-slate-900 dark:text-foreground"
         />
         {errors.description && <p className="text-xs text-destructive ml-1">{errors.description.message}</p>}
       </div>

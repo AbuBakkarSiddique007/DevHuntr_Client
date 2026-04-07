@@ -26,9 +26,10 @@ import { ReportService } from "@/services/report/report.service";
 interface SidebarProps {
   role: Role | undefined;
   userName: string;
+  photoUrl?: string;
 }
 
-export const Sidebar = ({ role, userName }: SidebarProps) => {
+export const Sidebar = ({ role, userName, photoUrl }: SidebarProps) => {
   const [open, setOpen] = useState(true);
   const pathname = usePathname();
   const { logout } = useAuth();
@@ -95,9 +96,9 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
   return (
     <nav
       className={`sticky top-0 h-screen shrink-0 border-r transition-all duration-300 ease-in-out ${open ? 'w-64' : 'w-20'
-        } border-white/10 bg-black/40 backdrop-blur-3xl p-3 shadow-xl z-50 overflow-y-auto overflow-x-hidden flex flex-col`}
+        } border-slate-200 dark:border-white/10 bg-white/80 dark:bg-black/40 backdrop-blur-3xl p-3 shadow-xl z-50 overflow-y-auto overflow-x-hidden flex flex-col`}
     >
-      <TitleSection open={open} userName={userName} role={role} />
+      <TitleSection open={open} userName={userName} role={role} photoUrl={photoUrl} />
 
       <div className="space-y-2 flex-1 mt-4">
         {navItems.map((item) => (
@@ -113,7 +114,7 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
         ))}
       </div>
 
-      <div className="border-t border-white/10 pt-4 pb-20 space-y-2">
+      <div className="border-t border-slate-200 dark:border-white/10 pt-4 pb-20 space-y-2">
         <NavItem
           Icon={Settings}
           title="Profile Settings"
@@ -123,7 +124,7 @@ export const Sidebar = ({ role, userName }: SidebarProps) => {
         />
         <button
           onClick={() => logout()}
-          className={`relative flex h-12 w-full items-center rounded-xl transition-all duration-300 text-red-500 hover:bg-red-500/10`}
+          className={`relative flex h-12 w-full items-center rounded-xl transition-all duration-300 text-rose-500 hover:bg-rose-50 dark:hover:bg-red-500/10`}
         >
           <div className="grid h-full w-14 place-content-center shrink-0">
             <LogOut className="h-5 w-5" />
@@ -155,8 +156,8 @@ const NavItem = ({ Icon, title, href, selected, open, notifs }: NavItemProps) =>
     <Link
       href={href}
       className={`relative flex h-12 w-full items-center rounded-xl transition-all duration-300 ${selected
-        ? "bg-purple-500/10 text-purple-400 border border-purple-500/20 shadow-[0_0_20px_rgba(168,85,247,0.1)]"
-        : "text-muted-foreground hover:bg-white/5 hover:text-foreground"
+        ? "bg-purple-50 dark:bg-purple-500/10 text-purple-700 dark:text-purple-400 border border-purple-200 dark:border-purple-500/20 shadow-[0_4px_10px_rgba(168,85,247,0.05)] dark:shadow-[0_0_20px_rgba(168,85,247,0.1)]"
+        : "text-slate-600 dark:text-muted-foreground hover:bg-slate-100 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-foreground"
         }`}
     >
       <div className="grid h-full w-14 place-content-center shrink-0">
@@ -187,13 +188,14 @@ interface TitleSectionProps {
   open: boolean;
   userName: string;
   role: Role | undefined;
+  photoUrl?: string;
 }
 
-const TitleSection = ({ open, userName, role }: TitleSectionProps) => {
+const TitleSection = ({ open, userName, role, photoUrl }: TitleSectionProps) => {
   return (
-    <div className="mb-4 border-b border-white/10 pb-4 mt-2">
+    <div className="mb-4 border-b border-slate-200 dark:border-white/10 pb-4 mt-2">
       <div className="flex items-center gap-3 px-2">
-        <Logo />
+        <Logo photoUrl={photoUrl} userName={userName} />
         <div className={`transition-all duration-300 overflow-hidden ${open ? 'w-40 opacity-100' : 'w-0 opacity-0'}`}>
           <span className="block text-sm font-bold text-foreground truncate">
             {userName}
@@ -207,10 +209,18 @@ const TitleSection = ({ open, userName, role }: TitleSectionProps) => {
   );
 };
 
-const Logo = () => {
+const Logo = ({ photoUrl, userName }: { photoUrl?: string, userName: string }) => {
+  if (photoUrl) {
+    return (
+      <div className="h-10 w-10 shrink-0 rounded-xl overflow-hidden shadow-lg shadow-purple-500/20 border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5">
+        <img src={photoUrl} alt={userName} className="h-full w-full object-cover" />
+      </div>
+    );
+  }
+
   return (
-    <div className="grid h-10 w-10 shrink-0 place-content-center rounded-xl bg-linear-to-br from-indigo-500 via-purple-500 to-pink-500 shadow-lg shadow-purple-500/20">
-      <Ghost className="h-6 w-6 text-white" />
+    <div className="grid h-10 w-10 shrink-0 place-content-center rounded-xl bg-linear-to-br from-indigo-500 via-purple-500 to-pink-500 shadow-lg shadow-purple-500/20 text-white font-bold text-lg">
+      {userName ? userName.charAt(0).toUpperCase() : <Ghost className="h-6 w-6 text-white" />}
     </div>
   );
 };
@@ -224,17 +234,17 @@ const ToggleClose = ({ open, setOpen }: ToggleCloseProps) => {
   return (
     <button
       onClick={() => setOpen(!open)}
-      className="absolute bottom-0 left-0 right-0 border-t border-white/10 bg-black/20 backdrop-blur-xl hover:bg-white/5 transition-colors group h-14"
+      className="absolute bottom-0 left-0 right-0 border-t border-slate-200 dark:border-white/10 bg-slate-50 border-r dark:bg-black/20 backdrop-blur-xl hover:bg-slate-100 dark:hover:bg-white/5 transition-colors group h-14"
     >
       <div className="flex items-center h-full px-4">
         <div className="grid h-10 w-10 place-content-center">
           <ChevronsRight
-            className={`h-5 w-5 transition-transform duration-500 text-muted-foreground group-hover:text-purple-400 ${open ? "rotate-180" : ""
+            className={`h-5 w-5 transition-transform duration-500 text-slate-500 dark:text-muted-foreground group-hover:text-purple-600 dark:group-hover:text-purple-400 ${open ? "rotate-180" : ""
               }`}
           />
         </div>
         <span
-          className={`text-sm font-bold text-muted-foreground group-hover:text-purple-400 transition-all duration-300 overflow-hidden ${open ? 'w-20 opacity-100' : 'w-0 opacity-0'
+          className={`text-sm font-bold text-slate-500 dark:text-muted-foreground group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-all duration-300 overflow-hidden ${open ? 'w-20 opacity-100' : 'w-0 opacity-0'
             }`}
         >
           Collapse

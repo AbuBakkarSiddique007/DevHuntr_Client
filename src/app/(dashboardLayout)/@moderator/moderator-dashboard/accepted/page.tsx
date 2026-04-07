@@ -68,10 +68,10 @@ export default function ModeratorAcceptedPage() {
               placeholder="Search accepted..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-9 rounded-xl border-white/10 bg-white/5 h-10 w-full"
+              className="pl-9 rounded-xl border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 h-10 w-full"
             />
           </div>
-          <Button variant="outline" className="rounded-xl border-white/10 bg-white/5 h-10 w-10 p-0">
+          <Button variant="outline" className="rounded-xl border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 h-10 w-10 p-0 text-slate-700 dark:text-foreground">
             <Filter className="h-4 w-4" />
           </Button>
         </div>
@@ -82,7 +82,7 @@ export default function ModeratorAcceptedPage() {
           <Loader2 className="h-10 w-10 animate-spin text-purple-500" />
         </div>
       ) : filtered.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-white/10 bg-white/2 p-20 text-center">
+        <div className="rounded-2xl border border-dashed border-slate-200 dark:border-white/10 bg-white dark:bg-white/2 p-20 text-center shadow-sm dark:shadow-none">
           <div className="flex flex-col items-center gap-4 max-w-sm mx-auto">
             <div className="h-16 w-16 rounded-full bg-green-500/10 flex items-center justify-center border border-green-500/20">
               <CheckCircle2 className="h-8 w-8 text-green-400" />
@@ -92,22 +92,22 @@ export default function ModeratorAcceptedPage() {
           </div>
         </div>
       ) : (
-        <div className="rounded-2xl border border-white/5 bg-white/2 backdrop-blur-sm overflow-hidden">
+        <div className="rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/2 shadow-sm dark:shadow-none overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
-                <tr className="text-xs font-bold text-muted-foreground uppercase tracking-widest border-b border-white/5">
+                <tr className="text-xs font-bold text-muted-foreground uppercase tracking-widest border-b border-slate-200 dark:border-white/5">
                   <th className="py-5 px-6">Product</th>
                   <th className="py-5 px-4 text-center">Votes</th>
                   <th className="py-5 px-6 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody className="divide-y divide-slate-100 dark:divide-white/5">
                 {filtered.map((product) => (
-                  <tr key={product.id} className="group hover:bg-white/2 transition-all">
+                  <tr key={product.id} className="group hover:bg-slate-50 dark:hover:bg-white/2 transition-all">
                     <td className="py-6 px-6">
                       <div className="flex items-center gap-4">
-                        <div className="h-12 w-12 rounded-xl bg-white/5 border border-white/5 overflow-hidden shrink-0">
+                        <div className="h-12 w-12 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5 overflow-hidden shrink-0">
                           <Image
                             src={product.image}
                             alt={product.name}
@@ -125,7 +125,7 @@ export default function ModeratorAcceptedPage() {
                       </div>
                     </td>
                     <td className="py-6 px-4 text-center">
-                      <div className="inline-flex items-center justify-center gap-3 px-3 py-1.5 rounded-xl bg-white/5 border border-white/5 shadow-sm">
+                      <div className="inline-flex items-center justify-center gap-3 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/5 shadow-sm dark:shadow-none">
                         <span className="text-xs font-bold text-purple-400">+{product.upvoteCount ?? 0}</span>
                         <span className="text-xs font-bold text-muted-foreground">-{product.downvoteCount ?? 0}</span>
                       </div>
@@ -138,12 +138,12 @@ export default function ModeratorAcceptedPage() {
                           size="sm" 
                           variant="ghost" 
                           title={product.isFeatured ? "Remove from Featured" : "Mark as Featured"}
-                          className={`h-9 w-9 p-0 rounded-lg ${product.isFeatured ? 'text-yellow-400 hover:text-yellow-500 bg-yellow-400/10 border border-yellow-400/20 shadow-[0_0_15px_rgba(250,204,21,0.2)]' : 'text-muted-foreground hover:text-yellow-400 hover:bg-white/10'}`}
+                          className={`h-9 w-9 p-0 rounded-lg ${product.isFeatured ? 'text-yellow-500 dark:text-yellow-400 hover:text-yellow-600 dark:hover:text-yellow-500 bg-yellow-400/10 border border-yellow-400/20 shadow-[0_0_15px_rgba(250,204,21,0.2)]' : 'text-slate-500 dark:text-muted-foreground hover:text-yellow-500 dark:hover:text-yellow-400 hover:bg-slate-100 dark:hover:bg-white/10'}`}
                         >
                           {actionLoading === product.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Star className={`h-4 w-4 ${product.isFeatured ? 'fill-current' : ''}`} />}
                         </Button>
                         <Link href={`/products/${product.id}`}>
-                          <Button size="sm" variant="ghost" className="h-9 w-9 p-0 rounded-lg hover:bg-white/10" title="View Details">
+                          <Button size="sm" variant="ghost" className="h-9 w-9 p-0 rounded-lg hover:bg-slate-100 dark:hover:bg-white/10 text-slate-700 dark:text-foreground" title="View Details">
                             <Eye className="h-4 w-4" />
                           </Button>
                         </Link>

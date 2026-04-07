@@ -49,35 +49,37 @@
 }
 
 :root {
-  /* Beautiful light mode */
-  --background: oklch(0.99 0.01 270);
-  --foreground: oklch(0.14 0.05 270);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.14 0.05 270);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.14 0.05 270);
-  --primary: oklch(0.5 0.25 290);
-  --primary-foreground: oklch(0.98 0 0);
-  --secondary: oklch(0.95 0.03 270);
-  --secondary-foreground: oklch(0.2 0.1 270);
-  --muted: oklch(0.95 0.03 270);
-  --muted-foreground: oklch(0.5 0.05 270);
-  --accent: oklch(0.5 0.25 290);
-  --accent-foreground: oklch(0.98 0 0);
-  --destructive: oklch(0.6 0.2 20);
-  --border: oklch(0.92 0.03 270);
-  --input: oklch(0.92 0.03 270);
-  --ring: oklch(0.5 0.25 290);
-  --chart-1: oklch(0.6 0.2 20);
-  --chart-2: oklch(0.5 0.2 160);
-  --chart-3: oklch(0.4 0.2 210);
-  --chart-4: oklch(0.7 0.2 80);
-  --chart-5: oklch(0.8 0.2 120);
+  --bg-gradient: none;
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: oklch(0.65 0.3 290);
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #f1f5f9;
+  --accent-foreground: #0f172a;
+  --destructive: #ef4444;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: oklch(0.65 0.3 290);
+  --chart-1: #e11d48;
+  --chart-2: #ea580c;
+  --chart-3: #2563eb;
+  --chart-4: #16a34a;
+  --chart-5: #9333ea;
   --radius: 0.75rem;
 }
 
 .dark {
   /* Rich immersive dark mode (purplish black theme) */
+  --bg-gradient: none;
   --background: oklch(0.12 0.02 270);
   --foreground: oklch(0.98 0.01 270);
   --card: oklch(0.15 0.03 270);
@@ -104,7 +106,9 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    background: var(--bg-gradient, var(--background));
+    background-attachment: fixed;
+    color: var(--foreground);
   }
   html {
     @apply font-sans;
@@ -116,7 +120,7 @@
 
 /* Glassmorphism custom classes */
 .glass {
-  @apply bg-white/5 border border-white/10 backdrop-blur-md;
+  @apply bg-white/70 border border-white/40 shadow-sm backdrop-blur-xl;
 }
 .dark .glass {
   @apply bg-black/20 border border-white/10 backdrop-blur-md;

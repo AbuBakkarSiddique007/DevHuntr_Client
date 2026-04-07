@@ -57,7 +57,7 @@ export function ProductsList() {
       {/* Header & Search */}
       <div className="flex flex-col items-center text-center gap-6 mb-8">
         <div>
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-2 text-transparent bg-clip-text bg-linear-to-r from-purple-400 to-indigo-400">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight mb-4 text-slate-900 dark:text-white">
             Explore Products
           </h1>
           <p className="text-muted-foreground text-lg">
@@ -174,7 +174,7 @@ export function ProductsList() {
                   </div>
                 )}
 
-                <h3 className="text-xl font-bold mb-2 group-hover:text-purple-400 transition-colors line-clamp-1">{product.name}</h3>
+                <h3 className="text-xl md:text-2xl font-bold tracking-tight mb-2 text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors line-clamp-1">{product.name}</h3>
                 <p className="text-muted-foreground text-sm line-clamp-3 mb-6 grow">
                   {product.description || (
                     <span className="flex items-center gap-1.5 text-amber-400/70 italic">
@@ -230,7 +230,7 @@ export function ProductsList() {
       ) : (
         <div className="flex flex-col items-center justify-center py-20 text-center glass rounded-3xl mt-8">
           <Ghost className="h-16 w-16 text-muted-foreground/30 mb-4" />
-          <h2 className="text-2xl font-bold mb-2">No products found</h2>
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-2 text-slate-900 dark:text-white">No products found</h2>
           <p className="text-muted-foreground">Try adjusting your search criteria to find what you&apos;re looking for.</p>
         </div>
       )}

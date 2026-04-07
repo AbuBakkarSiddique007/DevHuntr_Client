@@ -10,12 +10,12 @@ export function FormPricing() {
   const pricingType = watch("pricingType");
 
   return (
-    <div className="bg-white/1 px-4 lg:px-8 py-8 rounded-3xl space-y-6 border border-white/5">
+    <div className="bg-white dark:bg-white/1 px-4 lg:px-8 py-8 rounded-3xl space-y-6 border border-slate-200 dark:border-white/5 shadow-sm dark:shadow-none">
       <div className="flex items-center gap-4 mb-2">
         <div className="h-10 w-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
           <Crown className="h-5 w-5 text-amber-400" />
         </div>
-        <h3 className="text-xl font-bold uppercase tracking-tight text-foreground">Pricing Type</h3>
+        <h3 className="text-xl font-bold uppercase tracking-tight text-slate-900 dark:text-foreground">Pricing Type</h3>
       </div>
 
       <p className="text-sm text-muted-foreground">
@@ -31,7 +31,7 @@ export function FormPricing() {
             "relative flex flex-col items-start gap-2 p-5 rounded-2xl border-2 text-left transition-all duration-200",
             pricingType === "FREE"
               ? "border-indigo-500 bg-indigo-500/10 shadow-lg shadow-indigo-500/10"
-              : "border-white/10 bg-white/5 hover:bg-white/8 hover:border-white/20"
+              : "border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 hover:border-slate-300 dark:hover:border-white/20"
           )}
         >
           <div className="flex items-center gap-2">
@@ -58,7 +58,7 @@ export function FormPricing() {
             "relative flex flex-col items-start gap-2 p-5 rounded-2xl border-2 text-left transition-all duration-200",
             pricingType === "PREMIUM"
               ? "border-amber-500 bg-amber-500/10 shadow-lg shadow-amber-500/10"
-              : "border-white/10 bg-white/5 hover:bg-white/8 hover:border-white/20"
+              : "border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 hover:border-slate-300 dark:hover:border-white/20"
           )}
         >
           <div className="flex items-center gap-2">

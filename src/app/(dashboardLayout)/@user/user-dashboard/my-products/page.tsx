@@ -127,17 +127,17 @@ export default function MyProductsPage() {
               placeholder="Search products..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-9 rounded-xl border-white/10 bg-white/5 h-10 w-full"
+              className="pl-9 rounded-xl border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 h-10 w-full"
             />
           </div>
-          <Button variant="outline" className="rounded-xl border-white/10 bg-white/5 h-10 w-10 p-0">
+          <Button variant="outline" className="rounded-xl border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 h-10 w-10 p-0 text-slate-700 dark:text-foreground">
             <Filter className="h-4 w-4" />
           </Button>
         </div>
       </div>
 
       {/* PRODUCTS TABLE */}
-      <div className="rounded-2xl border border-white/5 bg-white/2 backdrop-blur-sm overflow-hidden">
+      <div className="rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/2 shadow-sm dark:shadow-none overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
@@ -263,13 +263,13 @@ export default function MyProductsPage() {
 
       {/* EDIT MODAL */}
       {editingProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 dark:bg-black/80 backdrop-blur-md animate-in fade-in duration-300">
           <div
-            className="w-full max-w-2xl bg-[#0d1117] border border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300"
+            className="w-full max-w-2xl bg-white dark:bg-[#0d1117] border border-slate-200 dark:border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="p-8 border-b border-white/5 bg-white/2">
-              <h2 className="text-2xl font-black uppercase tracking-tight text-foreground">Edit Product</h2>
+            <div className="p-8 border-b border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-white/2">
+              <h2 className="text-2xl font-black uppercase tracking-tight text-slate-900 dark:text-foreground">Edit Product</h2>
               <p className="text-xs mt-1 text-purple-400 font-bold uppercase tracking-widest opacity-80">Update your creation&apos;s digital identity</p>
             </div>
 
@@ -327,7 +327,7 @@ export default function MyProductsPage() {
                     <Input
                       name="name"
                       defaultValue={editingProduct.name}
-                      className="rounded-2xl border-white/10 bg-white/5 h-12 focus:ring-purple-500/20"
+                      className="rounded-2xl border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 h-12 focus:ring-purple-500/20"
                       required
                     />
                   </div>
@@ -336,7 +336,7 @@ export default function MyProductsPage() {
                     <Input
                       name="image"
                       defaultValue={editingProduct.image}
-                      className="rounded-2xl border-white/10 bg-white/5 h-12 focus:ring-purple-500/20"
+                      className="rounded-2xl border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 h-12 focus:ring-purple-500/20"
                       required
                     />
                   </div>
@@ -345,7 +345,7 @@ export default function MyProductsPage() {
                     <Input
                       name="externalLink"
                       defaultValue={editingProduct.externalLink}
-                      className="rounded-2xl border-white/10 bg-white/5 h-12 focus:ring-purple-500/20"
+                      className="rounded-2xl border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 h-12 focus:ring-purple-500/20"
                     />
                   </div>
                 </div>
@@ -356,7 +356,7 @@ export default function MyProductsPage() {
                     <textarea
                       name="description"
                       defaultValue={editingProduct.description}
-                      className="w-full min-h-[160px] rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-foreground focus:outline-hidden focus:ring-2 focus:ring-purple-500/20 transition-all resize-none"
+                      className="w-full min-h-[160px] rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 p-4 text-sm text-slate-900 dark:text-foreground focus:outline-hidden focus:ring-2 focus:ring-purple-500/20 transition-all resize-none"
                       required
                     />
                   </div>
@@ -376,7 +376,7 @@ export default function MyProductsPage() {
                         "px-4 py-2 rounded-xl border text-[10px] font-bold uppercase tracking-widest transition-all duration-300",
                         selectedTagIds.includes(tag.id)
                           ? "bg-purple-500 border-purple-400 text-white shadow-lg shadow-purple-500/30"
-                          : "bg-white/5 border-white/10 text-muted-foreground hover:bg-white/10 hover:border-white/20"
+                          : "bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-600 dark:text-muted-foreground hover:bg-slate-100 dark:hover:bg-white/10 hover:border-slate-300 dark:hover:border-white/20"
                       )}
                     >
                       {tag.name}
@@ -389,7 +389,7 @@ export default function MyProductsPage() {
                 <Button
                   type="button"
                   variant="ghost"
-                  className="flex-1 rounded-2xl h-14 font-black uppercase tracking-widest hover:bg-white/5 transition-all"
+                  className="flex-1 rounded-2xl h-14 font-black uppercase tracking-widest text-slate-600 dark:text-foreground hover:bg-slate-100 dark:hover:bg-white/5 transition-all"
                   onClick={() => setEditingProduct(null)}
                 >
                   Cancel
@@ -410,19 +410,19 @@ export default function MyProductsPage() {
       {/* DELETE CONFIRMATION (AlertDialog-style) */}
       {deleteProduct && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 dark:bg-black/80 backdrop-blur-md animate-in fade-in duration-300"
           onClick={() => {
             if (!processingId) setDeleteProduct(null);
           }}
         >
           <div
-            className="w-full max-w-md bg-[#0d1117] border border-white/10 rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300"
+            className="w-full max-w-md bg-white dark:bg-[#0d1117] border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300"
             onClick={(e) => e.stopPropagation()}
             role="alertdialog"
             aria-modal="true"
           >
-            <div className="p-6 border-b border-white/5 bg-white/2">
-              <h2 className="text-xl font-black tracking-tight text-foreground">Delete product?</h2>
+            <div className="p-6 border-b border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-white/2">
+              <h2 className="text-xl font-black tracking-tight text-slate-900 dark:text-foreground">Delete product?</h2>
               <p className="text-sm mt-2 text-muted-foreground">
                 This action can’t be undone. This will permanently delete “{deleteProduct.name}”.
               </p>
@@ -432,7 +432,7 @@ export default function MyProductsPage() {
               <Button
                 type="button"
                 variant="outline"
-                className="flex-1 rounded-2xl border-white/10"
+                className="flex-1 rounded-2xl border-slate-200 dark:border-white/10 text-slate-700 dark:text-foreground"
                 disabled={processingId === deleteProduct.id}
                 onClick={() => setDeleteProduct(null)}
               >
@@ -462,19 +462,19 @@ export default function MyProductsPage() {
       {/* REJECTION REASON MODAL */}
       {viewingReason && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 dark:bg-black/80 backdrop-blur-md animate-in fade-in duration-300"
           onClick={() => setViewingReason(null)}
         >
           <div
-            className="w-full max-w-lg bg-[#0d1117] border border-red-500/20 rounded-[2.5rem] shadow-2xl shadow-red-500/10 overflow-hidden animate-in zoom-in-95 duration-300"
+            className="w-full max-w-lg bg-white dark:bg-[#0d1117] border border-red-500/20 rounded-[2.5rem] shadow-2xl shadow-red-500/10 overflow-hidden animate-in zoom-in-95 duration-300"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="p-8 border-b border-white/5 bg-red-500/5 items-center flex gap-4">
+            <div className="p-8 border-b border-red-500/20 bg-red-50 dark:bg-red-500/5 items-center flex gap-4">
               <div className="h-12 w-12 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
                  <XCircle className="h-6 w-6 text-red-500" />
               </div>
               <div>
-                <h2 className="text-2xl font-black uppercase tracking-tight text-white">Rejection Details</h2>
+                <h2 className="text-2xl font-black uppercase tracking-tight text-slate-900 dark:text-white">Rejection Details</h2>
                 <p className="text-[10px] text-red-400 font-bold uppercase tracking-widest leading-none mt-1">
                    Moderation Feedback for: {viewingReason.name}
                 </p>
@@ -486,12 +486,12 @@ export default function MyProductsPage() {
                 <label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] ml-1">
                    Moderator Note
                 </label>
-                <div className="p-6 rounded-3xl bg-white/2 border border-white/5 text-sm text-foreground leading-relaxed italic">
+                <div className="p-6 rounded-3xl bg-white dark:bg-white/2 border border-slate-200 dark:border-white/5 text-sm text-slate-900 dark:text-foreground leading-relaxed italic shadow-sm dark:shadow-none">
                   &quot;{viewingReason.rejectionReason || "No specific reason provided by moderator."}&quot;
                 </div>
               </div>
 
-              <div className="p-4 rounded-2xl bg-white/5 border border-white/5 space-y-2">
+              <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 space-y-2 shadow-sm dark:shadow-none">
                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest text-center">
                     What does this mean?
                  </p>
@@ -502,7 +502,7 @@ export default function MyProductsPage() {
               </div>
 
               <Button
-                className="w-full rounded-2xl h-14 font-black uppercase tracking-widest bg-white/5 hover:bg-white/10 text-white transition-all"
+                className="w-full rounded-2xl h-14 font-black uppercase tracking-widest bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-900 dark:text-white transition-all border border-slate-200 dark:border-transparent"
                 onClick={() => setViewingReason(null)}
               >
                 Close Feedback

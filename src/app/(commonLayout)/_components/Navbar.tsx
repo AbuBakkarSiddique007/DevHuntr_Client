@@ -7,6 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Orbit, LogOut, Menu, UserCircle, LayoutDashboard, ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -15,7 +16,7 @@ export function Navbar() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-background/70 backdrop-blur-xl supports-backdrop-filter:bg-background/40 transition-all duration-300">
+    <header className="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-white/10 bg-white/80 dark:bg-background/95 backdrop-blur-xl supports-backdrop-filter:bg-white/60 dark:supports-backdrop-filter:bg-background/40 transition-all duration-300">
       <div className="container mx-auto px-4 h-20 flex items-center justify-between">
 
         {/* LOGO */}
@@ -24,26 +25,27 @@ export function Navbar() {
             <Orbit className="h-5 w-5 animate-[spin_5s_linear_infinite]" />
             <div className="absolute inset-0 rounded-xl bg-white/10 blur-sm opacity-100 transition-opacity" />
           </div>
-          <span className="font-bold text-xl tracking-tight bg-clip-text text-transparent bg-linear-to-r from-foreground to-foreground/70">
+          <span className="font-bold text-xl tracking-tight bg-clip-text text-transparent bg-linear-to-r from-purple-600 to-indigo-600 dark:from-white dark:to-white/70">
             DevHuntr
           </span>
         </Link>
 
         {/* DESKTOP NAV */}
         <nav className="hidden md:flex items-center gap-8">
-          <Link href="/products" className={`text-sm font-medium hover:scale-105 transition-all ${pathname === '/products' ? 'text-primary drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]' : 'text-muted-foreground hover:text-foreground'}`}>
+          <Link href="/products" className={`text-sm font-medium hover:scale-105 transition-all ${pathname === '/products' ? 'text-primary drop-shadow-[0_0_10px_rgba(139,92,246,0.2)]' : 'text-slate-600 dark:text-white/70 hover:text-slate-900 dark:hover:text-white'}`}>
             Explore
           </Link>
-          <Link href="/featured" className={`text-sm font-medium hover:scale-105 transition-all ${pathname === '/featured' ? 'text-primary drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]' : 'text-muted-foreground hover:text-foreground'}`}>
+          <Link href="/featured" className={`text-sm font-medium hover:scale-105 transition-all ${pathname === '/featured' ? 'text-primary drop-shadow-[0_0_10px_rgba(139,92,246,0.2)]' : 'text-slate-600 dark:text-white/70 hover:text-slate-900 dark:hover:text-white'}`}>
             Featured
           </Link>
-          <Link href="/about" className={`text-sm font-medium hover:scale-105 transition-all ${pathname === '/about' ? 'text-primary drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]' : 'text-muted-foreground hover:text-foreground'}`}>
+          <Link href="/about" className={`text-sm font-medium hover:scale-105 transition-all ${pathname === '/about' ? 'text-primary drop-shadow-[0_0_10px_rgba(139,92,246,0.2)]' : 'text-slate-600 dark:text-white/70 hover:text-slate-900 dark:hover:text-white'}`}>
             About Us
           </Link>
         </nav>
 
         {/* AUTH ACTIONS */}
         <div className="hidden md:flex items-center gap-4">
+          <ThemeToggle />
           {user ? (
             <>
               {user.role === "USER" && (
@@ -74,7 +76,7 @@ export function Navbar() {
                       <UserCircle className="h-5 w-5 text-purple-400" />
                     </div>
                   )}
-                  <ChevronDown className={`h-4 w-4 text-muted-foreground group-hover:text-foreground transition-transform duration-300 ${isUserMenuOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`h-4 w-4 text-slate-500 dark:text-white/70 group-hover:text-slate-900 dark:group-hover:text-white transition-transform duration-300 ${isUserMenuOpen ? 'rotate-180' : ''}`} />
                 </button>
 
                 {isUserMenuOpen && (
@@ -84,8 +86,8 @@ export function Navbar() {
                       <p className="text-sm font-bold truncate">{user?.name}</p>
                     </div>
 
-                    <Link href={`/${user?.role?.toLowerCase()}-dashboard`} className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors group">
-                      <LayoutDashboard className="h-4 w-4 group-hover:text-purple-500 transition-colors" />
+                    <Link href={`/${user?.role?.toLowerCase()}-dashboard`} className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-white/70 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors group">
+                      <LayoutDashboard className="h-4 w-4 text-slate-500 dark:text-white/70 group-hover:text-primary transition-colors" />
                       Dashboard
                     </Link>
 
@@ -114,13 +116,17 @@ export function Navbar() {
           )}
         </div>
 
-        {/* MOBILE MENU TOGGLE */}
-        <button
-          className="md:hidden p-2 text-foreground/80 hover:text-foreground"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          <Menu className="h-6 w-6" />
-        </button>
+        {/* MOBILE & GLOBAL ACTIONS */}
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
+          {/* MOBILE MENU TOGGLE */}
+          <button
+            className="p-2 text-slate-600 dark:text-white/80 hover:text-slate-900 dark:hover:text-white"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            <Menu className="h-6 w-6" />
+          </button>
+        </div>
       </div>
 
       {/* MOBILE NAV */}

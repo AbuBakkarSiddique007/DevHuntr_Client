@@ -36,13 +36,13 @@ function ReportModal({ productId, onClose }: { productId: string; onClose: () =>
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="w-full max-w-md rounded-3xl border border-white/10 bg-[#0d0d12] p-8 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm p-4">
+      <div className="w-full max-w-md rounded-3xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0d0d12] p-8 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold flex items-center gap-2">
             <ShieldAlert className="h-5 w-5 text-red-400" /> Report Product
           </h2>
-          <button onClick={onClose} className="p-2 rounded-xl hover:bg-white/5 text-muted-foreground transition-all">
+          <button onClick={onClose} className="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 text-slate-500 dark:text-muted-foreground transition-all">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -51,7 +51,7 @@ function ReportModal({ productId, onClose }: { productId: string; onClose: () =>
           <div className="text-center py-4 space-y-3">
             <p className="text-green-400 font-bold text-lg">Report submitted ✓</p>
             <p className="text-muted-foreground text-sm">Our moderators will review this shortly.</p>
-            <Button onClick={onClose} variant="outline" className="mt-4 rounded-xl border-white/10">Close</Button>
+            <Button onClick={onClose} variant="outline" className="mt-4 rounded-xl border-slate-200 dark:border-white/10 text-slate-700 dark:text-foreground">Close</Button>
           </div>
         ) : (
           <>
@@ -62,10 +62,10 @@ function ReportModal({ productId, onClose }: { productId: string; onClose: () =>
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               placeholder="e.g., This product is spam / contains misleading information..."
-              className="min-h-[120px] bg-white/5 border-white/10 rounded-xl resize-none focus-visible:ring-red-500/50 mb-4"
+              className="min-h-[120px] bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 rounded-xl resize-none focus-visible:ring-red-500/50 mb-4 text-slate-900 dark:text-foreground"
             />
             <div className="flex gap-3">
-              <Button onClick={onClose} variant="outline" className="flex-1 rounded-xl border-white/10">
+              <Button onClick={onClose} variant="outline" className="flex-1 rounded-xl border-slate-200 dark:border-white/10 text-slate-700 dark:text-foreground">
                 Cancel
               </Button>
               <Button
@@ -111,11 +111,11 @@ function SubscriptionModal({ productName, onClose }: { productName: string; onCl
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
-      <div className="w-full max-w-sm rounded-3xl border border-amber-500/20 bg-[#0d0d12] p-8 shadow-2xl shadow-amber-500/10 animate-in fade-in zoom-in-95 duration-200 text-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 dark:bg-black/70 backdrop-blur-md p-4">
+      <div className="w-full max-w-sm rounded-3xl border border-amber-500/20 bg-white dark:bg-[#0d0d12] p-8 shadow-2xl shadow-amber-500/10 animate-in fade-in zoom-in-95 duration-200 text-center">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-xl hover:bg-white/5 text-muted-foreground transition-all"
+          className="absolute top-4 right-4 p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 text-slate-500 dark:text-muted-foreground transition-all"
         >
           <X className="h-4 w-4" />
         </button>
@@ -129,16 +129,16 @@ function SubscriptionModal({ productName, onClose }: { productName: string; onCl
           <Crown className="h-3 w-3" /> Premium Content
         </div>
 
-        <h2 className="text-2xl font-extrabold mt-4 mb-2">
+        <h2 className="text-2xl font-extrabold mt-4 mb-2 text-slate-900 dark:text-white">
           Unlock &ldquo;{productName}&rdquo;
         </h2>
         <p className="text-muted-foreground text-sm mb-8 leading-relaxed">
           This is a premium product. Get <span className="text-amber-400 font-semibold">lifetime access</span> to all premium products on DevHuntr for a one-time payment.
         </p>
 
-        <div className="rounded-2xl bg-white/5 border border-white/10 p-5 mb-6">
-          <p className="text-4xl font-black text-white">$50</p>
-          <p className="text-xs text-muted-foreground mt-1">One-time · Lifetime Access · All Premium Products</p>
+        <div className="rounded-2xl bg-amber-50 dark:bg-white/5 border border-amber-100 dark:border-white/10 p-5 mb-6">
+          <p className="text-4xl font-black text-amber-600 dark:text-white">$50</p>
+          <p className="text-xs text-amber-700/60 dark:text-muted-foreground mt-1">One-time · Lifetime Access · All Premium Products</p>
         </div>
 
         <Button
@@ -158,7 +158,7 @@ function SubscriptionModal({ productName, onClose }: { productName: string; onCl
         </Button>
 
         <p className="text-xs text-muted-foreground mt-4">
-          Secured by <span className="text-white font-medium">Stripe</span>. Cancel anytime.
+          Secured by <span className="text-slate-900 dark:text-white font-medium">Stripe</span>. Cancel anytime.
         </p>
       </div>
     </div>
@@ -215,8 +215,8 @@ function VotingPanel({ product, onVote }: {
 
   return (
     <div className="glass p-6 rounded-3xl text-center space-y-4 shadow-xl border border-white/5">
-      <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Net Score</p>
-      <div className={`text-6xl font-black tabular-nums ${net > 0 ? "text-green-400" : net < 0 ? "text-red-400" : "text-white/40"}`}>
+      <p className="text-xs font-bold text-slate-500 dark:text-muted-foreground uppercase tracking-widest">Net Score</p>
+      <div className={`text-6xl font-black tabular-nums ${net > 0 ? "text-green-500 dark:text-green-400" : net < 0 ? "text-red-500 dark:text-red-400" : "text-slate-300 dark:text-white/40"}`}>
         {net > 0 ? "+" : ""}{net}
       </div>
       <div className="flex gap-3 justify-center">
@@ -224,8 +224,8 @@ function VotingPanel({ product, onVote }: {
           onClick={() => handleVote("UPVOTE")}
           disabled={!user || loading || voting}
           className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border font-bold text-sm transition-all duration-200 ${myVote === "UPVOTE"
-            ? "bg-green-500/20 border-green-500/40 text-green-400"
-            : "bg-white/5 border-white/10 text-muted-foreground hover:bg-green-500/10 hover:border-green-500/30 hover:text-green-400"
+            ? "bg-green-100 dark:bg-green-500/20 border-green-200 dark:border-green-500/40 text-green-600 dark:text-green-400"
+            : "bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-500 dark:text-muted-foreground hover:bg-green-50 dark:hover:bg-green-500/10 hover:border-green-200 dark:hover:border-green-500/30 hover:text-green-600 dark:hover:text-green-400"
             }`}
         >
           <ChevronUp className="h-4 w-4" /> {product.upvoteCount}
@@ -234,8 +234,8 @@ function VotingPanel({ product, onVote }: {
           onClick={() => handleVote("DOWNVOTE")}
           disabled={!user || loading || voting}
           className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border font-bold text-sm transition-all duration-200 ${myVote === "DOWNVOTE"
-            ? "bg-red-500/20 border-red-500/40 text-red-400"
-            : "bg-white/5 border-white/10 text-muted-foreground hover:bg-red-500/10 hover:border-red-500/30 hover:text-red-400"
+            ? "bg-red-100 dark:bg-red-500/20 border-red-200 dark:border-red-500/40 text-red-600 dark:text-red-400"
+            : "bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-500 dark:text-muted-foreground hover:bg-red-50 dark:hover:bg-red-500/10 hover:border-red-200 dark:hover:border-red-500/30 hover:text-red-600 dark:hover:text-red-400"
             }`}
         >
           <ChevronDown className="h-4 w-4" /> {product.downvoteCount}
@@ -287,11 +287,11 @@ function CommentsSection({ productId }: { productId: string }) {
 
   return (
     <div className="glass p-8 rounded-[2rem] space-y-6">
-      <h3 className="text-2xl font-bold flex items-center gap-3">
-        <MessageSquare className="h-6 w-6 text-purple-400" />
+      <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight flex items-center gap-3 text-slate-900 dark:text-white">
+        <MessageSquare className="h-6 w-6 text-purple-600 dark:text-purple-400" />
         Discussion
-        <span className="text-sm font-normal text-muted-foreground">({comments.length})</span>
-      </h3>
+        <span className="text-sm font-normal text-slate-500 dark:text-muted-foreground">({comments.length})</span>
+      </h2>
 
       {user ? (
         <div className="flex gap-3 items-start">
@@ -314,7 +314,7 @@ function CommentsSection({ productId }: { productId: string }) {
               onChange={(e) => setText(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handlePost(); } }}
               placeholder="Share your thoughts..."
-              className="flex-1 min-h-[44px] max-h-[200px] bg-white/5 border-white/10 rounded-2xl resize-none text-sm focus-visible:ring-purple-500/50"
+              className="flex-1 min-h-[44px] max-h-[200px] bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 rounded-2xl resize-none text-sm focus-visible:ring-purple-500/50 text-slate-900 dark:text-foreground"
             />
             <Button
               onClick={handlePost}
@@ -327,7 +327,7 @@ function CommentsSection({ productId }: { productId: string }) {
           </div>
         </div>
       ) : (
-        <p className="text-sm text-muted-foreground bg-white/5 px-4 py-3 rounded-2xl border border-white/10">
+        <p className="text-sm text-slate-600 dark:text-muted-foreground bg-slate-50 dark:bg-white/5 px-4 py-3 rounded-2xl border border-slate-200 dark:border-white/10">
           <Link href="/login" className="text-purple-400 hover:underline font-semibold">Log in</Link> to join the discussion.
         </p>
       )}
@@ -350,10 +350,10 @@ function CommentsSection({ productId }: { productId: string }) {
           {loading ? "Loading comments..." : "No comments yet. Be the first to share your thoughts!"}
         </p>
       ) : (
-        <div className="space-y-5 divide-y divide-white/5">
+        <div className="space-y-5 divide-y divide-slate-100 dark:divide-white/5">
           {comments.map((c) => (
             <div key={c.id} className="flex gap-3 pt-5 first:pt-0">
-              <div className="h-9 w-9 shrink-0 rounded-full bg-white/10 flex items-center justify-center border border-white/10 overflow-hidden">
+              <div className="h-9 w-9 shrink-0 rounded-full bg-slate-100 dark:bg-white/10 flex items-center justify-center border border-slate-200 dark:border-white/10 overflow-hidden">
                 {c.author?.photoUrl
                   ? (
                     <Image
@@ -368,7 +368,7 @@ function CommentsSection({ productId }: { productId: string }) {
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-sm font-bold">{c.author?.name ?? "Anonymous"}</span>
+                  <span className="text-sm font-bold text-slate-900 dark:text-foreground">{c.author?.name ?? "Anonymous"}</span>
                   <span className="text-xs text-muted-foreground">
                     {new Date(c.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                   </span>
@@ -458,7 +458,7 @@ export function ProductDetailClient({ id }: { id: string }) {
         <div className="mb-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold">
           <Crown className="h-3 w-3" /> Premium Product
         </div>
-        <h1 className="text-4xl font-extrabold tracking-tight mb-4">{product.name}</h1>
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight mb-4 text-slate-900 dark:text-white">{product.name}</h1>
         <p className="text-muted-foreground max-w-md mb-8 leading-relaxed">
           This is a premium product. Subscribe to get lifetime access to all premium content on DevHuntr.
         </p>
@@ -506,7 +506,7 @@ export function ProductDetailClient({ id }: { id: string }) {
                 className="h-32 w-32 md:h-48 md:w-48 rounded-3xl object-cover shadow-2xl border border-white/10"
               />
             ) : (
-              <div className="h-32 w-32 md:h-48 md:w-48 rounded-3xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center border border-white/10 shadow-2xl">
+              <div className="h-32 w-32 md:h-48 md:w-48 rounded-3xl bg-linear-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center border border-slate-100 dark:border-white/10 shadow-2xl">
                 <Ghost className="h-16 w-16 text-purple-400" />
               </div>
             )}
@@ -514,7 +514,7 @@ export function ProductDetailClient({ id }: { id: string }) {
 
           <div className="flex-1 space-y-6">
             <div className="flex flex-wrap items-center justify-between gap-4">
-              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">{product.name}</h1>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 dark:text-white">{product.name}</h1>
               <a href={product.externalLink || "#"} target="_blank" rel="noreferrer">
                 <Button className="rounded-full border-white/20 hover:opacity-90 shadow-md">
                   Visit App <ExternalLink className="ml-2 h-4 w-4" />
@@ -524,13 +524,13 @@ export function ProductDetailClient({ id }: { id: string }) {
 
             <div className="flex gap-2 flex-wrap pb-4 border-b border-border/40">
               {product.tags?.map((tagObj: ProductTag) => (
-                <span key={tagObj.id} className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-muted-foreground">
+                <span key={tagObj.id} className="px-3 py-1 rounded-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-medium text-slate-600 dark:text-muted-foreground">
                   #{tagObj.tag?.name || (tagObj as unknown as { name: string }).name}
                 </span>
               ))}
             </div>
 
-            <h2 className="text-xl font-semibold opacity-90">About this product</h2>
+            <h2 className="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">About this product</h2>
             <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl">{product.description}</p>
           </div>
         </div>
@@ -543,8 +543,8 @@ export function ProductDetailClient({ id }: { id: string }) {
 
         <div className="space-y-6">
 
-          <div className="glass p-6 rounded-3xl border border-white/10 shadow-xl space-y-4">
-            <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Meet the Maker</h3>
+          <div className="glass p-6 rounded-3xl border border-slate-200 dark:border-white/10 shadow-xl space-y-4">
+            <h3 className="text-xs font-bold text-purple-600 dark:text-purple-400 uppercase tracking-widest">Meet the Maker</h3>
             <div className="flex items-center gap-4">
               {product.owner?.photoUrl ? (
                 <Image
@@ -555,7 +555,7 @@ export function ProductDetailClient({ id }: { id: string }) {
                   className="h-12 w-12 rounded-2xl object-cover border border-white/10"
                 />
               ) : (
-                <div className="h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10">
+                <div className="h-12 w-12 rounded-2xl bg-slate-100 dark:bg-white/5 flex items-center justify-center border border-slate-200 dark:border-white/10">
                   <UserIcon className="h-6 w-6 text-muted-foreground" />
                 </div>
               )}

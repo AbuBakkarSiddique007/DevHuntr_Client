@@ -51,24 +51,24 @@ export function TrendingGrid() {
                 className="h-14 w-14 rounded-2xl object-cover border border-white/10 group-hover:scale-105 transition-transform"
               />
             ) : (
-              <div className="h-14 w-14 rounded-2xl bg-linear-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center border border-white/10 group-hover:scale-105 transition-transform">
-                <Ghost className="h-6 w-6 text-purple-400" />
+              <div className="h-14 w-14 rounded-2xl bg-linear-to-br from-[#d8d860]/20 to-[#d8d860]/10 flex items-center justify-center border border-white/10 group-hover:scale-105 transition-transform">
+                <Ghost className="h-6 w-6 text-[#d8d860]" />
               </div>
             )}
             <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-3 py-1.5 hover:bg-white/10 transition-colors">
               <div className="flex items-center gap-1">
-                <span className="text-xs font-semibold text-green-400">▲</span>
+                <span className="text-xs font-semibold text-[#d8d860]">▲</span>
                 <span className="text-sm font-bold text-foreground">{product.upvoteCount}</span>
               </div>
               <div className="w-px h-3 bg-white/20" />
               <div className="flex items-center gap-1">
-                <span className="text-xs font-semibold text-red-400">▼</span>
+                <span className="text-xs font-semibold text-rose-400">▼</span>
                 <span className="text-sm font-bold text-foreground">{product.downvoteCount}</span>
               </div>
             </div>
           </div>
 
-          <h3 className="text-xl font-bold mb-2 group-hover:text-purple-400 transition-colors line-clamp-1">{product.name}</h3>
+          <h3 className="text-xl md:text-2xl font-bold tracking-tight mb-2 text-slate-900 dark:text-white group-hover:text-purple-400 transition-colors line-clamp-1">{product.name}</h3>
           <p className="text-muted-foreground text-sm line-clamp-2 mb-4 grow">
             {product.description}
           </p>

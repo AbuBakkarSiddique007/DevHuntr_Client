@@ -28,8 +28,8 @@ export default function LaunchProductPage() {
         <ProductForm />
       </div>
 
-      <div className="p-8 bg-white/1 rounded-3xl text-center border border-white/5 space-y-4">
-        <h2 className="text-xl font-bold flex items-center justify-center gap-2 uppercase tracking-tight">
+      <div className="p-8 bg-white dark:bg-white/1 rounded-3xl text-center border border-slate-200 dark:border-white/5 space-y-4 shadow-sm dark:shadow-none">
+        <h2 className="text-xl font-bold flex items-center justify-center gap-2 uppercase tracking-tight text-slate-900 dark:text-foreground">
           <Rocket className="h-5 w-5 text-purple-400" />
           Next Steps
         </h2>

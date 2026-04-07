@@ -93,17 +93,17 @@ export default function ModeratorReportsPage() {
               placeholder="Search reports..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-9 rounded-xl border-white/10 bg-white/5 h-10 w-full"
+              className="pl-9 rounded-xl border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 h-10 w-full"
             />
           </div>
-          <Button variant="outline" className="rounded-xl border-white/10 bg-white/5 h-10 w-10 p-0">
+          <Button variant="outline" className="rounded-xl border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 h-10 w-10 p-0 text-slate-700 dark:text-foreground">
             <Filter className="h-4 w-4" />
           </Button>
         </div>
       </div>
 
-      <div className="rounded-2xl border border-white/5 bg-white/2 backdrop-blur-sm overflow-hidden">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/5">
+      <div className="rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/2 shadow-sm dark:shadow-none overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-transparent">
           <div className="flex items-center gap-2">
             <div className="h-9 w-9 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
               <AlertTriangle className="h-5 w-5 text-red-500" />
@@ -115,7 +115,7 @@ export default function ModeratorReportsPage() {
           </div>
           <Button
             variant="outline"
-            className="rounded-xl border-white/10 bg-white/5"
+            className="rounded-xl border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-700 dark:text-foreground"
             onClick={fetchReports}
             disabled={loading}
           >
@@ -126,13 +126,13 @@ export default function ModeratorReportsPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="text-xs font-bold text-muted-foreground uppercase tracking-widest border-b border-white/5">
+              <tr className="text-xs font-bold text-muted-foreground uppercase tracking-widest border-b border-slate-200 dark:border-white/5">
                 <th className="py-5 px-6">Reported Product</th>
                 <th className="py-5 px-6">Reason / Reporter</th>
                 <th className="py-5 px-6 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-slate-100 dark:divide-white/5">
               {loading ? (
                 Array.from({ length: 4 }).map((_, i) => (
                   <tr key={i} className="animate-pulse">
@@ -155,10 +155,10 @@ export default function ModeratorReportsPage() {
                 </tr>
               ) : (
                 filtered.map((report) => (
-                  <tr key={report.id} className="group hover:bg-white/2 transition-all">
+                  <tr key={report.id} className="group hover:bg-slate-50 dark:hover:bg-white/2 transition-all">
                     <td className="py-6 px-6">
                       <div className="flex items-center gap-4">
-                        <div className="h-10 w-10 rounded-lg bg-white/5 border border-white/5 overflow-hidden shrink-0">
+                        <div className="h-10 w-10 rounded-lg bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5 overflow-hidden shrink-0">
                           {report.product.image && (
                             <Image
                               src={report.product.image}
@@ -194,7 +194,7 @@ export default function ModeratorReportsPage() {
                           disabled={!!actionLoading}
                           size="sm"
                           variant="outline"
-                          className="h-9 px-4 rounded-xl border-white/10 hover:bg-white/5 text-xs font-bold"
+                          className="h-9 px-4 rounded-xl border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/5 text-slate-700 dark:text-foreground text-xs font-bold"
                         >
                           {actionLoading?.id === report.id && actionLoading.action === "DISMISS" ? (
                             <Loader2 className="h-4 w-4 animate-spin" />
@@ -230,17 +230,17 @@ export default function ModeratorReportsPage() {
       {/* REJECT MODAL */}
       {rejectingReport && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 dark:bg-black/80 backdrop-blur-md animate-in fade-in duration-300"
           onClick={() => {
             if (!actionLoading) setRejectingReport(null);
           }}
         >
           <div
-            className="w-full max-w-md bg-[#0d1117] border border-white/10 rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300"
+            className="w-full max-w-md bg-white dark:bg-[#0d1117] border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="p-6 border-b border-white/10 bg-red-500/5">
-              <h2 className="text-xl font-black tracking-tight text-white flex items-center gap-2">
+            <div className="p-6 border-b border-red-100 dark:border-white/10 bg-red-50 dark:bg-red-500/5">
+              <h2 className="text-xl font-black tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
                 <AlertTriangle className="h-5 w-5 text-red-500" />
                 Confirm Product Rejection
               </h2>
@@ -262,7 +262,7 @@ export default function ModeratorReportsPage() {
                   value={rejectionReason}
                   onChange={(e) => setRejectionReason(e.target.value)}
                   placeholder="Explain why this product is being removed..."
-                  className="w-full min-h-[100px] rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-foreground focus:outline-hidden focus:ring-2 focus:ring-red-500/20 transition-all resize-none"
+                  className="w-full min-h-[100px] rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 p-4 text-sm text-slate-900 dark:text-foreground focus:outline-hidden focus:ring-2 focus:ring-red-500/20 transition-all resize-none shadow-sm dark:shadow-none"
                 />
               </div>
 
@@ -270,7 +270,7 @@ export default function ModeratorReportsPage() {
                 <Button
                   type="button"
                   variant="outline"
-                  className="flex-1 rounded-2xl border-white/10 h-11 font-bold"
+                  className="flex-1 rounded-2xl border-slate-200 dark:border-white/10 h-11 font-bold text-slate-700 dark:text-foreground"
                   disabled={!!actionLoading}
                   onClick={() => setRejectingReport(null)}
                 >

@@ -110,9 +110,9 @@ export function ModeratorDashboardContent() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, i) => (
-          <div key={i} className="p-6 rounded-3xl border border-white/5 bg-white/2 backdrop-blur-xl hover:bg-white/5 transition-all group overflow-hidden relative">
+          <div key={i} className="p-6 rounded-3xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/2 backdrop-blur-xl hover:bg-slate-50 dark:hover:bg-white/5 transition-all group overflow-hidden relative shadow-sm dark:shadow-none">
             <div className="absolute top-0 right-0 -z-10 h-24 w-24 rounded-full bg-purple-500/5 blur-2xl group-hover:bg-purple-500/10 transition-colors"></div>
-            <div className="p-3 w-fit rounded-2xl bg-white/5 group-hover:bg-purple-500/10 transition-colors mb-4">
+            <div className="p-3 w-fit rounded-2xl bg-white dark:bg-white/5 group-hover:bg-purple-500/10 transition-colors mb-4 border border-slate-100 dark:border-transparent">
               <stat.Icon className={`h-5 w-5 ${stat.color}`} />
             </div>
             <h3 className="text-sm font-bold text-muted-foreground mb-1 uppercase tracking-widest">{stat.title}</h3>
@@ -123,7 +123,7 @@ export function ModeratorDashboardContent() {
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
         {/* Product Review Queue */}
-        <div className="rounded-[2rem] border border-white/5 bg-[#0d1117]/40 backdrop-blur-xl p-8 shadow-2xl relative overflow-hidden group">
+        <div className="rounded-[2rem] border border-slate-200 dark:border-white/5 bg-white dark:bg-[#0d1117]/40 backdrop-blur-xl p-8 shadow-md dark:shadow-2xl relative overflow-hidden group">
           <div className="flex items-center justify-between mb-8">
             <h3 className="text-2xl font-bold flex items-center gap-3">
               <Hourglass className="h-6 w-6 text-orange-400" />
@@ -142,8 +142,8 @@ export function ModeratorDashboardContent() {
               </div>
             ) : (
               pendingProducts.map((product) => (
-                <div key={product.id} className="p-4 rounded-2xl bg-white/2 border border-white/5 flex flex-col sm:flex-row items-start sm:items-center gap-4 group/item hover:bg-white/5 transition-all">
-                  <div className="h-12 w-12 rounded-xl border border-white/10 overflow-hidden shrink-0 bg-white/5 relative">
+                <div key={product.id} className="p-4 rounded-2xl bg-white dark:bg-white/2 border border-slate-200 dark:border-white/5 flex flex-col sm:flex-row items-start sm:items-center gap-4 group/item hover:bg-slate-50 dark:hover:bg-white/5 transition-all shadow-sm dark:shadow-none">
+                  <div className="h-12 w-12 rounded-xl border border-slate-200 dark:border-white/10 overflow-hidden shrink-0 bg-slate-50 dark:bg-white/5 relative">
                     {product.image ? (
                       <Image
                         src={product.image}
@@ -161,7 +161,7 @@ export function ModeratorDashboardContent() {
                   </div>
                   <div className="flex gap-2 shrink-0">
                     <Link href={`/products/${product.id}`}>
-                      <Button size="icon" variant="ghost" className="h-9 w-9 rounded-lg hover:bg-white/10">
+                      <Button size="icon" variant="ghost" className="h-9 w-9 rounded-lg hover:bg-slate-100 dark:hover:bg-white/10 text-slate-700 dark:text-foreground">
                         <Eye className="h-4 w-4" />
                       </Button>
                     </Link>
@@ -192,7 +192,7 @@ export function ModeratorDashboardContent() {
         </div>
 
         {/* Safety / Reports Queue */}
-        <div className="rounded-[2rem] border border-white/5 bg-[#0d1117]/40 backdrop-blur-xl p-8 shadow-2xl relative overflow-hidden group">
+        <div className="rounded-[2rem] border border-slate-200 dark:border-white/5 bg-white dark:bg-[#0d1117]/40 backdrop-blur-xl p-8 shadow-md dark:shadow-2xl relative overflow-hidden group">
           <div className="flex items-center justify-between mb-8">
             <h3 className="text-2xl font-bold flex items-center gap-3">
               <Flag className="h-6 w-6 text-red-400" />
@@ -211,7 +211,7 @@ export function ModeratorDashboardContent() {
               </div>
             ) : (
               reports.map((report) => (
-                <div key={report.id} className="p-5 rounded-2xl bg-red-500/5 border border-red-500/10 space-y-3 group/report hover:bg-red-500/10 transition-all">
+                <div key={report.id} className="p-5 rounded-2xl bg-red-50 dark:bg-red-500/5 border border-red-100 dark:border-red-500/10 space-y-3 group/report hover:bg-red-100 dark:hover:bg-red-500/10 transition-all shadow-sm dark:shadow-none">
                   <div className="flex items-center justify-between gap-4">
                     <span className="text-xs font-black uppercase text-red-400 bg-red-400/10 px-2 py-0.5 rounded">Issue Detected</span>
                     <span className="text-[10px] text-muted-foreground font-mono">{new Date(report.createdAt).toLocaleTimeString()}</span>
@@ -220,7 +220,7 @@ export function ModeratorDashboardContent() {
                     <p className="text-sm font-bold text-foreground">
                       Report for <Link href={`/products/${report.product?.id}`} className="text-purple-400 hover:underline inline-flex items-center gap-1">{report.product?.name} <ArrowRight className="h-3 w-3" /></Link>
                     </p>
-                    <p className="text-sm text-muted-foreground italic mt-2 py-2 px-3 bg-black/20 rounded-xl border border-white/5">
+                    <p className="text-sm text-slate-600 dark:text-muted-foreground italic mt-2 py-2 px-3 bg-white dark:bg-black/20 rounded-xl border border-slate-200 dark:border-white/5 shadow-sm dark:shadow-none">
                       &quot;{report.reason}&quot;
                     </p>
                   </div>
@@ -232,7 +232,7 @@ export function ModeratorDashboardContent() {
                         disabled={!!actionLoading}
                         size="sm"
                         variant="ghost"
-                        className="h-8 rounded-lg text-xs font-bold hover:bg-white/10"
+                        className="h-8 rounded-lg text-xs font-bold hover:bg-slate-200 dark:hover:bg-white/10 text-slate-700 dark:text-foreground border border-slate-300 dark:border-transparent"
                       >
                         Dismiss
                       </Button>
@@ -256,19 +256,19 @@ export function ModeratorDashboardContent() {
       {/* REJECT MODAL */}
       {rejectingProduct && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 dark:bg-black/80 backdrop-blur-md animate-in fade-in duration-300"
           onClick={() => {
             if (!actionLoading) setRejectingProduct(null);
           }}
         >
           <div
-            className="w-full max-w-md bg-[#0d1117] border border-white/10 rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300"
+            className="w-full max-w-md bg-white dark:bg-[#0d1117] border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300"
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
           >
-            <div className="p-6 border-b border-white/5 bg-white/2">
-              <h2 className="text-xl font-black tracking-tight text-foreground">Reject product</h2>
+            <div className="p-6 border-b border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-white/2">
+              <h2 className="text-xl font-black tracking-tight text-slate-900 dark:text-foreground">Reject product</h2>
               <p className="text-sm mt-2 text-muted-foreground">
                 Provide a short reason for rejecting <span className="text-foreground font-bold">{rejectingProduct.name}</span>.
               </p>
@@ -283,7 +283,7 @@ export function ModeratorDashboardContent() {
                   value={rejectionReason}
                   onChange={(e) => setRejectionReason(e.target.value)}
                   placeholder="e.g. Broken link / incomplete description / misleading image"
-                  className="w-full min-h-[120px] rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-foreground focus:outline-hidden focus:ring-2 focus:ring-purple-500/20 transition-all resize-none"
+                  className="w-full min-h-[120px] rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 p-4 text-sm text-slate-900 dark:text-foreground focus:outline-hidden focus:ring-2 focus:ring-purple-500/20 transition-all resize-none"
                 />
               </div>
 
@@ -291,7 +291,7 @@ export function ModeratorDashboardContent() {
                 <Button
                   type="button"
                   variant="outline"
-                  className="flex-1 rounded-2xl border-white/10"
+                  className="flex-1 rounded-2xl border-slate-200 dark:border-white/10 text-slate-700 dark:text-foreground"
                   disabled={!!actionLoading}
                   onClick={() => setRejectingProduct(null)}
                 >

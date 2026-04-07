@@ -54,20 +54,20 @@ export default function DashboardLayout({
 
   return (
     <div className="flex min-h-screen w-full bg-background">
-      <Sidebar role={user.role} userName={user.name} />
+      <Sidebar role={user.role} userName={user.name} photoUrl={user.photoUrl} />
 
       <div className="flex-1 flex flex-col min-w-0 bg-gray-50/50 dark:bg-black/20 overflow-hidden relative">
 
         <div className="absolute top-0 right-0 -z-10 h-96 w-96 rounded-full bg-purple-500/5 blur-[100px]"></div>
         <div className="absolute bottom-0 left-0 -z-10 h-96 w-96 rounded-full bg-indigo-500/5 blur-[100px]"></div>
 
-        <header className="h-20 shrink-0 border-b border-white/5 bg-background/40 backdrop-blur-xl flex items-center justify-between px-6 md:px-10 z-40 sticky top-0">
+        <header className="h-20 shrink-0 border-b border-slate-200 dark:border-white/5 bg-white/80 dark:bg-background/40 backdrop-blur-xl flex items-center justify-between px-6 md:px-10 z-40 sticky top-0">
           <div className="flex items-center gap-4 flex-1">
             <div className="relative w-full max-w-md hidden md:block">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search in dashboard..."
-                className="pl-9 rounded-xl border-white/10 bg-white/5 focus-visible:ring-purple-500/50 h-10 w-full"
+                className="pl-9 rounded-xl border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 focus-visible:ring-purple-500/50 h-10 w-full"
               />
             </div>
           </div>

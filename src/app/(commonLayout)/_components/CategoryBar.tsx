@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { TagService, Tag } from "@/services/tag/tag.service";
-import { 
-  Bot, Cloud, Code2, Cpu, Globe, Smartphone, Zap, 
+import {
+  Bot, Cloud, Code2, Cpu, Globe, Smartphone, Zap,
   Hash, Layers, Database, Shield, Palette
 } from "lucide-react";
 
@@ -48,23 +48,25 @@ export function CategoryBar() {
   const displayTags = [...tags, ...tags, ...tags];
 
   return (
-    <div className="w-full overflow-hidden py-6 -mt-12 relative z-20 group">
-      {/* Horizontal Scroller Container */}
-      <div className="flex animate-marquee-slow whitespace-nowrap group-hover:pause-animation gap-4">
-        {displayTags.map((tag, i) => {
+    <div className="container mx-auto px-4 overflow-hidden py-6 -mt-12 relative z-20 group">
+      {/* Horizontal Scroller Container with seamless gradient masks */}
+      <div className="mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+        <div className="flex animate-marquee-slow whitespace-nowrap group-hover:pause-animation gap-4 py-2">
+          {displayTags.map((tag, i) => {
           const Icon = getIcon(tag.name);
           return (
             <div
               key={`${tag.id}-${i}`}
-              className="flex items-center gap-2.5 px-6 py-3 rounded-2xl bg-[#0d0d12]/40 backdrop-blur-xl border border-white/5 hover:border-purple-500/30 hover:bg-purple-500/5 transition-all shadow-2xl shrink-0"
+              className="flex items-center gap-2.5 px-6 py-3 rounded-2xl bg-white dark:bg-[#0d0d12]/40 backdrop-blur-xl border border-slate-200 dark:border-white/5 hover:border-purple-300 dark:hover:border-purple-500/30 hover:bg-purple-50 dark:hover:bg-purple-500/5 transition-all shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] dark:shadow-2xl shrink-0 group/item cursor-pointer"
             >
-              <Icon className="h-4 w-4 text-purple-400" />
-              <span className="text-sm font-semibold text-muted-foreground group-hover/item:text-white transition-colors">
+              <Icon className="h-4 w-4 text-[#1d5464] dark:text-[#1d5464]/80 group-hover/item:text-[#1d5464] transition-colors" />
+              <span className="text-sm font-semibold text-slate-700 dark:text-muted-foreground group-hover/item:text-[#1d5464] dark:group-hover/item:text-white transition-colors">
                 {tag.name}
               </span>
             </div>
           );
         })}
+        </div>
       </div>
 
       <style jsx>{`

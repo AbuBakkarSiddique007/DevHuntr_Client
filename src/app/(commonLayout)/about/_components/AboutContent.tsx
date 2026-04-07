@@ -56,10 +56,10 @@ export function AboutContent() {
           <Ghost className="h-4 w-4 text-purple-400" />
           <span className="text-sm font-medium text-muted-foreground uppercase tracking-widest">Our Story</span>
         </div>
-        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 bg-clip-text text-transparent bg-linear-to-b from-white to-white/50 leading-tight">
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-6 text-slate-900 dark:text-transparent dark:bg-clip-text dark:bg-linear-to-br dark:from-white dark:via-white/90 dark:to-white/40 leading-tight">
           Redefining Product discovery <br className="hidden md:block" /> for local Developers.
         </h1>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+        <p className="text-xl text-slate-600 dark:text-muted-foreground/80 max-w-2xl mx-auto leading-relaxed">
           DevHuntr is more than a directory; it is an ecosystem built to bridge the gap between creative code and happy users.
         </p>
       </section>
@@ -77,7 +77,7 @@ export function AboutContent() {
              
               <div className="shrink-0">
                 <div className={`relative h-12 w-12 md:h-18 md:w-18 flex items-center justify-center rounded-2xl border ${step.borderColor} bg-linear-to-br ${step.color} shadow-lg shadow-black/5 group-hover:scale-110 transition-transform duration-500`}>
-                  <span className="text-sm md:text-lg font-bold opacity-80">{step.id}</span>
+                  <span className="text-sm md:text-lg font-bold text-slate-900 dark:text-white/80">{step.id}</span>
                   <div className="absolute -inset-2 bg-white/5 rounded-3xl -z-10 blur-sm opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
               </div>
@@ -86,13 +86,13 @@ export function AboutContent() {
               <div className="flex-1 pt-2 md:pt-4">
                 <div className="flex items-center gap-3 mb-3">
                   {step.icon}
-                  <h3 className="text-xl md:text-2xl font-bold text-white/90">{step.title}</h3>
+                  <h3 className="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white/90">{step.title}</h3>
                 </div>
-                <h4 className="text-lg md:text-xl font-semibold mb-4 text-primary/80 leading-snug">
+                <h4 className="text-lg md:text-xl font-semibold mb-4 text-purple-600 dark:text-primary/80 leading-snug">
                   {step.subtitle}
                 </h4>
                 <div className="p-6 rounded-3xl glass border border-white/5 hover:border-white/10 transition-colors shadow-2xl">
-                  <p className="text-muted-foreground text-md md:text-lg leading-relaxed">
+                  <p className="text-slate-600 dark:text-muted-foreground text-md md:text-lg leading-relaxed">
                     {step.description}
                   </p>
                 </div>
@@ -106,8 +106,8 @@ export function AboutContent() {
       <section className="container mx-auto px-4 py-20 text-center">
         <div className="p-12 md:p-20 rounded-[3rem] glass border border-white/10 relative overflow-hidden group">
           <div className="absolute inset-0 bg-linear-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">Ready to hunt for excellence?</h2>
-          <p className="text-xl text-muted-foreground mb-10 max-w-xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6 text-slate-900 dark:text-white">Ready to hunt for excellence?</h2>
+          <p className="text-xl text-slate-600 dark:text-muted-foreground/80 mb-10 max-w-xl mx-auto">
             Join thousands of developers sharing their journey and discovering the next big thing in tech.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">

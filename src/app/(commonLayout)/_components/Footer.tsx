@@ -9,7 +9,7 @@ export function Footer() {
 
           <div className="col-span-1 md:col-span-2 space-y-4">
             <Link href="/" className="flex items-center gap-3 group w-fit">
-              <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-tr from-emerald-500/80 to-teal-600/80 text-white shadow-lg shadow-emerald-500/10 group-hover:scale-110 transition-all duration-300">
+              <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-tr from-purple-500/80 to-indigo-600/80 text-white shadow-lg shadow-purple-500/20 group-hover:scale-110 transition-all duration-300">
                 <Orbit className="h-5 w-5 animate-[spin_5s_linear_infinite]" />
               </div>
               <span className="font-bold text-xl tracking-tight">DevHuntr</span>
@@ -20,25 +20,25 @@ export function Footer() {
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-semibold text-sm tracking-wider uppercase text-foreground/80">Platform</h3>
+            <h3 className="font-bold text-xs tracking-widest uppercase text-purple-600 dark:text-purple-400">Platform</h3>
 
             <div className="flex flex-col gap-2">
-              <Link href="/products" className="text-sm text-muted-foreground hover:text-purple-400 transition-colors">Explore Products</Link>
+              <Link href="/products" className="text-sm text-muted-foreground hover:text-purple-400 dark:hover:text-purple-400 transition-colors">Explore Products</Link>
 
-              <Link href="/user-dashboard/launch" className="text-sm text-muted-foreground hover:text-purple-400 transition-colors">Submit an App</Link>
-              
-              <Link href="#" className="text-sm text-muted-foreground hover:text-purple-400 transition-colors">Trending Now</Link>
+              <Link href="/user-dashboard/launch" className="text-sm text-muted-foreground hover:text-purple-400 dark:hover:text-purple-400 transition-colors">Submit an App</Link>
+
+              <Link href="#" className="text-sm text-muted-foreground hover:text-purple-400 dark:hover:text-purple-400 transition-colors">Trending Now</Link>
             </div>
           </div>
 
           <div className="space-y-4">
-            <h3 className="font-semibold text-sm tracking-wider uppercase text-foreground/80">Legal</h3>
+            <h3 className="font-bold text-xs tracking-widest uppercase text-purple-600 dark:text-purple-400">Legal</h3>
             <div className="flex flex-col gap-2">
 
-              <Link href="#" className="text-sm text-muted-foreground hover:text-purple-400 transition-colors">Privacy Policy</Link>
-              <Link href="#" className="text-sm text-muted-foreground hover:text-purple-400 transition-colors">Terms of Service</Link>
-              <Link href="#" className="text-sm text-muted-foreground hover:text-purple-400 transition-colors">Contact Us</Link>
-           
+              <Link href="#" className="text-sm text-muted-foreground hover:text-purple-400 dark:hover:text-purple-400 transition-colors">Privacy Policy</Link>
+              <Link href="#" className="text-sm text-muted-foreground hover:text-purple-400 dark:hover:text-purple-400 transition-colors">Terms of Service</Link>
+              <Link href="#" className="text-sm text-muted-foreground hover:text-purple-400 dark:hover:text-purple-400 transition-colors">Contact Us</Link>
+
             </div>
           </div>
         </div>

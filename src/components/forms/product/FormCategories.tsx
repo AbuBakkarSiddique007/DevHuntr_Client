@@ -42,7 +42,7 @@ export function FormCategories() {
   };
 
   return (
-    <div className="bg-white/1 px-4 lg:px-8 py-8 rounded-3xl space-y-6 border border-white/5">
+    <div className="bg-white dark:bg-white/1 px-4 lg:px-8 py-8 rounded-3xl space-y-6 border border-slate-200 dark:border-white/5 shadow-sm dark:shadow-none">
       <div className="flex items-center gap-4 mb-2">
         <div className="h-10 w-10 rounded-xl bg-indigo-500/20 flex items-center justify-center">
           <Check className="h-5 w-5 text-indigo-400" />
@@ -67,7 +67,7 @@ export function FormCategories() {
                 "px-4 py-2 rounded-xl border text-[10px] font-bold uppercase tracking-widest transition-all duration-300",
                 selectedTagIds.includes(tag.id)
                   ? "bg-indigo-500 border-indigo-400 text-white shadow-lg shadow-indigo-500/30"
-                  : "bg-white/5 border-white/10 text-muted-foreground hover:bg-white/10 hover:border-white/20"
+                  : "bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-600 dark:text-muted-foreground hover:bg-slate-50 dark:hover:bg-white/10 hover:border-slate-300 dark:hover:border-white/20"
               )}
             >
               {tag.name}
