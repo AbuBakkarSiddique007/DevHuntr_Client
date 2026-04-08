@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { ProductService, Product } from "@/services/product/product.service";
+import { useEffect, useState, useRef } from "react";
+import { ProductService, Product, ProductListResponse } from "@/services/product/product.service";
 import { TagService, Tag } from "@/services/tag/tag.service";
 import { ProductCard } from "@/components/shared/ProductCard";
 import { Ghost, Search, ChevronLeft, ChevronRight, Crown, X } from "lucide-react";
@@ -15,19 +15,24 @@ export function ProductsList() {
   const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
+  const [suggestions, setSuggestions] = useState<Product[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [tags, setTags] = useState<Tag[]>([]);
   const [selectedTag, setSelectedTag] = useState("");
   const [pricingType, setPricingType] = useState("");
+  
+  // Ref for outside clicks
+  const searchRef = useRef<HTMLDivElement>(null);
 
   const loadProducts = async () => {
     setLoading(true);
     try {
-      const response = await ProductService.getProducts({ page, limit: 10, search, tag: selectedTag, pricingType });
-      const productsData = response?.data?.products || response?.products || (Array.isArray(response?.data) ? response.data : null) || (Array.isArray(response) ? response : []);
-      setProducts(Array.isArray(productsData) ? productsData : []);
+      const response = await ProductService.getProducts({ page, limit: 12, search, tag: selectedTag, pricingType }) as ProductListResponse;
+      const productsData = response?.products || [];
+      setProducts(productsData);
       
-      const meta = response?.data?.meta || response?.meta;
-      const calculatedPages = meta?.total ? Math.ceil(meta.total / 10) : 1;
+      const meta = response?.meta;
+      const calculatedPages = meta?.total ? Math.ceil(meta.total / 12) : 1;
       setTotalPages(meta?.totalPages || calculatedPages);
     } catch (err) {
       console.error("Failed to load products", err);
@@ -35,6 +40,36 @@ export function ProductsList() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      if (searchInput.length < 1) {
+        setSuggestions([]);
+        return;
+      }
+      try {
+        const response = await ProductService.getProducts({ search: searchInput, limit: 5 }) as ProductListResponse;
+        const data = response?.products || [];
+        setSuggestions(data);
+        setShowSuggestions(true);
+      } catch (err) {
+        console.error("Suggestions fetch failed", err);
+      }
+    };
+
+    const timeoutId = setTimeout(fetchSuggestions, 300);
+    return () => clearTimeout(timeoutId);
+  }, [searchInput]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     TagService.getTags().then(setTags).catch(console.error);
@@ -45,10 +80,18 @@ export function ProductsList() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, search, selectedTag, pricingType]);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSearch = (e?: React.FormEvent) => {
+    e?.preventDefault();
     setSearch(searchInput);
     setPage(1);
+    setShowSuggestions(false);
+  };
+
+  const selectSuggestion = (name: string) => {
+    setSearchInput(name);
+    setSearch(name);
+    setPage(1);
+    setShowSuggestions(false);
   };
 
   const clearSearch = () => {
@@ -71,29 +114,59 @@ export function ProductsList() {
           </p>
         </div>
 
-        <form onSubmit={handleSearch} className="flex w-full md:w-auto gap-2 p-2 rounded-full shadow-lg shadow-purple-500/5 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl group">
-          <div className="relative w-full md:w-80">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-muted-foreground group-focus-within:text-purple-500 transition-colors" />
-            <Input
-              placeholder="Search products..."
-              className="pl-9 pr-10 rounded-full border-none bg-transparent shadow-none focus-visible:ring-0 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-muted-foreground"
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-            />
-            {searchInput && (
-              <button
-                type="button"
-                onClick={clearSearch}
-                className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 flex items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-white/10 text-slate-400 hover:text-slate-600 dark:hover:text-white transition-all"
-              >
-                <X className="h-3.5 w-3.5" />
-              </button>
-            )}
-          </div>
-          <Button type="submit" className="rounded-full bg-purple-600 hover:bg-purple-700 text-white transition-all shadow-md active:scale-95">
-            Search
-          </Button>
-        </form>
+        <div className="relative w-full md:w-[500px]" ref={searchRef}>
+          <form onSubmit={handleSearch} className="flex w-full gap-2 p-2 rounded-full shadow-lg shadow-purple-500/5 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-xl group relative z-10">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-muted-foreground group-focus-within:text-purple-500 transition-colors" />
+              <Input
+                placeholder="Start typing to discover..."
+                className="pl-9 pr-10 rounded-full border-none bg-transparent shadow-none focus-visible:ring-0 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-muted-foreground h-10"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                onFocus={() => searchInput.length > 0 && setShowSuggestions(true)}
+              />
+              {searchInput && (
+                <button
+                  type="button"
+                  onClick={clearSearch}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 flex items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-white/10 text-slate-400 hover:text-slate-600 dark:hover:text-white transition-all"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
+            <Button type="submit" className="rounded-full bg-purple-600 hover:bg-purple-700 text-white transition-all shadow-md active:scale-95 px-6">
+              Search
+            </Button>
+          </form>
+
+          {/* GOOGLE-STYLE SUGGESTIONS DROPDOWN */}
+          {showSuggestions && suggestions.length > 0 && (
+            <div className="absolute top-[85%] left-0 w-full pt-10 pb-4 px-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-b-[2.5rem] shadow-2xl z-50 animate-in fade-in slide-in-from-top-4 duration-300">
+              <div className="space-y-1 max-h-[300px] overflow-y-auto custom-scrollbar">
+                {suggestions.map((product) => (
+                  <button
+                    key={product.id}
+                    onClick={() => selectSuggestion(product.name)}
+                    className="w-full text-left px-4 py-3 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors flex items-center gap-3 group"
+                  >
+                    <div className="h-8 w-8 rounded-lg bg-slate-100 dark:bg-white/5 flex items-center justify-center border border-slate-200 dark:border-white/10 group-hover:bg-purple-500/10 group-hover:border-purple-500/30 transition-all">
+                      <Search className="h-3.5 w-3.5 text-slate-400 dark:text-white/30 group-hover:text-purple-500" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                        {product.name}
+                      </p>
+                      <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">
+                        {product.tags?.[0]?.tag?.name || "Available Product"}
+                      </p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Main Content Layout: Sidebar + Grid */}

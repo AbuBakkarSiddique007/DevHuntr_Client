@@ -8,6 +8,7 @@ import { BlogPreviewSection } from "./_components/BlogPreviewSection";
 import { NewsletterSection } from "./_components/NewsletterSection";
 import { FAQSection } from "./_components/FAQSection";
 import { FinalCTASection } from "./_components/FinalCTASection";
+import RecommendedProducts from "@/components/ai/RecommendedProducts";
 
 export default function HomePage() {
   return (
@@ -15,6 +16,9 @@ export default function HomePage() {
       <HeroSection />
       <CategoryBar />
       <FeaturedGrid />
+      <div className="container mx-auto px-4">
+        <RecommendedProducts />
+      </div>
       <TestimonialsSection />
       <StatsSection />
       <BlogPreviewSection />

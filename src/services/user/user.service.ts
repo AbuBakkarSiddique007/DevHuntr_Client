@@ -9,11 +9,12 @@ export interface UpdateProfilePayload {
 }
 
 export const UserService = {
-    getMe: async () => {
+    getMe: async (options?: RequestInit & { silent?: boolean }) => {
         return safeFetch(`${API_BASE}/users/me`, {
             method: "GET",
             credentials: "include",
             cache: "no-store",
+            ...options,
         });
     },
 

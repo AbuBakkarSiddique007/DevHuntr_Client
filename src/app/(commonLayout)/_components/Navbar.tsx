@@ -86,13 +86,16 @@ export function Navbar() {
                       <p className="text-sm font-bold truncate">{user?.name}</p>
                     </div>
 
-                    <Link href={`/${user?.role?.toLowerCase()}-dashboard`} className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-white/70 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors group">
+                    <Link href={`/${user?.role?.toLowerCase() || "user"}-dashboard`} className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-white/70 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors group">
                       <LayoutDashboard className="h-4 w-4 text-slate-500 dark:text-white/70 group-hover:text-primary transition-colors" />
                       Dashboard
                     </Link>
 
                     <button
-                      onClick={() => logout()}
+                      onClick={async () => {
+                        setIsUserMenuOpen(false);
+                        await logout();
+                      }}
                       className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors group"
                     >
                       <LogOut className="h-4 w-4" />

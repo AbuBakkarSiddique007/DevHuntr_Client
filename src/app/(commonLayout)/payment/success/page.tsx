@@ -7,31 +7,21 @@ import { CheckCircle, Crown, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function PaymentSuccessPage() {
-  const { checkSession } = useAuth();
+  const { user, checkSession } = useAuth();
+  const dashboardUrl = `/${user?.role?.toLowerCase() || "user"}-dashboard`;
 
   useEffect(() => {
-    // Check session immediately:
     checkSession();
-
-    // Poll every 1.5 seconds for 5 times (total 7.5 seconds)
-    // Stripe webhooks usually take 1-3 seconds to reach local server
-    let count = 0;
-    
-    const interval = setInterval(() => {
-      count++;
-      if (count >= 5) {
-        clearInterval(interval);
-      }
-      
-      checkSession();
-    }, 1500);
-
-    return () => clearInterval(interval);
+    const interval = setInterval(() => checkSession(), 1500);
+    const timeout = setTimeout(() => clearInterval(interval), 7500);
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
   }, [checkSession]);
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
-
       <div className="fixed inset-0 flex items-center justify-center pointer-events-none -z-10">
         <div className="h-[600px] w-[600px] rounded-full bg-green-500/5 blur-[120px]" />
       </div>
@@ -45,21 +35,21 @@ export default function PaymentSuccessPage() {
           <Crown className="h-3 w-3" /> Lifetime Member
         </div>
 
-        <h1 className="text-4xl font-extrabold tracking-tight mb-4 mt-4">
+        <h1 className="text-4xl font-extrabold tracking-tight mb-4 mt-4 text-slate-900 dark:text-white">
           You&apos;re Premium! 🎉
         </h1>
-        <p className="text-muted-foreground mb-10 leading-relaxed">
-          Your payment was successful. You now have <span className="text-amber-400 font-semibold">lifetime access</span> to all premium products on DevHuntr.
+        <p className="text-slate-500 dark:text-muted-foreground mb-10 leading-relaxed">
+          Your payment was successful. You now have <span className="text-amber-500 font-semibold">lifetime access</span> to all premium products on DevHuntr.
         </p>
 
         <div className="flex flex-col gap-3">
           <Link href="/products">
-            <Button className="w-full rounded-2xl h-12 text-base font-bold bg-amber-500 hover:bg-amber-400 text-black shadow-lg shadow-amber-500/25">
-              <Crown className="mr-2 h-4 w-4" /> Explore Premium Products
+            <Button className="w-full rounded-2xl h-14 text-base font-black bg-linear-to-r from-amber-400 to-amber-600 hover:opacity-90 text-black shadow-xl shadow-amber-500/20 border-none transition-all hover:scale-[1.02]">
+              <Crown className="mr-2 h-5 w-5" /> Explore Premium Products
             </Button>
           </Link>
-          <Link href="/dashboard">
-            <Button variant="outline" className="w-full rounded-2xl h-12 border-white/10">
+          <Link href={dashboardUrl}>
+            <Button variant="outline" className="w-full rounded-2xl h-14 border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/5 font-bold transition-all hover:scale-[1.02]">
               Go to Dashboard <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>

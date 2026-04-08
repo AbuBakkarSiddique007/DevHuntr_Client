@@ -25,6 +25,14 @@ interface AuthContextType {
   updateUser: (payload: Partial<User>) => Promise<void>;
 }
 
+interface UserResponse {
+  data?: User;
+  user?: User;
+  id?: string;
+  name?: string;
+  role?: Role;
+}
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -43,17 +51,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const checkSession = useCallback(async () => {
     setIsLoading(true);
     try {
-      let data;
+      let data: User | null = null;
       try {
-        const response = await UserService.getMe();
-        data = response.data || response.user || response;
+        const response = await UserService.getMe({ silent: true }) as UserResponse;
+        data = (response?.data || response?.user || (response?.id ? response : null)) as User | null;
       } catch (err: unknown) {
-        const error = err as Error;
-        if (error.message?.includes("401")) {
+        if ((err as { status?: number })?.status === 401) {
           const refreshed = await refreshSession();
           if (refreshed) {
-            const response = await UserService.getMe();
-            data = response.data || response.user || response;
+            const response = await UserService.getMe({ silent: true }) as UserResponse;
+            data = ((response?.data || response?.user || (response?.id ? response : null)) as unknown) as User | null;
           } else {
             throw err;
           }
@@ -63,11 +70,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       setUser(data);
-    } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : "No active logged-in session.";
-      console.log(errorMessage);
+    } catch {
       setUser(null);
-
     } finally {
       setIsLoading(false);
     }
@@ -88,10 +92,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const updateUser = async (payload: Partial<User>) => {
     try {
-      const response = await UserService.updateProfile(payload);
-      const updatedUser = response.data || response.user || response;
+      const response = (await UserService.updateProfile(payload)) as unknown as UserResponse;
+      const updatedUser = (response?.data || response?.user || (response?.id ? response : null)) as User;
       setUser(updatedUser);
-
     } catch (err) {
       console.error("Profile update failed", err);
       throw err;
