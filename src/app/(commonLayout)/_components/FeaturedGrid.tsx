@@ -25,7 +25,9 @@ export function FeaturedGrid() {
 
     fetchFeatured();
   }, []);
-
+ 
+  if (!loading && products.length === 0) return null;
+ 
   return (
     <section className="py-16 relative z-10 text-slate-900 dark:text-foreground">
       <div className="container mx-auto px-4">
@@ -39,10 +41,10 @@ export function FeaturedGrid() {
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="animate-pulse rounded-[2rem] border border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-white/5 h-[320px]" />
+              <div key={i} className="animate-pulse rounded-[2rem] glass h-[320px]" />
             ))}
           </div>
-        ) : products.length > 0 ? (
+        ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {products.slice(0, 4).map((product) => (
               <Link key={product.id} href={`/products/${product.id}`} className="group relative rounded-[2rem] border border-slate-200 dark:border-white/10 bg-white dark:bg-background/50 p-6 flex flex-col h-full shadow-[0_8px_30px_-10px_rgba(0,0,0,0.05)] dark:shadow-none hover:shadow-[0_8px_30px_-5px_rgba(139,92,246,0.2)] dark:hover:shadow-yellow-500/10 hover:border-purple-200 dark:hover:border-yellow-500/40 transition-all duration-500 overflow-hidden">
@@ -90,7 +92,7 @@ export function FeaturedGrid() {
               </Link>
             ))}
           </div>
-        ) : null}
+        )}
       </div>
     </section>
   );
