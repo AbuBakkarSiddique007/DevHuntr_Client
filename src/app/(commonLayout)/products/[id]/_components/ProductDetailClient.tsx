@@ -214,18 +214,19 @@ function VotingPanel({ product, onVote }: {
   };
 
   return (
-    <div className="glass p-6 rounded-3xl text-center space-y-4 shadow-xl border border-white/5">
-      <p className="text-xs font-bold text-slate-500 dark:text-muted-foreground uppercase tracking-widest">Net Score</p>
-      <div className={`text-6xl font-black tabular-nums ${net > 0 ? "text-green-500 dark:text-green-400" : net < 0 ? "text-red-500 dark:text-red-400" : "text-slate-300 dark:text-white/40"}`}>
+    <div className="bg-slate-50 dark:bg-white/5 p-6 md:p-8 rounded-[2rem] text-center space-y-4 shadow-sm dark:shadow-[0_0_30px_rgba(168,85,247,0.05)] border border-slate-200 dark:border-white/5 relative overflow-hidden group">
+      <div className="absolute top-0 right-0 -z-10 h-32 w-32 rounded-full bg-purple-500/5 blur-2xl group-hover:bg-purple-500/10 transition-colors"></div>
+      <p className="text-[10px] font-black text-slate-400 dark:text-muted-foreground uppercase tracking-[0.2em]">Net Score</p>
+      <div className={`text-6xl md:text-7xl font-black tracking-tighter tabular-nums ${net > 0 ? "text-green-500 dark:text-green-400" : net < 0 ? "text-rose-500 dark:text-rose-400" : "text-slate-300 dark:text-white/20"}`}>
         {net > 0 ? "+" : ""}{net}
       </div>
-      <div className="flex gap-3 justify-center">
+      <div className="flex gap-3 justify-center pt-2">
         <button
           onClick={() => handleVote("UPVOTE")}
           disabled={!user || loading || voting}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border font-bold text-sm transition-all duration-200 ${myVote === "UPVOTE"
-            ? "bg-green-100 dark:bg-green-500/20 border-green-200 dark:border-green-500/40 text-green-600 dark:text-green-400"
-            : "bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-500 dark:text-muted-foreground hover:bg-green-50 dark:hover:bg-green-500/10 hover:border-green-200 dark:hover:border-green-500/30 hover:text-green-600 dark:hover:text-green-400"
+          className={`flex items-center gap-2 px-6 py-3 rounded-2xl border font-bold text-sm transition-all duration-300 ${myVote === "UPVOTE"
+            ? "bg-green-500 text-white border-green-600 shadow-lg shadow-green-500/20"
+            : "bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-600 dark:text-muted-foreground hover:bg-green-50 dark:hover:bg-green-500/10 hover:border-green-200 dark:hover:border-green-500/30 hover:text-green-600 dark:hover:text-green-400"
             }`}
         >
           <ChevronUp className="h-4 w-4" /> {product.upvoteCount}
@@ -233,17 +234,17 @@ function VotingPanel({ product, onVote }: {
         <button
           onClick={() => handleVote("DOWNVOTE")}
           disabled={!user || loading || voting}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border font-bold text-sm transition-all duration-200 ${myVote === "DOWNVOTE"
-            ? "bg-red-100 dark:bg-red-500/20 border-red-200 dark:border-red-500/40 text-red-600 dark:text-red-400"
-            : "bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-500 dark:text-muted-foreground hover:bg-red-50 dark:hover:bg-red-500/10 hover:border-red-200 dark:hover:border-red-500/30 hover:text-red-600 dark:hover:text-red-400"
+          className={`flex items-center gap-2 px-6 py-3 rounded-2xl border font-bold text-sm transition-all duration-300 ${myVote === "DOWNVOTE"
+            ? "bg-rose-500 text-white border-rose-600 shadow-lg shadow-rose-500/20"
+            : "bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-600 dark:text-muted-foreground hover:bg-rose-50 dark:hover:bg-rose-500/10 hover:border-rose-200 dark:hover:border-rose-500/30 hover:text-rose-600 dark:hover:text-rose-400"
             }`}
         >
           <ChevronDown className="h-4 w-4" /> {product.downvoteCount}
         </button>
       </div>
       {!user && (
-        <p className="text-xs text-muted-foreground">
-          <Link href="/login" className="text-purple-400 hover:underline">Log in</Link> to vote
+        <p className="text-xs text-muted-foreground pt-2">
+          <Link href="/login" className="text-purple-600 dark:text-purple-400 font-bold hover:underline">Log in</Link> to vote
         </p>
       )}
     </div>
@@ -286,11 +287,11 @@ function CommentsSection({ productId }: { productId: string }) {
   };
 
   return (
-    <div className="glass p-8 rounded-[2rem] space-y-6">
-      <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight flex items-center gap-3 text-slate-900 dark:text-white">
-        <MessageSquare className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+    <div className="bg-white dark:bg-background/40 p-8 md:p-12 rounded-[2.5rem] space-y-10 border border-slate-200 dark:border-white/5 shadow-sm dark:shadow-none">
+      <h2 className="text-3xl md:text-4xl font-black tracking-tighter flex items-center gap-4 text-slate-900 dark:text-white leading-none">
+        <MessageSquare className="h-8 w-8 text-purple-600 dark:text-purple-400" />
         Discussion
-        <span className="text-sm font-normal text-slate-500 dark:text-muted-foreground">({comments.length})</span>
+        <span className="text-lg font-bold text-slate-400 dark:text-muted-foreground/50 ml-2">({comments.length})</span>
       </h2>
 
       {user ? (
@@ -543,27 +544,28 @@ export function ProductDetailClient({ id }: { id: string }) {
 
         <div className="space-y-6">
 
-          <div className="glass p-6 rounded-3xl border border-slate-200 dark:border-white/10 shadow-xl space-y-4">
-            <h3 className="text-xs font-bold text-purple-600 dark:text-purple-400 uppercase tracking-widest">Meet the Maker</h3>
+          <div className="bg-white dark:bg-background/40 p-8 rounded-[2rem] border border-slate-200 dark:border-white/5 shadow-sm dark:shadow-none space-y-6 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 -z-10 h-32 w-32 rounded-full bg-purple-500/5 blur-[50px] group-hover:bg-purple-500/10 transition-colors duration-500"></div>
+            <h3 className="text-[10px] font-black text-purple-600 dark:text-purple-400 uppercase tracking-[0.2em]">Meet the Maker</h3>
             <div className="flex items-center gap-4">
               {product.owner?.photoUrl ? (
                 <Image
                   src={product.owner.photoUrl}
                   alt={product.owner.name}
-                  width={48}
-                  height={48}
-                  className="h-12 w-12 rounded-2xl object-cover border border-white/10"
+                  width={64}
+                  height={64}
+                  className="h-16 w-16 rounded-[1.25rem] object-cover border border-slate-200 dark:border-white/10 shadow-sm"
                 />
               ) : (
-                <div className="h-12 w-12 rounded-2xl bg-slate-100 dark:bg-white/5 flex items-center justify-center border border-slate-200 dark:border-white/10">
-                  <UserIcon className="h-6 w-6 text-muted-foreground" />
+                <div className="h-16 w-16 rounded-[1.25rem] bg-slate-100 dark:bg-white/5 flex items-center justify-center border border-slate-200 dark:border-white/10 shadow-sm">
+                  <UserIcon className="h-8 w-8 text-slate-400 dark:text-muted-foreground" />
                 </div>
               )}
               <div className="flex-1 min-w-0">
-                <p className="font-bold text-foreground truncate">{product.owner?.name || "Anonymous Maker"}</p>
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-0.5">
-                  <Mail className="h-3 w-3" />
-                  <span className="truncate">{product.owner?.email || "No email provided"}</span>
+                <p className="text-lg font-black text-slate-900 dark:text-white truncate leading-none mb-2">{product.owner?.name || "Anonymous Maker"}</p>
+                <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-muted-foreground">
+                  <Mail className="h-4 w-4" />
+                  <span className="truncate font-medium">{product.owner?.email || "No email provided"}</span>
                 </div>
               </div>
             </div>
@@ -573,12 +575,12 @@ export function ProductDetailClient({ id }: { id: string }) {
 
           <button
             onClick={() => setShowReport(true)}
-            className="w-full glass p-4 rounded-3xl flex items-center justify-between group cursor-pointer hover:bg-destructive/10 hover:border-destructive/30 border border-transparent transition-all"
+            className="w-full bg-slate-50 dark:bg-white/2 hover:bg-rose-50 dark:hover:bg-rose-500/10 p-5 rounded-[2rem] flex items-center justify-between group cursor-pointer border border-slate-200 dark:border-white/5 hover:border-rose-200 dark:hover:border-rose-500/20 transition-all shadow-sm dark:shadow-none"
           >
-            <span className="text-sm font-medium text-muted-foreground group-hover:text-destructive transition-colors">
-              Report an issue
+            <span className="text-sm font-bold text-slate-500 dark:text-muted-foreground group-hover:text-rose-500 transition-colors uppercase tracking-[0.1em]">
+              Report Product
             </span>
-            <ShieldAlert className="h-4 w-4 text-muted-foreground group-hover:text-destructive transition-colors" />
+            <ShieldAlert className="h-5 w-5 text-slate-400 dark:text-muted-foreground group-hover:text-rose-500 transition-colors" />
           </button>
         </div>
       </div>

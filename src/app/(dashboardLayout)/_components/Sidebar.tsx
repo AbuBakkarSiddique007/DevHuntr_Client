@@ -10,13 +10,13 @@ import {
   CheckCircle,
   XCircle,
   Users,
-  Ghost,
   ArrowLeft,
-  LucideIcon,
   LogOut,
   Tag as TagIcon,
-  ShieldAlert
+  ShieldAlert,
+  LucideIcon
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Role, useAuth } from "@/context/AuthContext";
@@ -51,16 +51,11 @@ export const Sidebar = ({ role, userName, photoUrl }: SidebarProps) => {
         }
       };
       fetchCounts();
-
-      // Optional: Poll every 60 seconds
       const interval = setInterval(fetchCounts, 60000);
-
       return () => clearInterval(interval);
     }
   }, [role]);
 
-
-  // Role-based Navigation Items
   const getNavItems = () => {
     switch (role) {
       case "ADMIN":
@@ -70,7 +65,6 @@ export const Sidebar = ({ role, userName, photoUrl }: SidebarProps) => {
           { Icon: Users, title: "Manage Users", href: "/admin-dashboard/users" },
           { Icon: TagIcon, title: "Manage Tags", href: "/admin-dashboard/tags" },
         ];
-
       case "MODERATOR":
         return [
           { Icon: ArrowLeft, title: "Back to Home", href: "/" },
@@ -80,8 +74,7 @@ export const Sidebar = ({ role, userName, photoUrl }: SidebarProps) => {
           { Icon: CheckCircle, title: "Accepted", href: "/moderator-dashboard/accepted" },
           { Icon: XCircle, title: "Rejected", href: "/moderator-dashboard/rejected" },
         ];
-
-      default: // USER
+      default:
         return [
           { Icon: ArrowLeft, title: "Back to Home", href: "/" },
           { Icon: Home, title: "My Dashboard", href: "/user-dashboard" },
@@ -95,12 +88,11 @@ export const Sidebar = ({ role, userName, photoUrl }: SidebarProps) => {
 
   return (
     <nav
-      className={`sticky top-0 h-screen shrink-0 border-r transition-all duration-300 ease-in-out ${open ? 'w-64' : 'w-20'
-        } border-slate-200 dark:border-white/10 bg-white/80 dark:bg-black/40 backdrop-blur-3xl p-3 shadow-xl z-50 overflow-y-auto overflow-x-hidden flex flex-col`}
+      className={`sticky top-0 h-screen shrink-0 border-r transition-all duration-300 ease-in-out ${open ? 'w-64' : 'w-20'} border-slate-200 dark:border-white/10 bg-white/80 dark:bg-black/40 backdrop-blur-3xl p-3 shadow-xl z-50 overflow-y-auto overflow-x-hidden flex flex-col`}
     >
       <TitleSection open={open} userName={userName} role={role} photoUrl={photoUrl} />
 
-      <div className="space-y-2 flex-1 mt-4">
+      <div className="space-y-1.5 flex-1 mt-6">
         {navItems.map((item) => (
           <NavItem
             key={item.href}
@@ -114,7 +106,7 @@ export const Sidebar = ({ role, userName, photoUrl }: SidebarProps) => {
         ))}
       </div>
 
-      <div className="border-t border-slate-200 dark:border-white/10 pt-4 pb-20 space-y-2">
+      <div className="border-t border-slate-100 dark:border-white/5 pt-4 pb-20 space-y-1.5">
         <NavItem
           Icon={Settings}
           title="Profile Settings"
@@ -124,14 +116,12 @@ export const Sidebar = ({ role, userName, photoUrl }: SidebarProps) => {
         />
         <button
           onClick={() => logout()}
-          className={`relative flex h-12 w-full items-center rounded-xl transition-all duration-300 text-rose-500 hover:bg-rose-50 dark:hover:bg-red-500/10`}
+          className={`relative flex h-11 w-full items-center rounded-xl transition-all duration-300 text-rose-500 hover:bg-rose-50 dark:hover:bg-red-500/10 group`}
         >
           <div className="grid h-full w-14 place-content-center shrink-0">
-            <LogOut className="h-5 w-5" />
+            <LogOut className="h-5 w-5 group-hover:scale-110 transition-transform" />
           </div>
-          <span
-            className={`text-sm font-semibold whitespace-nowrap transition-all duration-300 overflow-hidden ${open ? 'w-32 opacity-100' : 'w-0 opacity-0'}`}
-          >
+          <span className={`text-sm font-bold whitespace-nowrap transition-all duration-300 overflow-hidden ${open ? 'w-32 opacity-100' : 'w-0 opacity-0'}`}>
             Logout
           </span>
         </button>
@@ -142,111 +132,78 @@ export const Sidebar = ({ role, userName, photoUrl }: SidebarProps) => {
   );
 };
 
-interface NavItemProps {
-  Icon: LucideIcon;
-  title: string;
-  href: string;
-  selected: boolean;
-  open: boolean;
-  notifs?: number;
-}
-
-const NavItem = ({ Icon, title, href, selected, open, notifs }: NavItemProps) => {
+const NavItem = ({ Icon, title, href, selected, open, notifs }: { Icon: LucideIcon, title: string, href: string, selected: boolean, open: boolean, notifs?: number }) => {
   return (
     <Link
       href={href}
-      className={`relative flex h-12 w-full items-center rounded-xl transition-all duration-300 ${selected
-        ? "bg-purple-50 dark:bg-purple-500/10 text-purple-700 dark:text-purple-400 border border-purple-200 dark:border-purple-500/20 shadow-[0_4px_10px_rgba(168,85,247,0.05)] dark:shadow-[0_0_20px_rgba(168,85,247,0.1)]"
-        : "text-slate-600 dark:text-muted-foreground hover:bg-slate-100 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-foreground"
+      className={`relative flex h-11 w-full items-center rounded-xl transition-all duration-300 ${selected
+        ? "bg-purple-600 text-white shadow-lg shadow-purple-500/20 font-bold"
+        : "text-slate-500 dark:text-muted-foreground hover:bg-slate-100 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white"
         }`}
     >
       <div className="grid h-full w-14 place-content-center shrink-0">
-        <Icon className={`h-5 w-5 transition-colors ${selected ? 'text-purple-400' : ''}`} />
+        <Icon className="h-5 w-5" />
       </div>
 
-      <span
-        className={`text-sm font-semibold whitespace-nowrap transition-all duration-300 overflow-hidden ${open ? 'w-32 opacity-100' : 'w-0 opacity-0'
-          }`}
-      >
+      <span className={`text-sm font-bold whitespace-nowrap transition-all duration-300 overflow-hidden ${open ? 'w-32 opacity-100' : 'w-0 opacity-0'}`}>
         {title}
       </span>
 
-      {notifs && open && (
-        <span className="absolute right-3 flex h-5 w-5 items-center justify-center rounded-full bg-purple-600 text-[10px] text-white font-bold ring-4 ring-black/20">
+      {notifs !== undefined && notifs > 0 && open && (
+        <span className="absolute right-3 flex h-5 w-5 items-center justify-center rounded-full bg-purple-500 dark:bg-purple-600 text-[10px] text-white font-black shadow-sm ring-2 ring-white dark:ring-[#0d0d12]">
           {notifs}
         </span>
       )}
 
       {!open && selected && (
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-6 bg-purple-500 rounded-l-full shadow-[0_0_10px_rgba(168,85,247,0.5)]" />
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-purple-500 rounded-l-full" />
       )}
     </Link>
   );
 };
 
-interface TitleSectionProps {
-  open: boolean;
-  userName: string;
-  role: Role | undefined;
-  photoUrl?: string;
-}
-
-const TitleSection = ({ open, userName, role, photoUrl }: TitleSectionProps) => {
+const TitleSection = ({ open, userName, role, photoUrl }: { open: boolean, userName: string, role: Role | undefined, photoUrl?: string }) => {
   return (
-    <div className="mb-4 border-b border-slate-200 dark:border-white/10 pb-4 mt-2">
-      <div className="flex items-center gap-3 px-2">
-        <Logo photoUrl={photoUrl} userName={userName} />
+    <div className="mb-2 border-b border-slate-100 dark:border-white/5 pb-4 pt-2">
+      <div className="flex items-center gap-3 px-1.5">
+        <div className="h-10 w-10 shrink-0 rounded-xl overflow-hidden shadow-md border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 relative">
+          {photoUrl ? (
+            <Image 
+              src={photoUrl} 
+              alt={userName} 
+              fill 
+              className="object-cover" 
+            />
+          ) : (
+            <div className="h-full w-full flex items-center justify-center bg-linear-to-br from-purple-500 to-indigo-600 font-bold text-white uppercase">
+              {userName?.charAt(0)}
+            </div>
+          )}
+        </div>
         <div className={`transition-all duration-300 overflow-hidden ${open ? 'w-40 opacity-100' : 'w-0 opacity-0'}`}>
-          <span className="block text-sm font-bold text-foreground truncate">
+          <p className="text-sm font-black text-slate-900 dark:text-white truncate leading-none mb-1">
             {userName}
-          </span>
-          <span className="block text-[10px] font-semibold text-purple-400 uppercase tracking-wider">
+          </p>
+          <p className="text-[10px] font-bold text-purple-600 dark:text-purple-400 uppercase tracking-widest leading-none">
             {role}
-          </span>
+          </p>
         </div>
       </div>
     </div>
   );
 };
 
-const Logo = ({ photoUrl, userName }: { photoUrl?: string, userName: string }) => {
-  if (photoUrl) {
-    return (
-      <div className="h-10 w-10 shrink-0 rounded-xl overflow-hidden shadow-lg shadow-purple-500/20 border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5">
-        <img src={photoUrl} alt={userName} className="h-full w-full object-cover" />
-      </div>
-    );
-  }
-
-  return (
-    <div className="grid h-10 w-10 shrink-0 place-content-center rounded-xl bg-linear-to-br from-indigo-500 via-purple-500 to-pink-500 shadow-lg shadow-purple-500/20 text-white font-bold text-lg">
-      {userName ? userName.charAt(0).toUpperCase() : <Ghost className="h-6 w-6 text-white" />}
-    </div>
-  );
-};
-
-interface ToggleCloseProps {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-}
-
-const ToggleClose = ({ open, setOpen }: ToggleCloseProps) => {
+const ToggleClose = ({ open, setOpen }: { open: boolean, setOpen: (open: boolean) => void }) => {
   return (
     <button
       onClick={() => setOpen(!open)}
-      className="absolute bottom-0 left-0 right-0 border-t border-slate-200 dark:border-white/10 bg-slate-50 border-r dark:bg-black/20 backdrop-blur-xl hover:bg-slate-100 dark:hover:bg-white/5 transition-colors group h-14"
+      className="absolute bottom-0 left-0 right-0 h-14 border-t border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-black/20 backdrop-blur-xl hover:bg-slate-100 dark:hover:bg-white/10 transition-all group"
     >
       <div className="flex items-center h-full px-4">
         <div className="grid h-10 w-10 place-content-center">
-          <ChevronsRight
-            className={`h-5 w-5 transition-transform duration-500 text-slate-500 dark:text-muted-foreground group-hover:text-purple-600 dark:group-hover:text-purple-400 ${open ? "rotate-180" : ""
-              }`}
-          />
+          <ChevronsRight className={`h-5 w-5 transition-transform duration-500 text-slate-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 ${open ? "rotate-180" : ""}`} />
         </div>
-        <span
-          className={`text-sm font-bold text-slate-500 dark:text-muted-foreground group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-all duration-300 overflow-hidden ${open ? 'w-20 opacity-100' : 'w-0 opacity-0'
-            }`}
-        >
+        <span className={`text-sm font-bold text-slate-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-all duration-300 overflow-hidden ${open ? 'w-24 opacity-100' : 'w-0 opacity-0'}`}>
           Collapse
         </span>
       </div>

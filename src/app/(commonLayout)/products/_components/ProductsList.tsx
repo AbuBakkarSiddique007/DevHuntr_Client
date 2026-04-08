@@ -58,15 +58,15 @@ export function ProductsList() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-12 md:py-20 min-h-[calc(100vh-100px)]">
+    <div className="container mx-auto px-4 py-20 md:py-32 min-h-[calc(100vh-100px)]">
 
       {/* Header & Search */}
-      <div className="flex flex-col items-center text-center gap-6 mb-8">
+      <div className="flex flex-col items-center text-center gap-8 mb-16">
         <div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight mb-4 text-slate-900 dark:text-white">
+          <h1 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter mb-6 text-slate-900 dark:text-white">
             Explore Products
           </h1>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-slate-500 dark:text-muted-foreground text-lg md:text-xl max-w-2xl">
             Discover the best tech products built by the community.
           </p>
         </div>

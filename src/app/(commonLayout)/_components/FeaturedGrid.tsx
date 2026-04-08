@@ -29,13 +29,17 @@ export function FeaturedGrid() {
   if (!loading && products.length === 0) return null;
  
   return (
-    <section className="py-16 relative z-10 text-slate-900 dark:text-foreground">
+    <section className="py-24 md:py-32 relative z-10 text-slate-900 dark:text-foreground">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col items-center text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 flex items-center gap-3 text-slate-900 dark:text-white">
-            Featured Innovation
-          </h2>
-          <p className="text-slate-600 dark:text-muted-foreground/80 text-lg max-w-2xl">Handpicked excellence from our community.</p>
+        <div className="flex flex-col items-center text-center gap-8 mb-20 px-4">
+          <div>
+            <h2 className="text-4xl md:text-5xl lg:text-8xl font-black tracking-tighter mb-8 text-slate-900 dark:text-white leading-[1.1]">
+              Featured Innovation
+            </h2>
+            <p className="text-slate-500 dark:text-muted-foreground text-lg md:text-xl lg:text-2xl max-w-4xl mx-auto leading-relaxed">
+              Experience the pinnacle of creative development. Handpicked excellence from our global community.
+            </p>
+          </div>
         </div>
 
         {loading ? (

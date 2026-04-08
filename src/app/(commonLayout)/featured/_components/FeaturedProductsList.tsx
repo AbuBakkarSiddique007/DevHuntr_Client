@@ -35,14 +35,14 @@ export function FeaturedProductsList() {
   }, [page]);
 
   return (
-    <div className="container mx-auto px-4 py-12 md:py-20 min-h-[calc(100vh-100px)]">
+    <div className="container mx-auto px-4 py-20 md:py-32 min-h-[calc(100vh-100px)]">
 
       {/* Header */}
-      <div className="flex flex-col items-center text-center mb-16 px-4">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight mb-4 text-slate-900 dark:text-white">
+      <div className="flex flex-col items-center text-center mb-20 px-4">
+        <h1 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter mb-6 text-slate-900 dark:text-white">
           Featured Excellence
         </h1>
-        <p className="text-muted-foreground text-lg max-w-3xl">
+        <p className="text-slate-500 dark:text-muted-foreground text-lg md:text-xl max-w-3xl">
           Discover handpicked, top-tier products recognized by the community for their outstanding impact and innovation.
         </p>
       </div>

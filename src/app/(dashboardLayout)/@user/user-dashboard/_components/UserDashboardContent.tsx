@@ -54,10 +54,10 @@ export function UserDashboardContent() {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-700">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-foreground">Creator Dashboard</h1>
-          <p className="text-muted-foreground mt-1 text-lg">Launch products, monitor reviews, and track votes.</p>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter text-slate-900 dark:text-white leading-tight">Creator Dashboard</h1>
+          <p className="text-slate-500 dark:text-muted-foreground mt-2 text-lg md:text-xl">Launch products, monitor reviews, and track votes.</p>
         </div>
 
         <Link href="/user-dashboard/launch">
@@ -67,11 +67,12 @@ export function UserDashboardContent() {
         </Link>
       </div>
 
-      <div className="mt-12 text-center p-8 border border-white/5 bg-white/2 rounded-3xl animate-in fade-in zoom-in-95 duration-700 delay-500">
-        <h3 className="text-xl font-bold mb-3">Ready to share your creation?</h3>
-        <p className="text-muted-foreground mb-6">Join thousands of developers launching their products on DevHuntr.</p>
+      <div className="mt-12 text-center p-10 md:p-14 border border-slate-200 dark:border-white/5 bg-white dark:bg-white/2 rounded-[2.5rem] animate-in fade-in zoom-in-95 duration-700 delay-500 shadow-sm dark:shadow-none relative overflow-hidden group">
+        <div className="absolute top-0 right-0 -z-10 h-64 w-64 rounded-full bg-purple-500/5 blur-[80px] group-hover:bg-purple-500/10 transition-colors"></div>
+        <h3 className="text-2xl md:text-3xl font-black mb-3 text-slate-900 dark:text-white tracking-tight">Ready to share your creation?</h3>
+        <p className="text-slate-500 dark:text-muted-foreground mb-8 text-lg">Join thousands of developers launching their products on DevHuntr.</p>
         <Link href="/user-dashboard/launch">
-          <button className="px-8 py-4 bg-linear-to-r from-purple-600 to-indigo-600 rounded-xl font-bold hover:opacity-90 shadow-lg shadow-purple-500/25 transition-all hover:scale-105 active:scale-95">
+          <button className="px-10 py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-2xl font-bold shadow-xl shadow-purple-500/25 transition-all hover:scale-105 active:scale-95">
             Launch Your App Now
           </button>
         </Link>
@@ -79,13 +80,13 @@ export function UserDashboardContent() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat) => (
-          <div key={stat.title} className="p-6 rounded-3xl border border-white/5 bg-white/2 backdrop-blur-xl hover:bg-white/5 transition-all group relative overflow-hidden">
+          <div key={stat.title} className="p-6 rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 shadow-sm dark:shadow-none hover:border-purple-200 dark:hover:border-purple-500/30 transition-all group relative overflow-hidden">
              <div className="absolute top-0 right-0 -z-10 h-24 w-24 rounded-full bg-purple-500/5 blur-2xl group-hover:bg-purple-500/10 transition-colors"></div>
-            <div className={`p-3 w-fit rounded-2xl bg-white/5 group-hover:bg-purple-500/10 transition-colors mb-4`}>
+            <div className={`p-3 w-fit rounded-xl bg-slate-50 dark:bg-white/5 group-hover:bg-purple-500/10 transition-colors mb-4`}>
               <stat.Icon className={`h-5 w-5 ${stat.color}`} />
             </div>
-            <h3 className="text-sm font-bold text-muted-foreground mb-1 uppercase tracking-widest">{stat.title}</h3>
-            <p className="text-3xl font-black text-foreground tracking-tight">{stat.value}</p>
+            <h3 className="text-xs font-bold text-slate-400 dark:text-muted-foreground mb-1 uppercase tracking-widest leading-none">{stat.title}</h3>
+            <p className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">{stat.value}</p>
           </div>
         ))}
       </div>

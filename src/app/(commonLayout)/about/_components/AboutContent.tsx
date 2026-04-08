@@ -51,15 +51,15 @@ export function AboutContent() {
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/10 rounded-full blur-[120px] -z-10 animate-pulse delay-1000" />
 
      
-      <section className="container mx-auto px-4 pt-20 pb-16 text-center">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 animate-in fade-in slide-in-from-top-4 duration-700">
-          <Ghost className="h-4 w-4 text-purple-400" />
-          <span className="text-sm font-medium text-muted-foreground uppercase tracking-widest">Our Story</span>
+      <section className="container mx-auto px-4 pt-24 pb-20 md:pt-32 md:pb-24 text-center">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 mb-10 animate-in fade-in slide-in-from-top-4 duration-700 shadow-sm">
+          <Ghost className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+          <span className="text-sm font-bold text-slate-500 dark:text-muted-foreground uppercase tracking-widest">Our Story</span>
         </div>
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-6 text-slate-900 dark:text-transparent dark:bg-clip-text dark:bg-linear-to-br dark:from-white dark:via-white/90 dark:to-white/40 leading-tight">
-          Redefining Product discovery <br className="hidden md:block" /> for local Developers.
+        <h1 className="text-4xl md:text-6xl lg:text-8xl font-black tracking-tighter mb-8 text-slate-900 dark:text-white leading-[1.1]">
+          Redefining Product Discovery <br className="hidden md:block" /> for Local Developers.
         </h1>
-        <p className="text-xl text-slate-600 dark:text-muted-foreground/80 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-lg md:text-xl lg:text-2xl text-slate-500 dark:text-muted-foreground/80 max-w-4xl mx-auto leading-relaxed">
           DevHuntr is more than a directory; it is an ecosystem built to bridge the gap between creative code and happy users.
         </p>
       </section>
@@ -88,7 +88,7 @@ export function AboutContent() {
                   {step.icon}
                   <h3 className="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white/90">{step.title}</h3>
                 </div>
-                <h4 className="text-lg md:text-xl font-semibold mb-4 text-purple-600 dark:text-primary/80 leading-snug">
+                <h4 className="text-lg md:text-xl font-semibold mb-4 text-slate-500 dark:text-muted-foreground leading-snug">
                   {step.subtitle}
                 </h4>
                 <div className="p-6 rounded-3xl glass border border-white/5 hover:border-white/10 transition-colors shadow-2xl">
