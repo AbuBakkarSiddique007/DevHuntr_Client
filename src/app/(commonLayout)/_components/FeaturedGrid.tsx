@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { ProductService, Product } from "@/services/product/product.service";
+import { ProductCard } from "@/components/shared/ProductCard";
 import Link from "next/link";
-import Image from "next/image";
-import { Ghost } from "lucide-react";
+import { ArrowUpRight, Star } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export function FeaturedGrid() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -13,8 +14,8 @@ export function FeaturedGrid() {
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        const response = await ProductService.getFeaturedProducts();
-        const productsData = response?.data?.products || [];
+        const response = await ProductService.getFeaturedProducts({ limit: 4 });
+        const productsData = response.products;
         setProducts(Array.isArray(productsData) ? productsData : []);
       } catch (err) {
         console.error("Failed to fetch featured products", err);
@@ -22,79 +23,57 @@ export function FeaturedGrid() {
         setLoading(false);
       }
     };
-
     fetchFeatured();
   }, []);
- 
-  if (!loading && products.length === 0) return null;
- 
-  return (
-    <section className="py-24 md:py-32 relative z-10 text-slate-900 dark:text-foreground">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col items-center text-center gap-8 mb-20 px-4">
-          <div>
-            <h2 className="text-4xl md:text-5xl lg:text-8xl font-black tracking-tighter mb-8 text-slate-900 dark:text-white leading-[1.1]">
-              Featured Innovation
-            </h2>
-            <p className="text-slate-500 dark:text-muted-foreground text-lg md:text-xl lg:text-2xl max-w-4xl mx-auto leading-relaxed">
-              Experience the pinnacle of creative development. Handpicked excellence from our global community.
-            </p>
+
+  if (loading) {
+    return (
+      <section className="py-24 relative z-10 text-slate-900 dark:text-foreground">
+        <div className="container mx-auto px-4">
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="animate-pulse rounded-[2.5rem] bg-slate-100 dark:bg-white/5 h-[320px]" />
+            ))}
           </div>
         </div>
+      </section>
+    );
+  }
 
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="animate-pulse rounded-[2rem] glass h-[320px]" />
-            ))}
+  return (
+    <section className="py-24 relative z-10 text-slate-900 dark:text-foreground">
+      <div className="container mx-auto px-4 text-center">
+        <div className="flex flex-col items-center mb-16 gap-4">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 text-xs font-black uppercase tracking-widest">
+            <Star className="h-3.5 w-3.5 fill-current" /> Curated Picks
           </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {products.slice(0, 4).map((product) => (
-              <Link key={product.id} href={`/products/${product.id}`} className="group relative rounded-[2rem] border border-slate-200 dark:border-white/10 bg-white dark:bg-background/50 p-6 flex flex-col h-full shadow-[0_8px_30px_-10px_rgba(0,0,0,0.05)] dark:shadow-none hover:shadow-[0_8px_30px_-5px_rgba(139,92,246,0.2)] dark:hover:shadow-yellow-500/10 hover:border-purple-200 dark:hover:border-yellow-500/40 transition-all duration-500 overflow-hidden">
+          <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-slate-900 dark:text-white">Featured Excellence</h2>
+          <p className="text-slate-500 dark:text-muted-foreground text-lg max-w-2xl">Handpicked creative tools and resources for modern developers.</p>
+        </div>
 
-                <div className="absolute top-0 right-0 -z-10 h-32 w-32 rounded-full bg-purple-500/5 dark:bg-yellow-500/5 blur-[50px] group-hover:bg-purple-500/10 dark:group-hover:bg-yellow-500/10 transition-colors"></div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {products.slice(0, 4).map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
 
-                <div className="flex justify-between items-start mb-6">
-                  {product.image ? (
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      width={64}
-                      height={64}
-                      className="h-16 w-16 rounded-2xl object-cover border border-slate-100 dark:border-white/10 group-hover:scale-105 transition-transform shadow-md dark:shadow-lg"
-                    />
-                  ) : (
-                    <div className="h-16 w-16 rounded-2xl bg-linear-to-br from-[#207e82]/10 to-[#207e82]/5 flex items-center justify-center border border-slate-100 dark:border-white/10 group-hover:scale-105 transition-transform shadow-md dark:shadow-lg">
-                      <Ghost className="h-8 w-8 text-[#207e82]" />
-                    </div>
-                  )}
+          {products.length === 0 && (
+            <div className="col-span-full py-20 text-center text-muted-foreground border border-dashed border-slate-200 dark:border-white/10 rounded-[2.5rem] bg-slate-50/50 dark:bg-white/2">
+              <div className="flex flex-col items-center gap-3">
+                <Star className="h-12 w-12 text-slate-300 dark:text-white/10" />
+                <p className="font-bold">No featured products at the moment.</p>
+                <p className="text-sm opacity-60 uppercase tracking-widest">Handpicking quality daily</p>
+              </div>
+            </div>
+          )}
+        </div>
 
-                  <div className="flex flex-col items-end gap-2">
-                    <div className="flex items-center gap-3 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-3 py-1.5 group-hover:bg-slate-100 dark:hover:bg-white/10 transition-colors shadow-none dark:shadow-inner h-fit">
-                      <div className="flex items-center gap-1">
-                        <span className="text-xs font-semibold text-[#207e82]">▲</span>
-                        <span className="text-sm font-bold text-slate-900 dark:text-foreground">{product.upvoteCount}</span>
-                      </div>
-                      <div className="w-px h-3 bg-slate-300 dark:bg-white/20" />
-                      <div className="flex items-center gap-1">
-                        <span className="text-xs font-semibold text-rose-500 dark:text-red-400">▼</span>
-                        <span className="text-sm font-bold text-slate-900 dark:text-foreground">{product.downvoteCount}</span>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col items-center bg-purple-500/10 dark:bg-yellow-500/10 border border-purple-500/20 dark:border-yellow-500/20 rounded-xl px-3 py-1.5 h-fit">
-                      <span className="text-[10px] font-bold text-purple-600 dark:text-yellow-500">FEATURED</span>
-                    </div>
-                  </div>
-                </div>
-
-                <h3 className="text-xl md:text-2xl font-bold tracking-tight mb-2 text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-yellow-500 transition-colors line-clamp-1">{product.name}</h3>
-                <p className="text-slate-600 dark:text-muted-foreground text-sm line-clamp-2 mt-auto">
-                  {product.description}
-                </p>
-              </Link>
-            ))}
+        {products.length > 0 && (
+          <div className="mt-16 flex justify-center">
+             <Link href="/featured">
+                <Button size="lg" variant="outline" className="rounded-full border-slate-200 dark:border-purple-500/30 hover:bg-slate-50 dark:hover:bg-purple-500/10 text-slate-900 dark:text-purple-400 font-bold px-8 h-14 group transition-all hover:scale-105 shadow-lg shadow-black/5 dark:shadow-purple-500/5">
+                   Explore All Excellence <ArrowUpRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+             </Link>
           </div>
         )}
       </div>

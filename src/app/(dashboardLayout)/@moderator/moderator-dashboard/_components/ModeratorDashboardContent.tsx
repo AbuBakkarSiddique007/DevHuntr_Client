@@ -34,7 +34,7 @@ export function ModeratorDashboardContent() {
     setLoading(true);
     try {
       const productRes = await ProductService.getQueueProducts({ page: 1, limit: 50 });
-      const fetchedProducts = productRes.data?.products || productRes.data || productRes.products || productRes;
+      const fetchedProducts = productRes.products || [];
       setPendingProducts(Array.isArray(fetchedProducts) ? fetchedProducts : []);
 
       const reportRes = await ReportService.getReports({ status: "OPEN" });
@@ -102,76 +102,77 @@ export function ModeratorDashboardContent() {
   ];
 
   return (
-    <div className="space-y-10 max-w-7xl mx-auto animate-in fade-in duration-700">
+    <div className="space-y-12 max-w-7xl mx-auto animate-in fade-in duration-700">
       <div>
-        <h1 className="text-4xl font-black tracking-tight text-foreground">Moderation Center</h1>
-        <p className="text-muted-foreground mt-2 text-lg">Review submissions, manage reports, and keep the feed clean.</p>
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter text-slate-900 dark:text-white leading-tight">Moderation Center</h1>
+        <p className="text-slate-500 dark:text-muted-foreground mt-2 text-lg md:text-xl">Maintain platform excellence by reviewing submissions and reports.</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, i) => (
-          <div key={i} className="p-6 rounded-3xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/2 backdrop-blur-xl hover:bg-slate-50 dark:hover:bg-white/5 transition-all group overflow-hidden relative shadow-sm dark:shadow-none">
-            <div className="absolute top-0 right-0 -z-10 h-24 w-24 rounded-full bg-purple-500/5 blur-2xl group-hover:bg-purple-500/10 transition-colors"></div>
-            <div className="p-3 w-fit rounded-2xl bg-white dark:bg-white/5 group-hover:bg-purple-500/10 transition-colors mb-4 border border-slate-100 dark:border-transparent">
-              <stat.Icon className={`h-5 w-5 ${stat.color}`} />
+          <div key={i} className="p-8 rounded-[2rem] border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 shadow-sm dark:shadow-none hover:border-purple-200 dark:hover:border-purple-500/30 transition-all group relative overflow-hidden">
+            <div className="absolute top-0 right-0 -z-10 h-32 w-32 rounded-full bg-slate-100 dark:bg-white/5 blur-3xl group-hover:bg-purple-500/10 transition-colors"></div>
+            <div className={`p-4 w-fit rounded-2xl bg-slate-50 dark:bg-white/5 group-hover:bg-purple-500/10 transition-colors mb-6 border border-slate-100 dark:border-white/5`}>
+              <stat.Icon className={`h-6 w-6 ${stat.color}`} />
             </div>
-            <h3 className="text-sm font-bold text-muted-foreground mb-1 uppercase tracking-widest">{stat.title}</h3>
-            <p className="text-3xl font-black text-foreground tracking-tight">{stat.value}</p>
+            <h3 className="text-xs font-black text-slate-400 dark:text-muted-foreground mb-2 uppercase tracking-[0.2em] leading-none">{stat.title}</h3>
+            <p className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">{stat.value}</p>
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 items-start">
         {/* Product Review Queue */}
-        <div className="rounded-[2rem] border border-slate-200 dark:border-white/5 bg-white dark:bg-[#0d1117]/40 backdrop-blur-xl p-8 shadow-md dark:shadow-2xl relative overflow-hidden group">
-          <div className="flex items-center justify-between mb-8">
-            <h3 className="text-2xl font-bold flex items-center gap-3">
-              <Hourglass className="h-6 w-6 text-orange-400" />
+        <div className="rounded-[2.5rem] border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900/40 backdrop-blur-xl p-8 md:p-10 shadow-sm dark:shadow-none relative overflow-hidden group">
+          <div className="flex flex-wrap items-center justify-between mb-8 gap-4">
+            <h3 className="text-2xl md:text-3xl font-black tracking-tight flex items-center gap-3 text-slate-900 dark:text-white">
+              <Hourglass className="h-7 w-7 text-orange-400" />
               Submission Queue
             </h3>
-            <span className="px-3 py-1 bg-orange-500/10 text-orange-400 text-xs font-bold rounded-full border border-orange-500/20">
+            <span className="px-3.5 py-1 bg-orange-500/10 text-orange-600 dark:text-orange-400 text-[10px] font-black uppercase tracking-widest rounded-full border border-orange-500/20">
               {pendingProducts.length} Pending
             </span>
           </div>
 
           <div className="space-y-4">
             {pendingProducts.length === 0 ? (
-              <div className="text-center py-12 border-2 border-dashed border-white/5 rounded-3xl">
+              <div className="text-center py-20 border-2 border-dashed border-slate-200 dark:border-white/5 rounded-[2rem] bg-slate-50/50 dark:bg-white/2">
                 <CheckCircle2 className="h-12 w-12 text-green-500/20 mx-auto mb-4" />
-                <p className="text-muted-foreground">Queue is clear! All products reviewed.</p>
+                <p className="text-slate-500 dark:text-muted-foreground font-bold">Queue is clear! All products reviewed.</p>
               </div>
             ) : (
               pendingProducts.map((product) => (
-                <div key={product.id} className="p-4 rounded-2xl bg-white dark:bg-white/2 border border-slate-200 dark:border-white/5 flex flex-col sm:flex-row items-start sm:items-center gap-4 group/item hover:bg-slate-50 dark:hover:bg-white/5 transition-all shadow-sm dark:shadow-none">
-                  <div className="h-12 w-12 rounded-xl border border-slate-200 dark:border-white/10 overflow-hidden shrink-0 bg-slate-50 dark:bg-white/5 relative">
+                <div key={product.id} className="p-4 md:p-5 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 flex flex-col sm:flex-row items-center gap-5 group/item hover:bg-slate-50 dark:hover:bg-white/10 transition-all shadow-sm dark:shadow-none">
+                  <div className="h-16 w-16 rounded-xl border border-slate-100 dark:border-white/10 overflow-hidden shrink-0 bg-slate-100 dark:bg-white/5 relative shadow-md">
                     {product.image ? (
                       <Image
                         src={product.image}
                         alt={product.name}
                         fill
-                        className="h-full w-full object-cover"
+                        sizes="64px"
+                        className="h-full w-full object-cover group-hover/item:scale-110 transition-transform duration-500"
                       />
                     ) : (
-                      <div className="h-full w-full flex items-center justify-center"><Eye className="h-5 w-5 text-muted-foreground" /></div>
+                      <div className="h-full w-full flex items-center justify-center bg-linear-to-br from-indigo-500/10 to-purple-500/10"><Eye className="h-6 w-6 text-purple-400" /></div>
                     )}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <h4 className="font-bold text-foreground truncate">{product.name}</h4>
-                    <p className="text-xs text-muted-foreground truncate">{product.description}</p>
+                  <div className="flex-1 min-w-0 text-center sm:text-left">
+                    <h4 className="font-black text-slate-900 dark:text-white text-lg tracking-tight uppercase group-hover/item:text-purple-600 dark:group-hover/item:text-purple-400 transition-colors">{product.name}</h4>
+                    <p className="text-xs text-slate-500 dark:text-muted-foreground line-clamp-1 opacity-80">{product.description}</p>
                   </div>
                   <div className="flex gap-2 shrink-0">
                     <Link href={`/products/${product.id}`}>
-                      <Button size="icon" variant="ghost" className="h-9 w-9 rounded-lg hover:bg-slate-100 dark:hover:bg-white/10 text-slate-700 dark:text-foreground">
-                        <Eye className="h-4 w-4" />
+                      <Button size="icon" variant="ghost" className="h-11 w-11 rounded-xl hover:bg-purple-500/10 text-slate-700 dark:text-purple-400 border border-transparent hover:border-purple-500/20 transition-all">
+                        <Eye className="h-5 w-5" />
                       </Button>
                     </Link>
                     <Button
                       onClick={() => handleProductStatus(product.id, "ACCEPTED")}
                       disabled={!!actionLoading}
                       size="icon"
-                      className="h-9 w-9 rounded-lg bg-green-500/10 text-green-500 hover:bg-green-500 hover:text-white border border-green-500/20"
+                      className="h-11 w-11 rounded-xl bg-green-500/10 text-green-600 dark:text-green-400 hover:bg-green-500 hover:text-white border border-green-500/20 shadow-lg shadow-green-500/5 transition-all"
                     >
-                      {actionLoading?.id === product.id && actionLoading.action === "ACCEPT" ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
+                      {actionLoading?.id === product.id && actionLoading.action === "ACCEPT" ? <Loader2 className="h-5 w-5 animate-spin" /> : <CheckCircle2 className="h-5 w-5" />}
                     </Button>
                     <Button
                       onClick={() => {
@@ -180,9 +181,9 @@ export function ModeratorDashboardContent() {
                       }}
                       disabled={!!actionLoading}
                       size="icon"
-                      className="h-9 w-9 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white border border-red-500/20"
+                      className="h-11 w-11 rounded-xl bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500 hover:text-white border border-red-500/20 shadow-lg shadow-red-500/5 transition-all"
                     >
-                      {actionLoading?.id === product.id && actionLoading.action === "REJECT" ? <Loader2 className="h-4 w-4 animate-spin" /> : <XCircle className="h-4 w-4" />}
+                      {actionLoading?.id === product.id && actionLoading.action === "REJECT" ? <Loader2 className="h-5 w-5 animate-spin" /> : <XCircle className="h-5 w-5" />}
                     </Button>
                   </div>
                 </div>
@@ -192,54 +193,54 @@ export function ModeratorDashboardContent() {
         </div>
 
         {/* Safety / Reports Queue */}
-        <div className="rounded-[2rem] border border-slate-200 dark:border-white/5 bg-white dark:bg-[#0d1117]/40 backdrop-blur-xl p-8 shadow-md dark:shadow-2xl relative overflow-hidden group">
-          <div className="flex items-center justify-between mb-8">
-            <h3 className="text-2xl font-bold flex items-center gap-3">
-              <Flag className="h-6 w-6 text-red-400" />
+        <div className="rounded-[2.5rem] border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900/40 backdrop-blur-xl p-8 md:p-10 shadow-sm dark:shadow-none relative overflow-hidden group">
+          <div className="flex flex-wrap items-center justify-between mb-8 gap-4">
+            <h3 className="text-2xl md:text-3xl font-black tracking-tight flex items-center gap-3 text-slate-900 dark:text-white">
+              <Flag className="h-7 w-7 text-red-400" />
               Safety Reports
             </h3>
-            <span className="px-3 py-1 bg-red-500/10 text-red-400 text-xs font-bold rounded-full border border-red-500/20">
+            <span className="px-3.5 py-1 bg-red-500/10 text-red-600 dark:text-red-400 text-[10px] font-black uppercase tracking-widest rounded-full border border-red-500/20">
               {reports.length} Active
             </span>
           </div>
 
           <div className="space-y-4">
             {reports.length === 0 ? (
-              <div className="text-center py-12 border-2 border-dashed border-white/5 rounded-3xl">
+              <div className="text-center py-20 border-2 border-dashed border-slate-200 dark:border-white/5 rounded-[2rem] bg-slate-50/50 dark:bg-white/2">
                 <ShieldCheck className="h-12 w-12 text-blue-500/20 mx-auto mb-4" />
-                <p className="text-muted-foreground">No active safety reports. Platform is clean.</p>
+                <p className="text-slate-500 dark:text-muted-foreground font-bold">No active safety reports. Platform is clean.</p>
               </div>
             ) : (
               reports.map((report) => (
-                <div key={report.id} className="p-5 rounded-2xl bg-red-50 dark:bg-red-500/5 border border-red-100 dark:border-red-500/10 space-y-3 group/report hover:bg-red-100 dark:hover:bg-red-500/10 transition-all shadow-sm dark:shadow-none">
+                <div key={report.id} className="p-6 rounded-[2rem] bg-red-50/50 dark:bg-red-500/5 border border-red-100 dark:border-red-500/20 space-y-4 group/report hover:bg-red-100/50 dark:hover:bg-red-500/10 transition-all shadow-sm dark:shadow-none">
                   <div className="flex items-center justify-between gap-4">
-                    <span className="text-xs font-black uppercase text-red-400 bg-red-400/10 px-2 py-0.5 rounded">Issue Detected</span>
-                    <span className="text-[10px] text-muted-foreground font-mono">{new Date(report.createdAt).toLocaleTimeString()}</span>
+                    <span className="text-[10px] font-black uppercase text-red-600 dark:text-red-400 bg-red-400/10 px-3 py-1 rounded-full border border-red-500/10">Issue Detected</span>
+                    <span className="text-[10px] text-slate-400 dark:text-muted-foreground/50 font-black uppercase tracking-widest">{new Date(report.createdAt).toLocaleTimeString()}</span>
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-foreground">
-                      Report for <Link href={`/products/${report.product?.id}`} className="text-purple-400 hover:underline inline-flex items-center gap-1">{report.product?.name} <ArrowRight className="h-3 w-3" /></Link>
+                    <p className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                      Report for <Link href={`/products/${report.product?.id}`} className="text-purple-600 dark:text-purple-400 hover:underline inline-flex items-center gap-1 font-bold">{report.product?.name} <ArrowRight className="h-3 w-3" /></Link>
                     </p>
-                    <p className="text-sm text-slate-600 dark:text-muted-foreground italic mt-2 py-2 px-3 bg-white dark:bg-black/20 rounded-xl border border-slate-200 dark:border-white/5 shadow-sm dark:shadow-none">
+                    <p className="text-sm text-slate-600 dark:text-muted-foreground italic mt-3 py-4 px-5 bg-white dark:bg-black/20 rounded-2xl border border-slate-200 dark:border-white/5 shadow-inner">
                       &quot;{report.reason}&quot;
                     </p>
                   </div>
-                  <div className="flex justify-between items-center pt-2">
-                    <span className="text-[10px] text-muted-foreground">Reporter: {report.reporter?.name}</span>
+                  <div className="flex flex-wrap justify-between items-center gap-4 pt-2">
+                    <span className="text-[10px] text-slate-400 dark:text-muted-foreground/60 font-bold uppercase tracking-widest">Reporter: {report.reporter?.name}</span>
                     <div className="flex gap-2">
                       <Button
                         onClick={() => handleReportStatus(report.id, "DISMISSED")}
                         disabled={!!actionLoading}
                         size="sm"
                         variant="ghost"
-                        className="h-8 rounded-lg text-xs font-bold hover:bg-slate-200 dark:hover:bg-white/10 text-slate-700 dark:text-foreground border border-slate-300 dark:border-transparent"
+                        className="h-9 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-200 dark:hover:bg-white/10 text-slate-700 dark:text-foreground border border-slate-200 dark:border-transparent transition-all"
                       >
                         Dismiss
                       </Button>
                       <Button
                         onClick={() => handleReportStatus(report.id, "RESOLVED")}
                         disabled={!!actionLoading}
-                        className="h-8 rounded-lg text-xs font-bold bg-red-500 hover:bg-red-600 text-white"
+                        className="h-9 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest bg-red-500 hover:bg-red-600 text-white shadow-lg shadow-red-500/20 transition-all"
                       >
                         {actionLoading?.id === report.id && actionLoading.action === "REPORT" ? <Loader2 className="h-3 w-3 animate-spin mr-2" /> : <ShieldCheck className="h-3 w-3 mr-2" />}
                         Resolve
@@ -262,36 +263,36 @@ export function ModeratorDashboardContent() {
           }}
         >
           <div
-            className="w-full max-w-md bg-white dark:bg-[#0d1117] border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300"
+            className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300"
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
           >
-            <div className="p-6 border-b border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-white/2">
-              <h2 className="text-xl font-black tracking-tight text-slate-900 dark:text-foreground">Reject product</h2>
-              <p className="text-sm mt-2 text-muted-foreground">
-                Provide a short reason for rejecting <span className="text-foreground font-bold">{rejectingProduct.name}</span>.
+            <div className="p-8 border-b border-slate-200 dark:border-white/5 bg-slate-50/50 dark:bg-white/2">
+              <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">Reject Submission</h2>
+              <p className="text-sm mt-3 text-slate-500 dark:text-muted-foreground leading-relaxed">
+                Provide a short reason for rejecting <span className="text-red-500 font-bold">{rejectingProduct.name}</span>.
               </p>
             </div>
 
-            <div className="p-6 space-y-4">
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] ml-1">
+            <div className="p-8 space-y-6">
+              <div className="space-y-3">
+                <label className="text-[10px] font-black text-slate-400 dark:text-muted-foreground uppercase tracking-[0.2rem] ml-1">
                   Rejection reason
                 </label>
                 <textarea
                   value={rejectionReason}
                   onChange={(e) => setRejectionReason(e.target.value)}
                   placeholder="e.g. Broken link / incomplete description / misleading image"
-                  className="w-full min-h-[120px] rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 p-4 text-sm text-slate-900 dark:text-foreground focus:outline-hidden focus:ring-2 focus:ring-purple-500/20 transition-all resize-none"
+                  className="w-full min-h-[140px] rounded-[1.5rem] border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 p-5 text-sm text-slate-900 dark:text-foreground focus:outline-hidden focus:ring-2 focus:ring-purple-500/20 transition-all resize-none shadow-inner"
                 />
               </div>
 
               <div className="flex items-center gap-3">
                 <Button
                   type="button"
-                  variant="outline"
-                  className="flex-1 rounded-2xl border-slate-200 dark:border-white/10 text-slate-700 dark:text-foreground"
+                  variant="ghost"
+                  className="flex-1 rounded-2xl h-12 border border-slate-200 dark:border-white/5 text-slate-700 dark:text-foreground font-bold hover:bg-slate-100 dark:hover:bg-white/5 transition-all"
                   disabled={!!actionLoading}
                   onClick={() => setRejectingProduct(null)}
                 >
@@ -299,7 +300,7 @@ export function ModeratorDashboardContent() {
                 </Button>
                 <Button
                   type="button"
-                  className="flex-1 rounded-2xl font-bold bg-red-500 hover:bg-red-600 text-white"
+                  className="flex-1 rounded-2xl h-12 font-black uppercase tracking-widest bg-red-500 hover:bg-red-600 text-white shadow-xl shadow-red-500/25 transition-all"
                   disabled={!!actionLoading || !rejectionReason.trim()}
                   onClick={async () => {
                     const reason = rejectionReason.trim();

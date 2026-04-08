@@ -59,6 +59,7 @@ export function ImageUpload() {
               src={imageUrl} 
               alt="Preview" 
               fill 
+              sizes="(max-width: 640px) 100vw, 400px"
               className="object-contain p-4"
             />
             <button

@@ -91,7 +91,7 @@ export default function AdminUsersPage() {
                 </Button>
             </div>
 
-            <div className="rounded-2xl border border-white/5 bg-white/2 backdrop-blur-sm overflow-hidden">
+            <div className="rounded-[2.5rem] border border-slate-200 dark:border-white/5 bg-white dark:bg-slate-900/40 backdrop-blur-xl shadow-sm dark:shadow-none overflow-hidden group">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead>

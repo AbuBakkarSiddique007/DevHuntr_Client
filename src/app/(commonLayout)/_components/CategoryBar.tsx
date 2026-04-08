@@ -7,7 +7,7 @@ import {
   Hash, Layers, Database, Shield, Palette
 } from "lucide-react";
 
-// Mapping icons to tag names for a visual punch
+
 const getIcon = (name: string) => {
   const n = name.toLowerCase();
   if (n.includes("ai") || n.includes("bot") || n.includes("gpt")) return Bot;
@@ -44,12 +44,10 @@ export function CategoryBar() {
 
   if (loading || tags.length === 0) return null;
 
-  // Duplicate items for a seamless loop
   const displayTags = [...tags, ...tags, ...tags];
 
   return (
     <div className="container mx-auto px-4 overflow-hidden py-6 -mt-12 relative z-20 group">
-      {/* Horizontal Scroller Container with seamless gradient masks */}
       <div className="mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
         <div className="flex animate-marquee-slow whitespace-nowrap group-hover:pause-animation gap-4 py-2">
           {displayTags.map((tag, i) => {

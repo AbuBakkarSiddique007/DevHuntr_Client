@@ -44,7 +44,7 @@ export const Sidebar = ({ role, userName, photoUrl }: SidebarProps) => {
             ProductService.getQueueProducts({ page: 1, limit: 1 }),
             ReportService.getReports({ page: 1, limit: 1, status: "OPEN" })
           ]);
-          setPendingCount(queueRes.data?.meta?.total || queueRes.meta?.total || 0);
+          setPendingCount(queueRes.meta?.total || 0);
           setReportCount(reportRes.data?.meta?.total || reportRes.meta?.total || 0);
         } catch (err) {
           console.error("Failed to fetch dashboard counts", err);
@@ -171,8 +171,9 @@ const TitleSection = ({ open, userName, role, photoUrl }: { open: boolean, userN
             <Image 
               src={photoUrl} 
               alt={userName} 
-              fill 
-              className="object-cover" 
+              width={40}
+              height={40}
+              className="h-full w-full object-cover" 
             />
           ) : (
             <div className="h-full w-full flex items-center justify-center bg-linear-to-br from-purple-500 to-indigo-600 font-bold text-white uppercase">

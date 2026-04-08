@@ -195,12 +195,10 @@ function VotingPanel({ product, onVote }: {
       const upDelta = (newVote === "UPVOTE" ? 1 : 0) - (prev === "UPVOTE" ? 1 : 0);
       const downDelta = (newVote === "DOWNVOTE" ? 1 : 0) - (prev === "DOWNVOTE" ? 1 : 0);
 
-      // update: optimistic update
       onVote({ up: upDelta, down: downDelta });
 
       await VoteService.castVote(product.id, type);
     } catch {
-      // update: revert if failed
       setMyVote(prev);
       const upDelta = (prev === "UPVOTE" ? 1 : 0) - (newVote === "UPVOTE" ? 1 : 0);
 
@@ -392,7 +390,7 @@ export function ProductDetailClient({ id }: { id: string }) {
 
   useEffect(() => {
     ProductService.getProductById(id)
-      .then((res) => setProduct(res.data ?? res))
+      .then((res) => setProduct(res))
       .catch((err) => console.error("Failed to load product", err))
       .finally(() => setLoading(false));
   }, [id]);
@@ -419,13 +417,14 @@ export function ProductDetailClient({ id }: { id: string }) {
         <Ghost className="h-16 w-16 text-muted-foreground mb-4" />
         <h1 className="text-4xl font-bold mb-4">Product Not Found</h1>
         <Link href="/products">
-          <Button variant="outline" className="rounded-full mt-4">Back to Products</Button>
+          <Button variant="outline" className="rounded-full mt-4 px-6 h-11 border-slate-200 dark:border-white/10 text-slate-600 dark:text-muted-foreground hover:text-slate-900 dark:hover:text-white transition-all">
+            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Products
+          </Button>
         </Link>
       </div>
     );
   }
 
-  // Full-Lock State for Premium products:
   if (product.isLocked) {
     return (
       <div className="container mx-auto px-4 py-20 min-h-[calc(100vh-100px)] flex flex-col items-center justify-center text-center">
@@ -471,8 +470,8 @@ export function ProductDetailClient({ id }: { id: string }) {
           <Crown className="mr-2 h-5 w-5" /> Unlock for $50 Lifetime
         </Button>
 
-        <Link href="/products" className="mt-6 text-sm text-muted-foreground hover:text-foreground transition-colors">
-          ← Back to Explore
+        <Link href="/products" className="mt-8 inline-flex items-center gap-2 px-6 py-2 rounded-full border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-white/5 text-sm font-bold text-slate-500 dark:text-muted-foreground hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-white/20 transition-all group">
+          <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" /> Back to Explore
         </Link>
       </div>
     );
@@ -488,12 +487,11 @@ export function ProductDetailClient({ id }: { id: string }) {
         />
       )}
 
-      {/* Hero card */}
       <div className="relative overflow-hidden rounded-[2rem] glass p-8 md:p-12 mb-12 shadow-2xl shadow-purple-500/10 border border-border/50 group">
         <div className="absolute top-0 right-0 -z-10 h-[300px] w-[300px] rounded-full bg-indigo-500/10 blur-[100px] group-hover:bg-purple-500/20 transition-colors duration-700" />
 
-        <Link href="/products" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-8 bg-black/20 px-4 py-2 rounded-full border border-white/5 backdrop-blur-md">
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Explore
+        <Link href="/products" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-black/20 backdrop-blur-md text-sm font-bold text-slate-500 dark:text-muted-foreground hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-white/20 transition-all mb-8 group">
+          <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" /> Back to Explore
         </Link>
 
         <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
@@ -577,7 +575,7 @@ export function ProductDetailClient({ id }: { id: string }) {
             onClick={() => setShowReport(true)}
             className="w-full bg-slate-50 dark:bg-white/2 hover:bg-rose-50 dark:hover:bg-rose-500/10 p-5 rounded-[2rem] flex items-center justify-between group cursor-pointer border border-slate-200 dark:border-white/5 hover:border-rose-200 dark:hover:border-rose-500/20 transition-all shadow-sm dark:shadow-none"
           >
-            <span className="text-sm font-bold text-slate-500 dark:text-muted-foreground group-hover:text-rose-500 transition-colors uppercase tracking-[0.1em]">
+            <span className="text-sm font-bold text-slate-500 dark:text-muted-foreground group-hover:text-rose-500 transition-colors uppercase tracking-widest">
               Report Product
             </span>
             <ShieldAlert className="h-5 w-5 text-slate-400 dark:text-muted-foreground group-hover:text-rose-500 transition-colors" />

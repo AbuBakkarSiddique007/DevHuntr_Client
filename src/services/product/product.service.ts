@@ -1,3 +1,5 @@
+import { safeFetch } from "@/lib/api.utils";
+
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://devhuntrserver.onrender.com/api/v1";
 
 export interface Tag {
@@ -34,68 +36,44 @@ export interface Product {
   };
 }
 
-export const ProductService = {
+export interface ProductListResponse {
+  products: Product[];
+  meta: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
+}
 
+export const ProductService = {
   getProducts: async ({ page = 1, limit = 10, search = "", tag = "", pricingType = "" } = {}) => {
     let url = `${API_BASE}/products?page=${page}&limit=${limit}`;
-
     if (search) url += `&search=${encodeURIComponent(search)}`;
-
     if (tag) url += `&tag=${encodeURIComponent(tag)}`;
-
     if (pricingType) url += `&pricingType=${encodeURIComponent(pricingType)}`;
 
-    const res = await fetch(url, {
-      method: "GET",
-      credentials: "include",
+    return safeFetch(url, { method: "GET", credentials: "include" }, {
+      products: [], meta: { total: 0, page: 1, limit: 10, totalPages: 1 }
     });
-
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => ({}));
-      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
-    }
-    return res.json();
   },
 
-
-  getProductById: async (id: string) => {
-    const res = await fetch(`${API_BASE}/products/${id}`, {
-      method: "GET",
-      credentials: "include",
-    });
-
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => ({}));
-      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
-    }
-    return res.json();
+  getProductById: async (id: string): Promise<Product> => {
+    return safeFetch(`${API_BASE}/products/${id}`, { method: "GET", credentials: "include" });
   },
 
-  getFeaturedProducts: async ({ page = 1, limit = 10 } = {}) => {
-    const res = await fetch(`${API_BASE}/products/featured?page=${page}&limit=${limit}`, {
-      method: "GET",
-      credentials: "include",
-    });
-
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => ({}));
-      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
-    }
-    return res.json();
+  getFeaturedProducts: async ({ page = 1, limit = 10 } = {}): Promise<ProductListResponse> => {
+    return safeFetch(`${API_BASE}/products/featured?page=${page}&limit=${limit}`,
+      { method: "GET", credentials: "include" },
+      { products: [], meta: { total: 0, page: 1, limit: 10, totalPages: 1 } }
+    );
   },
 
   getTrendingProducts: async () => {
-    const res = await fetch(`${API_BASE}/products/trending`, {
-      method: "GET",
-      credentials: "include",
-    });
-
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => ({}));
-      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
-    }
-    return res.json();
-
+    return safeFetch(`${API_BASE}/products/trending`,
+      { method: "GET", credentials: "include" },
+      []
+    );
   },
 
   createProduct: async (payload: {
@@ -106,70 +84,34 @@ export const ProductService = {
     tagIds?: string[];
     pricingType?: "FREE" | "PREMIUM";
   }) => {
-    const res = await fetch(`${API_BASE}/products`, {
+    return safeFetch(`${API_BASE}/products`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
       credentials: "include",
     });
-
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => ({}));
-      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
-    }
-
-    return res.json();
   },
 
-  getMyProducts: async ({ page = 1, limit = 10 } = {}) => {
-    const res = await fetch(`${API_BASE}/products/my-products?page=${page}&limit=${limit}`, {
-      method: "GET",
-      credentials: "include",
-    });
-
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => ({}));
-
-      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
-    }
-
-    return res.json();
+  getMyProducts: async ({ page = 1, limit = 10 } = {}): Promise<ProductListResponse> => {
+    return safeFetch(`${API_BASE}/products/my-products?page=${page}&limit=${limit}`,
+      { method: "GET", credentials: "include" },
+      { products: [], meta: { total: 0, page: 1, limit: 10, totalPages: 1 } }
+    );
   },
 
-  getQueueProducts: async ({ page = 1, limit = 10 } = {}) => {
-    const res = await fetch(`${API_BASE}/products/queue?page=${page}&limit=${limit}`, {
-      method: "GET",
-      credentials: "include",
-    });
-
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => ({}));
-      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
-    }
-
-    return res.json();
+  getQueueProducts: async ({ page = 1, limit = 10 } = {}): Promise<ProductListResponse> => {
+    return safeFetch(`${API_BASE}/products/queue?page=${page}&limit=${limit}`,
+      { method: "GET", credentials: "include" },
+      { products: [], meta: { total: 0, page: 1, limit: 10, totalPages: 1 } }
+    );
   },
 
-  getModerationProducts: async ({ page = 1, limit = 10, status }: { page?: number; limit?: number; status: "ACCEPTED" | "REJECTED" }) => {
-    const params = new URLSearchParams({
-      page: String(page),
-      limit: String(limit),
-      status,
-    });
-
-    const res = await fetch(`${API_BASE}/products/moderation?${params.toString()}`, {
-      method: "GET",
-      credentials: "include",
-    });
-
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => ({}));
-      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
-    }
-
-    return res.json();
+  getModerationProducts: async ({ page = 1, limit = 10, status }: { page?: number; limit?: number; status: "ACCEPTED" | "REJECTED" | "PENDING" }): Promise<ProductListResponse> => {
+    const params = new URLSearchParams({ page: String(page), limit: String(limit), status });
+    return safeFetch(`${API_BASE}/products/moderation?${params.toString()}`,
+      { method: "GET", credentials: "include" },
+      { products: [], meta: { total: 0, page: 1, limit: 10, totalPages: 1 } }
+    );
   },
 
   updateProduct: async (id: string, payload: Partial<{
@@ -178,61 +120,33 @@ export const ProductService = {
     description: string;
     externalLink: string;
     tagIds: string[];
+    pricingType: "FREE" | "PREMIUM";
   }>) => {
-    const res = await fetch(`${API_BASE}/products/${id}`, {
+    return safeFetch(`${API_BASE}/products/${id}`, {
       method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
       credentials: "include",
-
     });
-
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => ({}));
-      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
-    }
-
-    return res.json();
   },
 
   deleteProduct: async (id: string) => {
-    const res = await fetch(`${API_BASE}/products/${id}`, {
-      method: "DELETE",
-      credentials: "include",
-    });
-
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => ({}));
-      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
-    }
-    return res.json();
+    return safeFetch(`${API_BASE}/products/${id}`, { method: "DELETE", credentials: "include" });
   },
 
   updateProductStatus: async (id: string, status: "ACCEPTED" | "REJECTED", rejectionReason?: string) => {
-    const res = await fetch(`${API_BASE}/products/${id}/status`, {
+    return safeFetch(`${API_BASE}/products/${id}/status`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify({ status, rejectionReason }),
     });
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => ({}));
-      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
-    }
-    return res.json();
   },
 
   toggleFeatured: async (id: string) => {
-    const res = await fetch(`${API_BASE}/products/${id}/feature`, {
+    return safeFetch(`${API_BASE}/products/${id}/feature`, {
       method: "PATCH",
       credentials: "include",
     });
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => ({}));
-      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
-    }
-    return res.json();
   },
 };

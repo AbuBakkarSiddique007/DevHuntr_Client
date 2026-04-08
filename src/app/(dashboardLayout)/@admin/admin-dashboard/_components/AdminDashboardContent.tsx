@@ -92,73 +92,88 @@ export function AdminDashboardContent() {
    const hasData = publicStats || adminStats;
 
    return (
-      <div className="space-y-10 max-w-6xl mx-auto animate-in fade-in duration-700">
-
-         {/* Header */}
-         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-               <h1 className="text-3xl font-extrabold tracking-tight flex items-center gap-3">
-                  <Zap className="h-8 w-8 text-yellow-500 fill-yellow-500/20" />
-                  Admin Control Panel
-               </h1>
-               <p className="text-muted-foreground mt-1 text-lg">Real-time platform analytics and system overview.</p>
-            </div>
-            <Button
-               variant="outline"
-               className="rounded-xl border-white/10 bg-white/5 flex items-center gap-2"
-               onClick={() => setRefreshKey(k => k + 1)}
-               disabled={loading}
-            >
-               <RefreshCw className="h-4 w-4" /> Refresh
-            </Button>
-         </div>
-
-         {hasData ? (
-            <>
-               {/* Primary Stats */}
-               <div>
-                  <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Platform Overview</p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                     {primaryCards.map((stat) => (
-                        <div key={stat.title} className="p-6 rounded-2xl border border-white/5 bg-white/2 backdrop-blur-sm hover:bg-white/4 transition-all group relative overflow-hidden">
-                           <div className={`absolute top-0 right-0 -z-10 h-24 w-24 rounded-full bg-white/5 blur-2xl ${stat.glow} transition-colors`} />
-                           <div className={`p-3 w-fit rounded-xl bg-white/5 ${stat.glow} transition-colors mb-4`}>
-                              <stat.Icon className={`h-5 w-5 ${stat.color}`} />
-                           </div>
-                           <h3 className="text-sm font-medium text-muted-foreground mb-1">{stat.title}</h3>
-                           <p className="text-2xl font-bold text-foreground tracking-tight">
-                              {typeof stat.value === "number" ? stat.value.toLocaleString() : "—"}
-                           </p>
-                        </div>
-                     ))}
-                  </div>
-               </div>
-
-               {/* Secondary Stats */}
-               <div>
-                  <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Product & Moderation</p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-                     {secondaryCards.map((stat) => (
-                        <div key={stat.title} className={`p-5 rounded-2xl border border-white/5 bg-white/2 backdrop-blur-sm border-l-4 ${stat.border} hover:bg-white/4 transition-all`}>
-                           <div className="flex items-center gap-2 mb-3">
-                              <stat.Icon className={`h-4 w-4 ${stat.color}`} />
-                              <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{stat.title}</h3>
-                           </div>
-                           <p className="text-3xl font-black text-foreground">
-                              {typeof stat.value === "number" ? stat.value.toLocaleString() : "—"}
-                           </p>
-                        </div>
-                     ))}
-                  </div>
-               </div>
-            </>
-         ) : (
-            <div className="rounded-2xl border border-dashed border-white/10 bg-white/2 p-12 text-center">
-               <div className="inline-flex items-center gap-2 text-muted-foreground">
-                  <Info className="h-4 w-4" /> Statistics not available or unauthorized.
-               </div>
-            </div>
-         )}
+    <div className="space-y-16 max-w-7xl mx-auto animate-in fade-in duration-700">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter text-slate-900 dark:text-white leading-tight flex items-center gap-4">
+            <Zap className="h-10 w-10 text-yellow-500 fill-yellow-500/20" />
+            Nexus Core
+          </h1>
+          <p className="text-slate-500 dark:text-muted-foreground mt-2 text-lg md:text-xl">Unified platform intelligence and governance.</p>
+        </div>
+        <Button
+          variant="outline"
+          className="rounded-2xl border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 h-14 px-6 flex items-center gap-3 font-black uppercase tracking-widest text-[10px] hover:bg-slate-50 dark:hover:bg-white/10 transition-all shadow-sm"
+          onClick={() => setRefreshKey(k => k + 1)}
+          disabled={loading}
+        >
+          <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} /> Sync Intelligence
+        </Button>
       </div>
-   );
+
+      {hasData ? (
+        <>
+          {/* Primary Stats */}
+          <div className="space-y-8">
+            <div className="flex items-center gap-4">
+              <div className="h-px flex-1 bg-linear-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent"></div>
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 dark:text-muted-foreground/60">Platform Equilibrium</p>
+              <div className="h-px flex-1 bg-linear-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent"></div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {primaryCards.map((stat) => (
+                <div key={stat.title} className="p-8 rounded-[2.5rem] border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900/40 backdrop-blur-xl hover:border-purple-200 dark:hover:border-purple-500/30 transition-all group relative overflow-hidden shadow-sm dark:shadow-none">
+                  <div className={`absolute top-0 right-0 -z-10 h-32 w-32 rounded-full bg-slate-100 dark:bg-white/5 blur-3xl ${stat.glow} transition-colors`} />
+                  <div className={`p-4 w-fit rounded-2xl bg-slate-50 dark:bg-white/5 ${stat.glow} transition-colors mb-6 border border-slate-100 dark:border-white/10`}>
+                    <stat.Icon className={`h-6 w-6 ${stat.color}`} />
+                  </div>
+                  <h3 className="text-[10px] font-black text-slate-400 dark:text-muted-foreground uppercase tracking-[0.2em] mb-2 leading-none">{stat.title}</h3>
+                  <p className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+                    {typeof stat.value === "number" ? stat.value.toLocaleString() : "—"}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Secondary Stats */}
+          <div className="space-y-8">
+             <div className="flex items-center gap-4">
+              <div className="h-px flex-1 bg-linear-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent"></div>
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 dark:text-muted-foreground/60">Governance Matrix</p>
+              <div className="h-px flex-1 bg-linear-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent"></div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+              {secondaryCards.map((stat) => (
+                <div key={stat.title} className={`p-6 rounded-[2rem] border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900/40 backdrop-blur-xl border-l-[6px] ${stat.border} hover:bg-slate-50 dark:hover:bg-white/5 transition-all shadow-sm dark:shadow-none group relative overflow-hidden`}>
+                   <div className="absolute top-0 right-0 -z-10 h-16 w-16 rounded-full bg-slate-100/50 dark:bg-white/2 blur-2xl group-hover:bg-slate-200/50 dark:group-hover:bg-white/5 transition-colors" />
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10">
+                      <stat.Icon className={`h-4 w-4 ${stat.color}`} />
+                    </div>
+                    <h3 className="text-[10px] font-black text-slate-400 dark:text-muted-foreground uppercase tracking-widest">{stat.title}</h3>
+                  </div>
+                  <p className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+                    {typeof stat.value === "number" ? stat.value.toLocaleString() : "—"}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className="rounded-[2.5rem] border-2 border-dashed border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-white/2 p-20 text-center animate-in zoom-in-95 duration-500">
+           <div className="h-20 w-20 rounded-[2rem] bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center mx-auto mb-6">
+              <Info className="h-10 w-10 text-slate-300 dark:text-muted-foreground/20" />
+           </div>
+           <p className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">Signal Lost</p>
+           <p className="text-sm text-slate-500 dark:text-muted-foreground mt-2">Statistics are currently offline or access is restricted.</p>
+           <Button className="mt-8 rounded-xl h-12 px-6 font-black uppercase tracking-widest bg-slate-900 dark:bg-white/10 text-white" onClick={() => setRefreshKey(k => k + 1)}>
+              Reconnect
+           </Button>
+        </div>
+      )}
+    </div>
+  );
 }

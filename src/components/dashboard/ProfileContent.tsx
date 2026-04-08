@@ -75,6 +75,7 @@ export function ProfileContent() {
                     src={formData.photoUrl}
                     alt={user.name}
                     fill
+                    sizes="128px"
                     className="object-cover"
                   />
                 ) : (

@@ -80,13 +80,13 @@ export function UserDashboardContent() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat) => (
-          <div key={stat.title} className="p-6 rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 shadow-sm dark:shadow-none hover:border-purple-200 dark:hover:border-purple-500/30 transition-all group relative overflow-hidden">
-             <div className="absolute top-0 right-0 -z-10 h-24 w-24 rounded-full bg-purple-500/5 blur-2xl group-hover:bg-purple-500/10 transition-colors"></div>
-            <div className={`p-3 w-fit rounded-xl bg-slate-50 dark:bg-white/5 group-hover:bg-purple-500/10 transition-colors mb-4`}>
-              <stat.Icon className={`h-5 w-5 ${stat.color}`} />
+          <div key={stat.title} className="p-8 rounded-[2rem] border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 shadow-sm dark:shadow-none hover:border-purple-200 dark:hover:border-purple-500/30 transition-all group relative overflow-hidden">
+             <div className="absolute top-0 right-0 -z-10 h-32 w-32 rounded-full bg-slate-100 dark:bg-white/5 blur-3xl group-hover:bg-purple-500/10 transition-colors"></div>
+            <div className={`p-4 w-fit rounded-2xl bg-slate-50 dark:bg-white/5 group-hover:bg-purple-500/10 transition-colors mb-6 border border-slate-100 dark:border-white/5`}>
+              <stat.Icon className={`h-6 w-6 ${stat.color}`} />
             </div>
-            <h3 className="text-xs font-bold text-slate-400 dark:text-muted-foreground mb-1 uppercase tracking-widest leading-none">{stat.title}</h3>
-            <p className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">{stat.value}</p>
+            <h3 className="text-xs font-black text-slate-400 dark:text-muted-foreground mb-2 uppercase tracking-[0.2em] leading-none">{stat.title}</h3>
+            <p className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">{stat.value}</p>
           </div>
         ))}
       </div>

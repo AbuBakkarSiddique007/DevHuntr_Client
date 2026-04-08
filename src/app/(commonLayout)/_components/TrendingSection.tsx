@@ -8,11 +8,12 @@ export function TrendingSection() {
     <section className="py-24 border-y border-slate-200 dark:border-border/30 dark:bg-black/50 relative z-10 overflow-hidden text-slate-900 dark:text-foreground">
       <div className="absolute inset-0 bg-purple-500/5 blur-[120px] -z-10"></div>
       <div className="container mx-auto px-4">
-        <div className="flex flex-col items-center text-center mb-16 gap-6">
-          <div className="text-center">
-            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-slate-900 dark:text-white">Trending Right Now</h2>
-            <p className="text-slate-600 dark:text-muted-foreground/80 text-lg max-w-2xl">The most upvoted products by the community this week.</p>
+        <div className="flex flex-col items-center text-center mb-16 gap-4">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-black uppercase tracking-widest">
+            <ArrowRight className="h-3.5 w-3.5" /> Hot This Week
           </div>
+          <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-slate-900 dark:text-white">Trending Right Now</h2>
+          <p className="text-slate-500 dark:text-muted-foreground text-lg max-w-2xl">The most upvoted products by the community this week.</p>
         </div>
 
         <TrendingGrid />

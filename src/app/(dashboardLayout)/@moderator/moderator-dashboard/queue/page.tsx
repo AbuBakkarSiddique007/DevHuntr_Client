@@ -82,7 +82,7 @@ export default function ModeratorQueuePage() {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/2 shadow-sm dark:shadow-none overflow-hidden">
+      <div className="rounded-[2.5rem] border border-slate-200 dark:border-white/5 bg-white dark:bg-slate-900/40 backdrop-blur-xl shadow-sm dark:shadow-none overflow-hidden group">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-transparent">
           <div className="flex items-center gap-2">
             <div className="h-9 w-9 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center">

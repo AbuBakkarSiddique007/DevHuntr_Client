@@ -1,3 +1,5 @@
+import { safeFetch } from "@/lib/api.utils";
+
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://devhuntrserver.onrender.com/api/v1";
 
 export type VoteType = "UPVOTE" | "DOWNVOTE";
@@ -8,27 +10,17 @@ export interface VoteStatus {
 
 export const VoteService = {
   checkVote: async (productId: string): Promise<VoteStatus> => {
-    const res = await fetch(`${API_BASE}/votes/${productId}/check`, {
+    return safeFetch(`${API_BASE}/votes/${productId}/check`, {
       credentials: "include",
-    });
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || err.message || `HTTP ${res.status}`);
-    }
-    return res.json();
+    }, { voteType: null });
   },
 
   castVote: async (productId: string, voteType: VoteType) => {
-    const res = await fetch(`${API_BASE}/votes/${productId}`, {
+    return safeFetch(`${API_BASE}/votes/${productId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify({ voteType }),
     });
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || err.message || `HTTP ${res.status}`);
-    }
-    return res.json();
   },
 };
