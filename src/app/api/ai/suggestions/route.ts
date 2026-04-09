@@ -27,13 +27,20 @@ export async function GET(request: Request) {
     const response = await result.response;
     const text = response.text();
     
-    // Clean potential markdown code blocks from the response
-    const jsonString = text.replace(/```json|```/g, "").trim();
+    // Robust JSON extraction: look for the first [ and last ]
+    const startBracket = text.indexOf("[");
+    const endBracket = text.lastIndexOf("]");
+    
+    if (startBracket === -1 || endBracket === -1) {
+      throw new Error("Invalid AI response: No JSON array found");
+    }
+
+    const jsonString = text.substring(startBracket, endBracket + 1);
     const suggestions = JSON.parse(jsonString);
 
     return NextResponse.json({ data: suggestions });
   } catch (err) {
     console.error("Gemini Suggestion Error:", err);
-    return NextResponse.json({ data: [], error: "Failed to fetch suggestions" }, { status: 500 });
+    return NextResponse.json({ data: [], error: "Failed to generate valid suggestions" }, { status: 500 });
   }
 }

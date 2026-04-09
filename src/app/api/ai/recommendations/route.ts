@@ -40,7 +40,7 @@ export async function GET() {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "llama-3-8b-instant",
+        model: "llama-3.1-8b-instant",
         messages: [
           { role: "system", content: "You are a specialized JSON recommendation engine." },
           { role: "user", content: prompt }
@@ -53,13 +53,24 @@ export async function GET() {
     if (!groqRes.ok) throw new Error("Groq request failed");
 
     const groqData = await groqRes.json();
-    const content = groqData.choices[0]?.message?.content || "[]";
+    const content = groqData.choices[0]?.message?.content || "{}";
     
-    // Groq returns the full object, extract the array
+    // Parse the JSON object
     const parsed = JSON.parse(content);
-    const recommendations = Array.isArray(parsed) ? parsed : (parsed.recommendations || parsed.data || []);
+    
+    // Flexible extraction: handle top-level array or wrapped objects
+    let recommendations = [];
+    if (Array.isArray(parsed)) {
+      recommendations = parsed;
+    } else if (parsed.recommendations && Array.isArray(parsed.recommendations)) {
+      recommendations = parsed.recommendations;
+    } else if (parsed.data && Array.isArray(parsed.data)) {
+      recommendations = parsed.data;
+    } else if (parsed.products && Array.isArray(parsed.products)) {
+      recommendations = parsed.products;
+    }
 
-    return NextResponse.json({ data: recommendations });
+    return NextResponse.json({ data: recommendations.slice(0, 3) });
   } catch (err) {
     console.error("Groq Recommendation Error:", err);
     return NextResponse.json({ data: [], error: "Failed to fetch recommendations" }, { status: 500 });

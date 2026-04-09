@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { MessageSquare, Send, X, Sparkles, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { AIService } from "@/services/ai/ai.service";
 
 interface Message {
   role: "user" | "model";
@@ -33,14 +34,7 @@ export default function ChatAssistant() {
     setIsLoading(true);
 
     try {
-      const res = await fetch("/api/ai/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          message: userMsg, 
-          history: messages.slice(1) 
-        }),
-      });
+      const res = await AIService.sendMessage(userMsg, messages.slice(1));
 
       if (!res.ok) throw new Error("Connection failed");
 

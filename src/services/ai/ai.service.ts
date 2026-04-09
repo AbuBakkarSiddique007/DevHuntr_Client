@@ -12,7 +12,7 @@ export const AIService = {
    */
   getSearchSuggestions: async (query: string): Promise<AISuggestion[]> => {
     try {
-      const res = await safeFetch<{ data: AISuggestion[] }>(`/api/ai/suggestions?q=${encodeURIComponent(query)}`, {
+      const res = await safeFetch<{ data: AISuggestion[] }>(`/api/ai/suggestions?query=${encodeURIComponent(query)}`, {
         method: "GET",
         silent: true,
       }, { data: [] });
@@ -57,17 +57,16 @@ export const AIService = {
   /**
    * Sends a message to the AI Chat Assistant.
    */
-  sendMessage: async (message: string, history: { role: string; parts: { text: string }[] }[] = []): Promise<string> => {
+  sendMessage: async (message: string, history: { role: string; text: string }[] = []): Promise<Response> => {
     try {
-      const res = await safeFetch<{ message: string }>(`/api/ai/chat`, {
+      return await fetch(`/api/ai/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message, history }),
-        silent: true,
-      }, { message: "I'm sorry, I'm having trouble connecting right now." });
-      return res.message;
-    } catch {
-      return "Assistant currently unavailable.";
+      });
+    } catch (err) {
+      console.error("AI Chat fetch failed", err);
+      throw err;
     }
   }
 };
