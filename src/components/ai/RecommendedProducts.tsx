@@ -18,7 +18,7 @@ export default function RecommendedProducts() {
     fetchRecs();
   }, []);
 
-  if (!isLoading && recommendations.length === 0) return null;
+  if (!isLoading && (!recommendations || recommendations.length === 0)) return null;
 
   return (
     <section className="py-12">

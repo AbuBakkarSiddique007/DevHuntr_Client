@@ -1,13 +1,12 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
-
-const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY || "");
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 export async function GET() {
   try {
-    // In a real app, you would fetch the current user's behavior and real products here.
-    // For this implementation, we'll fetch real products from your API and use Gemini to recommend.
+    const apiKey = process.env.GROQ_API_KEY;
+    if (!apiKey) {
+      return NextResponse.json({ data: [] });
+    }
+
     const productsRes = await fetch("https://devhuntrserver.onrender.com/api/v1/products?limit=10");
     const productsData = await productsRes.json();
     const products = productsData.data || productsData;
@@ -34,16 +33,35 @@ export async function GET() {
       ]
     `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "llama-3-8b-instant",
+        messages: [
+          { role: "system", content: "You are a specialized JSON recommendation engine." },
+          { role: "user", content: prompt }
+        ],
+        temperature: 0.1, // Low temperature for consistent JSON
+        response_format: { type: "json_object" }
+      })
+    });
+
+    if (!groqRes.ok) throw new Error("Groq request failed");
+
+    const groqData = await groqRes.json();
+    const content = groqData.choices[0]?.message?.content || "[]";
     
-    const jsonString = text.replace(/```json|```/g, "").trim();
-    const recommendations = JSON.parse(jsonString);
+    // Groq returns the full object, extract the array
+    const parsed = JSON.parse(content);
+    const recommendations = Array.isArray(parsed) ? parsed : (parsed.recommendations || parsed.data || []);
 
     return NextResponse.json({ data: recommendations });
   } catch (err) {
-    console.error("Gemini Recommendation Error:", err);
+    console.error("Groq Recommendation Error:", err);
     return NextResponse.json({ data: [], error: "Failed to fetch recommendations" }, { status: 500 });
   }
 }

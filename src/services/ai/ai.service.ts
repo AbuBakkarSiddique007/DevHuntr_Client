@@ -8,16 +8,15 @@ export interface AISuggestion {
 
 export const AIService = {
   /**
-   * Fetches AI-powered search suggestions based on the user's query.
+   * Fetches semantic search suggestions based on user input.
    */
   getSearchSuggestions: async (query: string): Promise<AISuggestion[]> => {
-    if (!query || query.length < 2) return [];
-    
     try {
-      return await safeFetch(`/api/ai/suggestions?query=${encodeURIComponent(query)}`, {
+      const res = await safeFetch<{ data: AISuggestion[] }>(`/api/ai/suggestions?q=${encodeURIComponent(query)}`, {
         method: "GET",
         silent: true,
-      }, []);
+      }, { data: [] });
+      return res.data;
     } catch (err) {
       console.error("AI Suggestions failed", err);
       return [];
@@ -29,10 +28,11 @@ export const AIService = {
    */
   getRecommendations: async (): Promise<AISuggestion[]> => {
     try {
-      return await safeFetch(`/api/ai/recommendations`, {
+      const res = await safeFetch<{ data: AISuggestion[] }>(`/api/ai/recommendations`, {
         method: "GET",
         silent: true,
-      }, []);
+      }, { data: [] });
+      return res.data;
     } catch (err) {
       console.error("AI Recommendations failed", err);
       return [];
@@ -51,6 +51,23 @@ export const AIService = {
       return res.insight;
     } catch {
       return "";
+    }
+  },
+
+  /**
+   * Sends a message to the AI Chat Assistant.
+   */
+  sendMessage: async (message: string, history: { role: string; parts: { text: string }[] }[] = []): Promise<string> => {
+    try {
+      const res = await safeFetch<{ message: string }>(`/api/ai/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message, history }),
+        silent: true,
+      }, { message: "I'm sorry, I'm having trouble connecting right now." });
+      return res.message;
+    } catch {
+      return "Assistant currently unavailable.";
     }
   }
 };

@@ -111,7 +111,7 @@ function SubscriptionModal({ productName, onClose }: { productName: string; onCl
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 dark:bg-black/70 backdrop-blur-md p-4">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/40 dark:bg-black/70 backdrop-blur-md p-4">
       <div className="w-full max-w-sm rounded-3xl border border-amber-500/20 bg-white dark:bg-[#0d0d12] p-8 shadow-2xl shadow-amber-500/10 animate-in fade-in zoom-in-95 duration-200 text-center">
         <button
           onClick={onClose}
