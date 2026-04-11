@@ -36,7 +36,8 @@ export default function MyProductsPage() {
   const fetchMyProducts = async () => {
     try {
       const res = await ProductService.getMyProducts();
-      const data = res.data?.products || res.products || res;
+      const r = res as unknown as { data?: { products?: Product[] }; products?: Product[] };
+      const data = r?.data?.products || r?.products || res.products;
       setProducts(Array.isArray(data) ? data : []);
     } catch (err) {
       toast.error("Failed to load your products");

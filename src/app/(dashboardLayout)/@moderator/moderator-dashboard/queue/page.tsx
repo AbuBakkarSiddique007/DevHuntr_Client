@@ -21,7 +21,8 @@ export default function ModeratorQueuePage() {
     setLoading(true);
     try {
       const res = await ProductService.getQueueProducts({ page: 1, limit: 50 });
-      const data = res.data?.products || res.data || res.products || res;
+      const r = res as unknown as { data?: { products?: Product[] }; products?: Product[] };
+      const data = r?.data?.products || r?.data || r?.products || res.products;
       setProducts(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error(err);

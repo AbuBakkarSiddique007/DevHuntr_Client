@@ -13,7 +13,8 @@ export function TrendingGrid() {
     const fetchTrending = async () => {
       try {
         const response = await ProductService.getTrendingProducts();
-        const productsData = response?.data?.products || response?.products || (Array.isArray(response?.data) ? response.data : null) || (Array.isArray(response) ? response : []);
+        const r = response as unknown as { data?: { products?: Product[] }; products?: Product[] };
+        const productsData = r?.data?.products || r?.products || (Array.isArray(response) ? response : []);
         setProducts(Array.isArray(productsData) ? productsData : []);
       } catch (err) {
         console.error("Failed to fetch trending products", err);

@@ -28,7 +28,8 @@ export default function AdminUsersPage() {
             setLoading(true);
             try {
                 const json = await UserService.listUsers({ page: 1, limit: 50 });
-                const data = json?.data?.users || json?.users || [];
+                const j = json as unknown as { data?: { users?: UserRow[] }; users?: UserRow[] };
+                const data = j?.data?.users || j?.users || [];
                 const list = Array.isArray(data) ? data : [];
                 setUsers(list);
                 setEditedRoles((prev) => {

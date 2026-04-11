@@ -21,7 +21,8 @@ export function UserDashboardContent() {
     const fetchStats = async () => {
       try {
         const res = await ProductService.getMyProducts({ limit: 100 });
-        const data = res.data?.products || res.products || res;
+        const r = res as unknown as { data?: { products?: Product[] }; products?: Product[] };
+        const data = r?.data?.products || r?.products || res.products;
         const fetchedProducts = Array.isArray(data) ? data : [];
         setProducts(fetchedProducts);
       } catch (err) {

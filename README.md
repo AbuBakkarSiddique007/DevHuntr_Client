@@ -22,6 +22,11 @@
 - **Secure File Uploads:** Integrated image upload services (ImgBB) for user avatars and product galleries.
 - **Premium Subscriptions:** Stripe-powered payment integrations for premium platform features.
 - **Performance Optimized:** Server-Side Rendering (SSR) via Next.js for lightning-fast metrics and SEO performance.
+- **Performance Optimized:** Server-Side Rendering (SSR) via Next.js for lightning-fast metrics and SEO performance.
+
+- **AI Assistant & Recommendations:** In-app Chat Assistant and AI-powered recommended products (`src/components/ai`, `src/services/ai/ai.service.ts`).
+- **Theme Toggle:** Dark/Light theme toggle (`src/components/ThemeToggle.tsx`).
+- **Toasts / Notifications:** UI notifications via `sonner` (`src/components/ui/sonner.tsx`).
 
 ## 🛠️ Technologies Used
 

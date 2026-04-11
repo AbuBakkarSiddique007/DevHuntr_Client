@@ -19,7 +19,8 @@ export default function ModeratorRejectedPage() {
       setLoading(true);
       try {
         const res = await ProductService.getModerationProducts({ page: 1, limit: 100, status: "REJECTED" });
-        const items = res?.data?.products || res?.products || [];
+        const r = res as unknown as { data?: { products?: Product[] }; products?: Product[] };
+        const items = r?.data?.products || r?.products || [];
         const list = Array.isArray(items) ? items : [];
         setProducts(list);
       } catch (err) {

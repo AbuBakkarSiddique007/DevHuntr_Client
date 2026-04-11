@@ -16,9 +16,10 @@ export function FeaturedProductsList() {
     setLoading(true);
     try {
       const response = await ProductService.getFeaturedProducts({ page, limit: 12 });
-      const productsData = response?.data?.products || response?.products || (Array.isArray(response?.data) ? response.data : null) || (Array.isArray(response) ? response : []);
+      const r = response as unknown as { data?: { products?: Product[]; meta?: { total?: number; totalPages?: number } }; products?: Product[]; meta?: { total?: number; totalPages?: number } };
+      const productsData = r?.data?.products || r?.products || [];
       setProducts(Array.isArray(productsData) ? productsData : []);
-      const meta = response?.data?.meta || response?.meta;
+      const meta = r?.data?.meta || r?.meta;
       const calculatedPages = meta?.total ? Math.ceil(meta.total / 12) : 1;
       setTotalPages(meta?.totalPages || calculatedPages);
     } catch (err) {
