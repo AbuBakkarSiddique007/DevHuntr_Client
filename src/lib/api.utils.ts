@@ -32,6 +32,7 @@ export async function safeFetch<T>(
         
         // Pass the status code in the error message for easier handling in callers
         const error = new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (error as any).status = res.status;
         throw error;
     }
@@ -39,6 +40,7 @@ export async function safeFetch<T>(
     const data = await res.json();
     return data.data || data; 
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     // If we've already thrown a specific API error, re-throw it
     if (err.status) throw err;
