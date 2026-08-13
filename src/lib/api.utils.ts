@@ -1,3 +1,5 @@
+import { getStoredToken } from "./token.utils";
+
 /**
  * Standardized API Response structure for safeFetch
  */
@@ -18,7 +20,19 @@ export async function safeFetch<T>(
   fallback?: T
 ): Promise<T> {
   try {
-    const res = await fetch(url, options);
+    const headers = new Headers(options?.headers);
+    const storedToken = getStoredToken();
+
+    if (storedToken && !headers.has("Authorization")) {
+      headers.set("Authorization", `Bearer ${storedToken}`);
+    }
+
+    const fetchOptions: RequestInit = {
+      ...options,
+      headers,
+    };
+
+    const res = await fetch(url, fetchOptions);
     
     if (!res.ok) {
         const errorData = await res.json().catch(() => ({}));
