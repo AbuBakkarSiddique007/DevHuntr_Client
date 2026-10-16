@@ -57,22 +57,22 @@ export default function ModeratorAcceptedPage() {
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight">Accepted Products</h1>
-          <p className="text-muted-foreground mt-1 text-lg">Browse all accepted products.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Accepted Products</h1>
+          <p className="text-muted-foreground mt-1 text-sm sm:text-base">Browse all approved and live products.</p>
         </div>
-        <div className="flex items-center gap-3 w-full md:w-auto">
-          <div className="relative flex-1 md:w-64">
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <div className="relative flex-1 sm:w-64">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search accepted..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-9 rounded-xl border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 h-10 w-full"
+              className="pl-9 rounded-lg border-border bg-background h-10 w-full"
             />
           </div>
-          <Button variant="outline" className="rounded-xl border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 h-10 w-10 p-0 text-slate-700 dark:text-foreground">
+          <Button variant="outline" size="icon" className="rounded-lg border-border h-10 w-10 text-muted-foreground hover:text-foreground shrink-0">
             <Filter className="h-4 w-4" />
           </Button>
         </div>
@@ -80,71 +80,128 @@ export default function ModeratorAcceptedPage() {
 
       {loading ? (
         <div className="flex items-center justify-center min-h-80">
-          <Loader2 className="h-10 w-10 animate-spin text-purple-500" />
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
       ) : filtered.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-slate-200 dark:border-white/10 bg-white dark:bg-white/2 p-20 text-center shadow-sm dark:shadow-none">
-          <div className="flex flex-col items-center gap-4 max-w-sm mx-auto">
-            <div className="h-16 w-16 rounded-full bg-green-500/10 flex items-center justify-center border border-green-500/20">
-              <CheckCircle2 className="h-8 w-8 text-green-400" />
+        <div className="rounded-xl border border-dashed border-border bg-card/40 p-16 text-center">
+          <div className="flex flex-col items-center gap-3 max-w-sm mx-auto">
+            <div className="h-14 w-14 rounded-full bg-success/10 flex items-center justify-center border border-success/20">
+              <CheckCircle2 className="h-7 w-7 text-success" />
             </div>
-            <h3 className="text-xl font-bold">No accepted products found</h3>
-            <p className="text-muted-foreground text-sm">Try a different search.</p>
+            <h3 className="text-lg font-semibold">No accepted products found</h3>
+            <p className="text-muted-foreground text-sm">Try adjusting your search criteria.</p>
           </div>
         </div>
       ) : (
-        <div className="rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/2 shadow-sm dark:shadow-none overflow-hidden">
-          <div className="overflow-x-auto">
+        <div className="rounded-xl border border-border bg-card shadow-xs overflow-hidden">
+          {/* Mobile card list (below md) */}
+          <div className="md:hidden divide-y divide-border">
+            {filtered.map((product) => (
+              <div key={product.id} className="p-4 space-y-3">
+                <div className="flex items-start gap-3">
+                  <div className="h-12 w-12 rounded-lg bg-muted border border-border overflow-hidden shrink-0">
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      width={48}
+                      height={48}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-semibold text-foreground text-sm truncate">
+                      {product.name}
+                    </p>
+                    <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">
+                      {product.description}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between gap-2 pt-1 border-t border-border/50">
+                  <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-muted border border-border text-xs font-medium">
+                    <span className="text-primary font-semibold">+{product.upvoteCount ?? 0}</span>
+                    <span className="text-muted-foreground">-{product.downvoteCount ?? 0}</span>
+                  </div>
+
+                  <div className="flex items-center gap-1.5">
+                    <Button 
+                      onClick={() => handleToggleFeature(product.id, product.isFeatured ?? false)}
+                      disabled={actionLoading === product.id}
+                      size="sm" 
+                      variant="ghost" 
+                      className={`h-8 px-2.5 rounded-lg text-xs font-medium ${product.isFeatured ? 'text-amber-500 bg-amber-500/10 border border-amber-500/20' : 'text-muted-foreground hover:text-amber-500'}`}
+                    >
+                      {actionLoading === product.id ? (
+                        <Loader2 className="h-3.5 w-3.5 animate-spin mr-1" />
+                      ) : (
+                        <Star className={`h-3.5 w-3.5 mr-1 ${product.isFeatured ? 'fill-current' : ''}`} />
+                      )}
+                      {product.isFeatured ? "Featured" : "Feature"}
+                    </Button>
+                    <Link href={`/products/${product.id}`}>
+                      <Button size="sm" variant="ghost" className="h-8 px-2.5 rounded-lg text-muted-foreground hover:text-foreground text-xs font-medium">
+                        <Eye className="h-3.5 w-3.5 mr-1" /> View
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop table (md+) */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-left">
               <thead>
-                <tr className="text-xs font-bold text-muted-foreground uppercase tracking-widest border-b border-slate-200 dark:border-white/5">
-                  <th className="py-5 px-6">Product</th>
-                  <th className="py-5 px-4 text-center">Votes</th>
-                  <th className="py-5 px-6 text-right">Actions</th>
+                <tr className="text-xs font-semibold text-muted-foreground uppercase tracking-wider border-b border-border bg-muted/40">
+                  <th className="py-4 px-6">Product</th>
+                  <th className="py-4 px-4 text-center">Votes</th>
+                  <th className="py-4 px-6 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-white/5">
+              <tbody className="divide-y divide-border">
                 {filtered.map((product) => (
-                  <tr key={product.id} className="group hover:bg-slate-50 dark:hover:bg-white/2 transition-all">
-                    <td className="py-6 px-6">
+                  <tr key={product.id} className="group hover:bg-muted/40 transition-colors">
+                    <td className="py-5 px-6">
                       <div className="flex items-center gap-4">
-                        <div className="h-12 w-12 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5 overflow-hidden shrink-0">
+                        <div className="h-12 w-12 rounded-lg bg-muted border border-border overflow-hidden shrink-0">
                           <Image
                             src={product.image}
                             alt={product.name}
                             width={48}
                             height={48}
-                            className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                         </div>
                         <div className="min-w-0">
-                          <p className="font-bold text-foreground group-hover:text-purple-400 transition-colors truncate uppercase tracking-tight">
+                          <p className="font-semibold text-foreground group-hover:text-primary transition-colors truncate tracking-tight">
                             {product.name}
                           </p>
                           <p className="text-xs text-muted-foreground line-clamp-1 max-w-130">{product.description}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="py-6 px-4 text-center">
-                      <div className="inline-flex items-center justify-center gap-3 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/5 shadow-sm dark:shadow-none">
-                        <span className="text-xs font-bold text-purple-400">+{product.upvoteCount ?? 0}</span>
-                        <span className="text-xs font-bold text-muted-foreground">-{product.downvoteCount ?? 0}</span>
+                    <td className="py-5 px-4 text-center">
+                      <div className="inline-flex items-center justify-center gap-2.5 px-3 py-1 rounded-md bg-muted border border-border text-xs font-medium">
+                        <span className="text-primary font-semibold">+{product.upvoteCount ?? 0}</span>
+                        <span className="text-muted-foreground">-{product.downvoteCount ?? 0}</span>
                       </div>
                     </td>
-                    <td className="py-6 px-6 text-right">
+                    <td className="py-5 px-6 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <Button 
                           onClick={() => handleToggleFeature(product.id, product.isFeatured ?? false)}
                           disabled={actionLoading === product.id}
-                          size="sm" 
+                          size="icon" 
                           variant="ghost" 
                           title={product.isFeatured ? "Remove from Featured" : "Mark as Featured"}
-                          className={`h-9 w-9 p-0 rounded-lg ${product.isFeatured ? 'text-yellow-500 dark:text-yellow-400 hover:text-yellow-600 dark:hover:text-yellow-500 bg-yellow-400/10 border border-yellow-400/20 shadow-[0_0_15px_rgba(250,204,21,0.2)]' : 'text-slate-500 dark:text-muted-foreground hover:text-yellow-500 dark:hover:text-yellow-400 hover:bg-slate-100 dark:hover:bg-white/10'}`}
+                          className={`h-9 w-9 rounded-lg ${product.isFeatured ? 'text-amber-500 hover:text-amber-600 bg-amber-500/10 border border-amber-500/20' : 'text-muted-foreground hover:text-amber-500 hover:bg-muted'}`}
                         >
                           {actionLoading === product.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Star className={`h-4 w-4 ${product.isFeatured ? 'fill-current' : ''}`} />}
                         </Button>
                         <Link href={`/products/${product.id}`}>
-                          <Button size="sm" variant="ghost" className="h-9 w-9 p-0 rounded-lg hover:bg-slate-100 dark:hover:bg-white/10 text-slate-700 dark:text-foreground" title="View Details">
+                          <Button size="icon" variant="ghost" className="h-9 w-9 rounded-lg text-muted-foreground hover:text-foreground" title="View Details">
                             <Eye className="h-4 w-4" />
                           </Button>
                         </Link>

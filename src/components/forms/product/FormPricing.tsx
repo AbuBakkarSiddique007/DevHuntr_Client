@@ -10,60 +10,57 @@ export function FormPricing() {
   const pricingType = watch("pricingType");
 
   return (
-    <div className="bg-white dark:bg-white/1 px-4 lg:px-8 py-8 rounded-3xl space-y-6 border border-slate-200 dark:border-white/5 shadow-sm dark:shadow-none">
-      <div className="flex items-center gap-4 mb-2">
-        <div className="h-10 w-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
-          <Crown className="h-5 w-5 text-amber-400" />
+    <div className="bg-card px-6 py-6 rounded-xl space-y-5 border border-border shadow-xs">
+      <div className="flex items-center gap-3">
+        <div className="h-9 w-9 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+          <Crown className="h-4.5 w-4.5 text-amber-500" />
         </div>
-        <h3 className="text-xl font-bold uppercase tracking-tight text-slate-900 dark:text-foreground">Pricing Type</h3>
+        <div>
+          <h3 className="text-lg font-bold text-foreground">Pricing Model</h3>
+          <p className="text-xs text-muted-foreground">Choose who can access the full details of this product</p>
+        </div>
       </div>
 
-      <p className="text-sm text-muted-foreground">
-        Choose who can access the full details of this product.
-      </p>
-
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {/* FREE option */}
         <button
           type="button"
           onClick={() => setValue("pricingType", "FREE", { shouldValidate: true })}
           className={cn(
-            "relative flex flex-col items-start gap-2 p-5 rounded-2xl border-2 text-left transition-all duration-200",
+            "relative flex flex-col items-start gap-1.5 p-4 rounded-xl border-2 text-left transition-colors",
             pricingType === "FREE"
-              ? "border-indigo-500 bg-indigo-500/10 shadow-lg shadow-indigo-500/10"
-              : "border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 hover:border-slate-300 dark:hover:border-white/20"
+              ? "border-primary bg-primary/5 shadow-xs"
+              : "border-border bg-card hover:bg-muted/40"
           )}
         >
           <div className="flex items-center gap-2">
-            <Zap className={cn("h-5 w-5", pricingType === "FREE" ? "text-indigo-400" : "text-muted-foreground")} />
-            <span className={cn("font-bold text-base", pricingType === "FREE" ? "text-indigo-300" : "text-foreground")}>
+            <Zap className={cn("h-4.5 w-4.5", pricingType === "FREE" ? "text-primary" : "text-muted-foreground")} />
+            <span className={cn("font-bold text-sm", pricingType === "FREE" ? "text-primary" : "text-foreground")}>
               Free
             </span>
           </div>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            Anyone can view the full product details — no subscription required.
+            Anyone can view the full product details without a subscription.
           </p>
           {pricingType === "FREE" && (
-            <div className="absolute top-3 right-3 h-5 w-5 rounded-full bg-indigo-500 flex items-center justify-center">
-              <Check className="h-3 w-3 text-white" />
+            <div className="absolute top-3 right-3 h-5 w-5 rounded-full bg-primary flex items-center justify-center">
+              <Check className="h-3 w-3 text-primary-foreground" />
             </div>
           )}
         </button>
 
-        {/* PREMIUM option */}
         <button
           type="button"
           onClick={() => setValue("pricingType", "PREMIUM", { shouldValidate: true })}
           className={cn(
-            "relative flex flex-col items-start gap-2 p-5 rounded-2xl border-2 text-left transition-all duration-200",
+            "relative flex flex-col items-start gap-1.5 p-4 rounded-xl border-2 text-left transition-colors",
             pricingType === "PREMIUM"
-              ? "border-amber-500 bg-amber-500/10 shadow-lg shadow-amber-500/10"
-              : "border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 hover:border-slate-300 dark:hover:border-white/20"
+              ? "border-amber-500 bg-amber-500/5 shadow-xs"
+              : "border-border bg-card hover:bg-muted/40"
           )}
         >
           <div className="flex items-center gap-2">
-            <Crown className={cn("h-5 w-5", pricingType === "PREMIUM" ? "text-amber-400" : "text-muted-foreground")} />
-            <span className={cn("font-bold text-base", pricingType === "PREMIUM" ? "text-amber-300" : "text-foreground")}>
+            <Crown className={cn("h-4.5 w-4.5", pricingType === "PREMIUM" ? "text-amber-500" : "text-muted-foreground")} />
+            <span className={cn("font-bold text-sm", pricingType === "PREMIUM" ? "text-amber-500" : "text-foreground")}>
               Premium
             </span>
           </div>
@@ -72,7 +69,7 @@ export function FormPricing() {
           </p>
           {pricingType === "PREMIUM" && (
             <div className="absolute top-3 right-3 h-5 w-5 rounded-full bg-amber-500 flex items-center justify-center">
-              <Check className="h-3 w-3 text-black" />
+              <Check className="h-3 w-3 text-white" />
             </div>
           )}
         </button>

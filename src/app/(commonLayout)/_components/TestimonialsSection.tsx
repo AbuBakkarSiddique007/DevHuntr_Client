@@ -32,65 +32,63 @@ const testimonials = [
 
 export function TestimonialsSection() {
   return (
-    <section className="py-24 relative overflow-hidden bg-slate-50 dark:bg-slate-900/20">
-      <div className="absolute top-0 right-0 -z-10 h-96 w-96 rounded-full bg-purple-500/10 dark:bg-purple-500/5 blur-[100px]" />
-      <div className="absolute bottom-0 left-0 -z-10 h-96 w-96 rounded-full bg-blue-500/10 dark:bg-blue-500/5 blur-[100px]" />
+    <section className="py-24 relative overflow-hidden bg-background border-t border-border">
+      <div className="absolute top-0 right-0 -z-10 h-80 w-80 rounded-full bg-primary/5 blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 -z-10 h-80 w-80 rounded-full bg-indigo-500/5 blur-3xl pointer-events-none" />
 
       <div className="container mx-auto px-4">
-        <div className="flex flex-col items-center text-center mb-16 gap-4">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-600 dark:text-purple-400 text-xs font-black uppercase tracking-widest">
+        <div className="flex flex-col items-center text-center mb-14 gap-3">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold uppercase tracking-wider">
             <Star className="h-3.5 w-3.5 fill-current" /> Community Voice
           </div>
-          <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-slate-900 dark:text-white">
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
             Loved by Developers
           </h2>
-          <p className="text-slate-500 dark:text-muted-foreground text-lg max-w-2xl">
+          <p className="text-muted-foreground text-base max-w-xl">
             See what the community is saying about the products and experiences on DevHuntr.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {testimonials.map((t) => (
             <div
               key={t.id}
-              className="group relative p-8 rounded-[2.5rem] bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-lg shadow-black/5 hover:shadow-2xl hover:shadow-purple-500/10 hover:border-purple-500/30 transition-all duration-500 flex flex-col h-full"
+              className="group relative p-7 rounded-2xl bg-card border border-border shadow-xs hover:shadow-md hover:border-primary/40 transition-all duration-300 flex flex-col h-full"
             >
-              <Quote className="absolute top-6 right-8 h-10 w-10 text-slate-200 dark:text-white/5 group-hover:text-purple-300/40 dark:group-hover:text-purple-500/20 transition-colors" />
+              <Quote className="absolute top-6 right-6 h-8 w-8 text-muted-foreground/20 group-hover:text-primary/30 transition-colors" />
               
               <div className="flex flex-col h-full">
-                <p className="text-slate-600 dark:text-slate-300 text-lg leading-relaxed mb-8 relative z-10 italic grow">
+                <p className="text-foreground/90 text-base leading-relaxed mb-6 relative z-10 italic grow">
                   &quot;{t.content}&quot;
                 </p>
- 
-                <div className="flex items-center gap-4 mt-auto pt-6 border-t border-slate-100 dark:border-white/5">
+
+                <div className="flex items-center gap-3.5 mt-auto pt-5 border-t border-border">
                   <div className="relative shrink-0">
                     <Image
                       src={t.avatar}
                       alt={t.author}
-                      width={56}
-                      height={56}
-                      className="h-14 w-14 rounded-full object-cover border-2 border-slate-100 dark:border-white/10 shadow-sm"
+                      width={48}
+                      height={48}
+                      className="h-12 w-12 rounded-full object-cover border border-border shadow-xs"
                     />
                     {t.verified && (
-                      <div className="absolute -bottom-1 -right-1 bg-purple-600 text-white rounded-full p-1 border-2 border-white dark:border-slate-900 shadow-lg leading-none">
-                        <svg className="h-2 w-2 fill-current" viewBox="0 0 20 20">
+                      <div className="absolute -bottom-0.5 -right-0.5 bg-primary text-primary-foreground rounded-full p-0.5 border-2 border-card shadow-xs">
+                        <svg className="h-2.5 w-2.5 fill-current" viewBox="0 0 20 20">
                           <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
                         </svg>
                       </div>
                     )}
                   </div>
                   <div className="flex flex-col justify-center min-w-0">
-                    <h4 className="font-bold text-slate-900 dark:text-white text-lg leading-tight mb-0.5">
+                    <h4 className="font-semibold text-foreground text-base leading-tight mb-0.5 truncate">
                       {t.author}
                     </h4>
-                    <p className="text-slate-500 dark:text-muted-foreground text-sm font-medium">
+                    <p className="text-muted-foreground text-xs">
                       {t.role}
                     </p>
                   </div>
                 </div>
               </div>
- 
-              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-12 h-1 rounded-full bg-slate-200 dark:bg-white/5 group-hover:w-24 group-hover:bg-purple-400/40 dark:group-hover:bg-purple-500/30 transition-all duration-500"></div>
             </div>
           ))}
         </div>

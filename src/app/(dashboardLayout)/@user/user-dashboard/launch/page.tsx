@@ -5,36 +5,36 @@ import { Rocket, Sparkles } from "lucide-react";
 
 export default function LaunchProductPage() {
   return (
-    <div className="max-w-4xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="text-center space-y-4">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-[10px] font-bold uppercase tracking-widest mb-2">
-          <Sparkles className="h-3 w-3" />
+    <div className="max-w-3xl mx-auto space-y-10 animate-in fade-in duration-300">
+      <div className="text-center space-y-3">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold uppercase tracking-wider mb-1">
+          <Sparkles className="h-3.5 w-3.5" />
           <span>Showcase your creation</span>
         </div>
 
-        <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic">
-          Launch your project
+        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+          Launch Your Product
         </h1>
 
-        <p className="text-muted-foreground max-w-xl mx-auto leading-relaxed">
-          Share your innovation with the community. Every great journey starts with a single launch.
+        <p className="text-muted-foreground text-sm max-w-lg mx-auto leading-relaxed">
+          Share your innovation with the maker community. High quality submissions are reviewed and featured globally.
         </p>
       </div>
 
       <div className="relative">
-        <div className="absolute -top-20 -left-20 w-64 h-64 bg-purple-500/5 rounded-full blur-[100px] -z-10 animate-pulse"></div>
-        <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-indigo-500/5 rounded-full blur-[100px] -z-10 animate-pulse delay-700"></div>
+        <div className="absolute -top-16 -left-16 w-48 h-48 bg-primary/5 rounded-full blur-[100px] -z-10 pointer-events-none" />
+        <div className="absolute -bottom-16 -right-16 w-48 h-48 bg-indigo-500/5 rounded-full blur-[100px] -z-10 pointer-events-none" />
 
         <ProductForm />
       </div>
 
-      <div className="p-8 bg-white dark:bg-white/1 rounded-3xl text-center border border-slate-200 dark:border-white/5 space-y-4 shadow-sm dark:shadow-none">
-        <h2 className="text-xl font-bold flex items-center justify-center gap-2 uppercase tracking-tight text-slate-900 dark:text-foreground">
-          <Rocket className="h-5 w-5 text-purple-400" />
-          Next Steps
+      <div className="p-6 bg-card rounded-2xl text-center border border-border space-y-2 shadow-xs">
+        <h2 className="text-base font-bold flex items-center justify-center gap-2 text-foreground">
+          <Rocket className="h-4 w-4 text-primary" />
+          What happens next?
         </h2>
-        <p className="text-muted-foreground max-w-xl mx-auto text-sm leading-relaxed">
-          Your product will be reviewed by our moderators. Once accepted, it will appear on the global feed and can be voted by the community!
+        <p className="text-muted-foreground max-w-md mx-auto text-xs leading-relaxed">
+          Your product will be reviewed by our moderation team. Once approved, it appears in the explore feed and community members can upvote and discuss it.
         </p>
       </div>
     </div>

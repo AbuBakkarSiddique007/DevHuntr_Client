@@ -53,12 +53,13 @@ export function ProductForm() {
           <Button
             type="submit"
             disabled={loading}
-            className="rounded-2xl px-10 h-14 bg-linear-to-r from-purple-600 to-pink-600 hover:opacity-90 shadow-2xl shadow-purple-500/30 border-none text-lg font-bold group"
+            size="lg"
+            className="w-full sm:w-auto rounded-lg px-8 h-11 text-sm font-semibold"
           >
             {loading ? (
-              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (
-              <Rocket className="mr-2 h-5 w-5 group-hover:animate-bounce" />
+              <Rocket className="mr-2 h-4 w-4" />
             )}
             {loading ? "Launching..." : "Launch Product"}
           </Button>

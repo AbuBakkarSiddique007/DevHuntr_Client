@@ -14,7 +14,7 @@ export default function CommonLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative flex min-h-screen flex-col bg-background text-foreground font-sans antialiased selection:bg-purple-500/30">
+    <div className="relative flex min-h-screen flex-col bg-background text-foreground font-sans antialiased selection:bg-primary/20 selection:text-foreground">
       <Navbar />
       <main className="flex-1 wrapper">{children}</main>
       <ChatAssistant />

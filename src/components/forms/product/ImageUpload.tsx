@@ -35,32 +35,32 @@ export function ImageUpload() {
   };
 
   return (
-    <div className="space-y-4">
-      <label className="text-xs font-bold text-muted-foreground uppercase tracking-widest ml-1">Product Thumbnail</label>
+    <div className="space-y-3">
+      <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Product Thumbnail</label>
       
       <div 
         className={cn(
-          "relative group cursor-pointer rounded-3xl border-2 border-dashed transition-all duration-300 min-h-[200px] flex flex-col items-center justify-center overflow-hidden",
+          "relative group cursor-pointer rounded-xl border-2 border-dashed transition-colors min-h-[190px] flex flex-col items-center justify-center overflow-hidden",
           imageUrl 
-            ? "border-purple-500/30 bg-purple-500/5" 
-            : "border-white/10 bg-white/5 hover:border-purple-500/50 hover:bg-purple-500/5",
-          errors.image && "border-red-500/50 bg-red-500/5"
+            ? "border-primary/30 bg-primary/5" 
+            : "border-border bg-muted/20 hover:border-primary/50 hover:bg-muted/40",
+          errors.image && "border-destructive/50 bg-destructive/5"
         )}
         onClick={() => !imageUrl && !isUploading && fileInputRef.current?.click()}
       >
         {isUploading ? (
-          <div className="flex flex-col items-center gap-3 animate-in fade-in">
-            <Loader2 className="h-10 w-10 animate-spin text-purple-400" />
-            <p className="text-sm font-medium text-purple-300">Uploading to ImgBB...</p>
+          <div className="flex flex-col items-center gap-2 animate-in fade-in">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <p className="text-xs font-medium text-muted-foreground">Uploading image...</p>
           </div>
         ) : imageUrl ? (
-          <div className="relative w-full aspect-video sm:aspect-auto sm:h-48 animate-in zoom-in-95">
+          <div className="relative w-full aspect-video sm:aspect-auto sm:h-44 animate-in zoom-in-95">
             <Image 
               src={imageUrl} 
               alt="Preview" 
               fill 
               sizes="(max-width: 640px) 100vw, 400px"
-              className="object-contain p-4"
+              className="object-contain p-2"
             />
             <button
               type="button"
@@ -68,19 +68,20 @@ export function ImageUpload() {
                 e.stopPropagation();
                 removeImage();
               }}
-              className="absolute top-4 right-4 h-10 w-10 rounded-full bg-red-500/80 text-white flex items-center justify-center hover:bg-red-600 transition-colors shadow-lg backdrop-blur-md"
+              className="absolute top-3 right-3 h-8 w-8 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center hover:bg-destructive/90 transition-colors shadow-sm"
+              aria-label="Remove image"
             >
-              <X className="h-5 w-5" />
+              <X className="h-4 w-4" />
             </button>
           </div>
         ) : (
-          <div className="flex flex-col items-center gap-4 p-8 text-center animate-in slide-in-from-bottom-2">
-            <div className="h-16 w-16 rounded-2xl bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <Upload className="h-8 w-8 text-muted-foreground group-hover:text-purple-400" />
+          <div className="flex flex-col items-center gap-3 p-6 text-center animate-in slide-in-from-bottom-2">
+            <div className="h-12 w-12 rounded-lg bg-muted flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+              <Upload className="h-6 w-6 text-muted-foreground group-hover:text-primary" />
             </div>
             <div>
-              <p className="text-base font-bold text-foreground">Click to upload image</p>
-              <p className="text-xs text-muted-foreground mt-1 uppercase tracking-widest">JPG, PNG (Max 5MB)</p>
+              <p className="text-sm font-semibold text-foreground">Click to upload thumbnail</p>
+              <p className="text-xs text-muted-foreground mt-0.5">JPG, PNG, WebP (Max 5MB)</p>
             </div>
           </div>
         )}
@@ -89,13 +90,13 @@ export function ImageUpload() {
           type="file"
           ref={fileInputRef}
           onChange={handleFileChange}
-          accept="image/png, image/jpeg, image/jpg"
+          accept="image/png, image/jpeg, image/jpg, image/webp"
           className="hidden"
         />
       </div>
 
       {errors.image && (
-        <p className="text-xs text-red-400 font-medium ml-1">
+        <p className="text-xs text-destructive font-medium ml-1">
           {errors.image.message}
         </p>
       )}

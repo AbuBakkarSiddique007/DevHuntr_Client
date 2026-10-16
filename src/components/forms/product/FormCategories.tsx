@@ -42,19 +42,20 @@ export function FormCategories() {
   };
 
   return (
-    <div className="bg-white dark:bg-white/1 px-4 lg:px-8 py-8 rounded-3xl space-y-6 border border-slate-200 dark:border-white/5 shadow-sm dark:shadow-none">
-      <div className="flex items-center gap-4 mb-2">
-        <div className="h-10 w-10 rounded-xl bg-indigo-500/20 flex items-center justify-center">
-          <Check className="h-5 w-5 text-indigo-400" />
+    <div className="bg-card px-6 py-6 rounded-xl space-y-5 border border-border shadow-xs">
+      <div className="flex items-center gap-3">
+        <div className="h-9 w-9 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
+          <Check className="h-4.5 w-4.5 text-primary" />
         </div>
-        <h3 className="text-xl font-bold uppercase tracking-tight text-foreground">Categories</h3>
+        <div>
+          <h3 className="text-lg font-bold text-foreground">Categories</h3>
+          <p className="text-xs text-muted-foreground">Select tags that best describe your product</p>
+        </div>
       </div>
 
-      <p className="text-sm text-muted-foreground">Select at least one tag that best describes your product.</p>
-
       {fetchingTags ? (
-        <div className="flex justify-center py-8">
-          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        <div className="flex justify-center py-6">
+          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
         </div>
       ) : (
         <div className="flex flex-wrap gap-2">
@@ -64,10 +65,10 @@ export function FormCategories() {
               type="button"
               onClick={() => toggleTag(tag.id)}
               className={cn(
-                "px-4 py-2 rounded-xl border text-[10px] font-bold uppercase tracking-widest transition-all duration-300",
+                "px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition-colors",
                 selectedTagIds.includes(tag.id)
-                  ? "bg-indigo-500 border-indigo-400 text-white shadow-lg shadow-indigo-500/30"
-                  : "bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-600 dark:text-muted-foreground hover:bg-slate-50 dark:hover:bg-white/10 hover:border-slate-300 dark:hover:border-white/20"
+                  ? "bg-primary border-primary text-primary-foreground shadow-xs"
+                  : "bg-muted/50 border-border text-muted-foreground hover:bg-muted hover:text-foreground"
               )}
             >
               {tag.name}
@@ -75,7 +76,7 @@ export function FormCategories() {
           ))}
         </div>
       )}
-      {errors.tagIds && <p className="text-xs text-destructive mt-2 ml-1">{errors.tagIds.message}</p>}
+      {errors.tagIds && <p className="text-xs text-destructive mt-1 ml-1">{errors.tagIds.message}</p>}
     </div>
   );
 }

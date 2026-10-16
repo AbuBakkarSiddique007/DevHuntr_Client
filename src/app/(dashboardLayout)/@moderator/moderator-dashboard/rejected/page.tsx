@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { XCircle, Search, Filter, Loader2, Eye } from "lucide-react";
+import { XCircle, Search, Loader2, Eye } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -37,88 +37,140 @@ export default function ModeratorRejectedPage() {
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     if (!q) return products;
-    return products.filter((p) => p.name.toLowerCase().includes(q));
+    return products.filter((p) => (p.name || "").toLowerCase().includes(q));
   }, [products, search]);
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div className="space-y-6 animate-in fade-in duration-300">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight">Rejected Products</h1>
-          <p className="text-muted-foreground mt-1 text-lg">Browse all rejected products.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground flex items-center gap-2">
+            <XCircle className="h-6 w-6 text-destructive" />
+            Rejected Products
+          </h1>
+          <p className="text-muted-foreground text-sm mt-1">Archived submissions that did not pass moderation guidelines.</p>
         </div>
-        <div className="flex items-center gap-3 w-full md:w-auto">
-          <div className="relative flex-1 md:w-64">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search rejected..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-9 rounded-xl border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 h-10 w-full"
-            />
-          </div>
-          <Button variant="outline" className="rounded-xl border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 h-10 w-10 p-0 text-slate-700 dark:text-foreground">
-            <Filter className="h-4 w-4" />
-          </Button>
+        <div className="relative w-full sm:w-64">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+          <Input
+            aria-label="Search rejected products"
+            placeholder="Search by name..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-8 h-9 text-xs rounded-xl"
+          />
         </div>
       </div>
 
       {loading ? (
-        <div className="flex items-center justify-center min-h-80">
-          <Loader2 className="h-10 w-10 animate-spin text-purple-500" />
+        <div className="flex items-center justify-center min-h-60">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
       ) : filtered.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-slate-200 dark:border-white/10 bg-white dark:bg-white/2 p-20 text-center shadow-sm dark:shadow-none">
-          <div className="flex flex-col items-center gap-4 max-w-sm mx-auto">
-            <div className="h-16 w-16 rounded-full bg-red-500/10 flex items-center justify-center border border-red-500/20">
-              <XCircle className="h-8 w-8 text-red-400" />
+        <div className="rounded-2xl border border-dashed border-border bg-card p-12 text-center shadow-xs">
+          <div className="flex flex-col items-center gap-3 max-w-sm mx-auto">
+            <div className="h-12 w-12 rounded-full bg-destructive/10 flex items-center justify-center text-destructive">
+              <XCircle className="h-6 w-6" />
             </div>
-            <h3 className="text-xl font-bold">No rejected products found</h3>
-            <p className="text-muted-foreground text-sm">Try a different search.</p>
+            <h2 className="text-base font-bold text-foreground">No rejected products found</h2>
+            <p className="text-muted-foreground text-xs">No records match your query.</p>
           </div>
         </div>
       ) : (
-        <div className="rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/2 shadow-sm dark:shadow-none overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
+        <div className="rounded-2xl border border-border bg-card shadow-xs overflow-hidden">
+          {/* Mobile card list (below md) */}
+          <div className="md:hidden divide-y divide-border">
+            {filtered.map((product) => (
+              <div key={product.id} className="p-4 space-y-3">
+                <div className="flex items-start gap-3">
+                  <div className="h-11 w-11 rounded-xl bg-muted border border-border overflow-hidden shrink-0 relative">
+                    {product.image ? (
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        width={44}
+                        height={44}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="h-full w-full flex items-center justify-center text-muted-foreground">
+                        <XCircle className="h-5 w-5" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-semibold text-foreground text-sm truncate">
+                      {product.name}
+                    </p>
+                    <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">
+                      {product.description || "No description"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between gap-2 pt-1 border-t border-border/50">
+                  <div className="inline-flex items-center justify-center gap-2 px-2.5 py-1 rounded-lg bg-muted border border-border text-xs font-semibold">
+                    <span className="text-emerald-600 dark:text-emerald-400">▲ {product.upvoteCount ?? 0}</span>
+                    <span className="text-rose-500 dark:text-red-400">▼ {product.downvoteCount ?? 0}</span>
+                  </div>
+
+                  <Link href={`/products/${product.id}`}>
+                    <Button size="sm" variant="ghost" className="h-8 px-2.5 rounded-lg text-muted-foreground hover:text-foreground text-xs font-medium">
+                      <Eye className="h-3.5 w-3.5 mr-1" /> View Product
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop table (md+) */}
+          <div className="hidden md:block overflow-x-auto">
+            <table className="w-full text-left text-sm">
               <thead>
-                <tr className="text-xs font-bold text-muted-foreground uppercase tracking-widest border-b border-slate-200 dark:border-white/5">
-                  <th className="py-5 px-6">Product</th>
-                  <th className="py-5 px-4 text-center">Votes</th>
-                  <th className="py-5 px-6 text-right">View</th>
+                <tr className="text-xs font-semibold text-muted-foreground uppercase tracking-wider border-b border-border bg-muted/40">
+                  <th className="py-3 px-4 sm:px-6">Product</th>
+                  <th className="py-3 px-4 text-center">Score</th>
+                  <th className="py-3 px-4 sm:px-6 text-right">View</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-white/5">
+              <tbody className="divide-y divide-border">
                 {filtered.map((product) => (
-                  <tr key={product.id} className="group hover:bg-slate-50 dark:hover:bg-white/2 transition-all">
-                    <td className="py-6 px-6">
-                      <div className="flex items-center gap-4">
-                        <div className="h-12 w-12 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5 overflow-hidden shrink-0">
-                          <Image
-                            src={product.image}
-                            alt={product.name}
-                            width={48}
-                            height={48}
-                            className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
-                          />
+                  <tr key={product.id} className="hover:bg-muted/30 transition-colors">
+                    <td className="py-3.5 px-4 sm:px-6">
+                      <div className="flex items-center gap-3">
+                        <div className="h-11 w-11 rounded-xl bg-muted border border-border overflow-hidden shrink-0 relative">
+                          {product.image ? (
+                            <Image
+                              src={product.image}
+                              alt={product.name}
+                              width={44}
+                              height={44}
+                              className="h-full w-full object-cover"
+                            />
+                          ) : (
+                            <div className="h-full w-full flex items-center justify-center text-muted-foreground">
+                              <XCircle className="h-5 w-5" />
+                            </div>
+                          )}
                         </div>
                         <div className="min-w-0">
-                          <p className="font-bold text-foreground group-hover:text-purple-400 transition-colors truncate uppercase tracking-tight">
+                          <p className="font-semibold text-foreground text-sm truncate">
                             {product.name}
                           </p>
-                          <p className="text-xs text-muted-foreground line-clamp-1 max-w-130">{product.description}</p>
+                          <p className="text-xs text-muted-foreground line-clamp-1 max-w-md">{product.description || "No description"}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="py-6 px-4 text-center">
-                      <div className="inline-flex items-center justify-center gap-3 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/5 shadow-sm dark:shadow-none">
-                        <span className="text-xs font-bold text-purple-400">+{product.upvoteCount ?? 0}</span>
-                        <span className="text-xs font-bold text-muted-foreground">-{product.downvoteCount ?? 0}</span>
+                    <td className="py-3.5 px-4 text-center">
+                      <div className="inline-flex items-center justify-center gap-2 px-2.5 py-1 rounded-lg bg-muted border border-border text-xs font-semibold">
+                        <span className="text-emerald-600 dark:text-emerald-400">▲ {product.upvoteCount ?? 0}</span>
+                        <span className="text-rose-500 dark:text-red-400">▼ {product.downvoteCount ?? 0}</span>
                       </div>
                     </td>
-                    <td className="py-6 px-6 text-right">
+                    <td className="py-3.5 px-4 sm:px-6 text-right">
                       <Link href={`/products/${product.id}`}>
-                        <Button size="sm" variant="ghost" className="h-9 w-9 p-0 rounded-lg hover:bg-slate-100 dark:hover:bg-white/10 text-slate-700 dark:text-foreground">
+                        <Button size="icon-sm" variant="ghost" aria-label="View product page" className="hover:text-primary">
                           <Eye className="h-4 w-4" />
                         </Button>
                       </Link>

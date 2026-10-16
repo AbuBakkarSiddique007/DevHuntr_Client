@@ -55,10 +55,10 @@ export function CategoryBar() {
           return (
             <div
               key={`${tag.id}-${i}`}
-              className="flex items-center gap-2.5 px-6 py-3 rounded-2xl bg-white dark:bg-[#0d0d12]/40 backdrop-blur-xl border border-slate-200 dark:border-white/5 hover:border-purple-300 dark:hover:border-purple-500/30 hover:bg-purple-50 dark:hover:bg-purple-500/5 transition-all shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] dark:shadow-2xl shrink-0 group/item cursor-pointer"
+              className="flex items-center gap-2.5 px-6 py-3 rounded-2xl bg-card border border-border hover:border-primary/30 hover:bg-primary/5 dark:bg-card/60 dark:hover:bg-primary/10 transition-all shadow-sm dark:shadow-none shrink-0 group/item cursor-pointer backdrop-blur-xl"
             >
-              <Icon className="h-4 w-4 text-[#1d5464] dark:text-[#1d5464]/80 group-hover/item:text-[#1d5464] transition-colors" />
-              <span className="text-sm font-semibold text-slate-700 dark:text-muted-foreground group-hover/item:text-[#1d5464] dark:group-hover/item:text-white transition-colors">
+              <Icon className="h-4 w-4 text-muted-foreground group-hover/item:text-primary transition-colors" />
+              <span className="text-sm font-semibold text-foreground/70 group-hover/item:text-primary dark:group-hover/item:text-primary-foreground transition-colors">
                 {tag.name}
               </span>
             </div>
@@ -66,19 +66,6 @@ export function CategoryBar() {
         })}
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-33.33%); }
-        }
-        .animate-marquee-slow {
-          animation: marquee 40s linear infinite;
-        }
-        .pause-animation {
-          animation-play-state: paused;
-        }
-      `}</style>
     </div>
   );
 }

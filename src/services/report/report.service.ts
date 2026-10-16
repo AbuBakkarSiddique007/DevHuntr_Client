@@ -1,3 +1,5 @@
+import { safeFetch } from "@/lib/api.utils";
+
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://devhuntrserver.onrender.com/api/v1";
 
 export type ReportStatus = "OPEN" | "RESOLVED" | "DISMISSED";
@@ -11,31 +13,36 @@ export interface Report {
   reporter: { id: string; name: string };
 }
 
+export interface ReportListResponse {
+  data?: {
+    reports?: Report[];
+    meta?: { total?: number };
+  } & Report[];
+  reports?: Report[];
+  meta?: { total?: number };
+}
+
+export interface ReportActionResponse {
+  success?: boolean;
+  message?: string;
+  data?: unknown;
+}
+
 export const ReportService = {
-  submitReport: async (productId: string, reason: string) => {
-    const res = await fetch(`${API_BASE}/reports`, {
+  submitReport: async (productId: string, reason: string): Promise<ReportActionResponse> => {
+    return safeFetch<ReportActionResponse>(`${API_BASE}/reports`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify({ productId, reason }),
     });
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || err.message || `HTTP ${res.status}`);
-    }
-    return res.json();
   },
 
-  getReports: async ({ page = 1, limit = 10, status = "OPEN" } = {}) => {
-    const res = await fetch(
+  getReports: async ({ page = 1, limit = 10, status = "OPEN" } = {}): Promise<ReportListResponse> => {
+    return safeFetch<ReportListResponse>(
       `${API_BASE}/reports?page=${page}&limit=${limit}&status=${status}`,
       { credentials: "include" }
     );
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || err.message || `HTTP ${res.status}`);
-    }
-    return res.json();
   },
 
   updateReportStatus: async (
@@ -43,29 +50,19 @@ export const ReportService = {
     status: "RESOLVED" | "DISMISSED", 
     rejectProduct?: boolean, 
     rejectionReason?: string
-  ) => {
-    const res = await fetch(`${API_BASE}/reports/${reportId}/status`, {
+  ): Promise<ReportActionResponse> => {
+    return safeFetch<ReportActionResponse>(`${API_BASE}/reports/${reportId}/status`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify({ status, rejectProduct, rejectionReason }),
     });
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || err.message || `HTTP ${res.status}`);
-    }
-    return res.json();
   },
 
-  deleteReport: async (id: string) => {
-    const res = await fetch(`${API_BASE}/reports/${id}`, {
+  deleteReport: async (id: string): Promise<ReportActionResponse> => {
+    return safeFetch<ReportActionResponse>(`${API_BASE}/reports/${id}`, {
       method: "DELETE",
       credentials: "include",
     });
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.message || `HTTP ${res.status}`);
-    }
-    return res.json();
   },
 };

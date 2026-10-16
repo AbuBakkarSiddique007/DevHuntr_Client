@@ -56,40 +56,42 @@ export default function TagsManagementPage() {
   }, [search, tags]);
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-extrabold tracking-tight">Platform Tags</h1>
-          <p className="text-muted-foreground mt-1 text-lg">Manage searchable categories for all products.</p>
-        </div>
+    <div className="space-y-6 animate-in fade-in duration-300">
+      <div>
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground flex items-center gap-2.5">
+          <TagIcon className="h-6 w-6 text-primary" />
+          Platform Tags
+        </h1>
+        <p className="text-muted-foreground text-sm mt-1">Manage searchable taxonomies and categories for launched products.</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* CREATE TAG PANEL */}
-        <div className="lg:col-span-1 border border-white/5 bg-white/2 rounded-[2rem] p-6 h-fit backdrop-blur-xl">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-purple-500/10 border border-purple-500/20">
-              <Plus className="h-5 w-5 text-purple-400" />
+        <div className="lg:col-span-1 border border-border bg-card rounded-2xl p-6 h-fit shadow-xs space-y-4">
+          <div className="flex items-center gap-2.5 mb-2">
+            <div className="h-9 w-9 flex items-center justify-center rounded-xl bg-primary/10 border border-primary/20 text-primary">
+              <Plus className="h-4 w-4" />
             </div>
-            <h3 className="font-bold text-lg">Create New Tag</h3>
+            <h2 className="font-bold text-base text-foreground">Create New Tag</h2>
           </div>
 
-          <form onSubmit={handleCreateTag} className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest ml-1">Tag Name</label>
+          <form onSubmit={handleCreateTag} className="space-y-3.5">
+            <div className="space-y-1.5">
+              <label htmlFor="tag-name" className="text-xs font-semibold text-foreground">Tag Name</label>
               <Input
+                id="tag-name"
                 placeholder="e.g. Developer Tools, AI, SaaS..."
                 value={newTagName}
                 onChange={(e) => setNewTagName(e.target.value)}
-                className="h-12 bg-white/5 border-white/10 rounded-xl px-4 text-sm"
+                className="h-10 text-sm"
                 maxLength={40}
               />
             </div>
             <Button
               type="submit"
               disabled={isCreating || !newTagName.trim()}
-              className="w-full h-12 rounded-xl bg-purple-600 hover:bg-purple-700 font-bold"
+              className="w-full h-10 rounded-xl font-semibold text-sm bg-primary text-primary-foreground hover:opacity-90"
             >
               {isCreating ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Plus className="h-4 w-4 mr-2" />}
               Create Tag
@@ -98,46 +100,44 @@ export default function TagsManagementPage() {
         </div>
 
         {/* TAGS LIST PANEL */}
-        <div className="lg:col-span-2 border border-white/5 bg-white/2 rounded-[2rem] p-0 overflow-hidden backdrop-blur-xl flex flex-col min-h-[500px]">
-          <div className="p-6 border-b border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-lg bg-pink-500/10 flex items-center justify-center border border-pink-500/20">
-                <TagIcon className="h-4 w-4 text-pink-400" />
-              </div>
-              <h3 className="font-bold">Active Tags ({tags.length})</h3>
+        <div className="lg:col-span-2 border border-border bg-card rounded-2xl p-0 overflow-hidden shadow-xs flex flex-col min-h-[460px]">
+          <div className="p-4 sm:p-5 border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-muted/30">
+            <div className="flex items-center gap-2.5">
+              <span className="font-bold text-sm text-foreground">Active Tags ({tags.length})</span>
             </div>
             <div className="relative w-full sm:w-64">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
               <Input
-                placeholder="Search tags..."
+                aria-label="Filter tags"
+                placeholder="Filter tags..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-9 bg-white/5 border-white/10 rounded-xl h-10 w-full"
+                className="pl-8 h-8 text-xs rounded-xl"
               />
             </div>
           </div>
 
-          <div className="flex-1 p-6 overflow-y-auto">
+          <div className="flex-1 p-5 overflow-y-auto">
             {loading ? (
-              <div className="flex h-full items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
+              <div className="flex h-full items-center justify-center py-16">
+                <Loader2 className="h-6 w-6 animate-spin text-primary" />
               </div>
             ) : filteredTags.length === 0 ? (
-              <div className="flex flex-col h-full items-center justify-center text-center opacity-60">
-                 <CheckCircle2 className="h-12 w-12 text-muted-foreground mb-4" />
-                 <p className="font-bold text-lg">No tags found</p>
-                 <p className="text-sm">Try empty search or create a new one.</p>
+              <div className="flex flex-col h-full items-center justify-center text-center py-16 text-muted-foreground">
+                <CheckCircle2 className="h-10 w-10 opacity-30 mb-2" />
+                <p className="font-semibold text-sm">No tags found</p>
+                <p className="text-xs">Try another keyword or create a new tag.</p>
               </div>
             ) : (
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-2">
                 {filteredTags.map((tag) => (
-                   <div 
-                     key={tag.id}
-                     className="px-4 py-2 rounded-xl border border-white/10 bg-white/5 flex items-center gap-2 hover:bg-white/10 transition-colors"
-                   >
-                     <span className="text-[10px] text-muted-foreground">ID: {tag.id.slice(-4)}</span>
-                     <span className="font-bold text-sm tracking-wide">{tag.name}</span>
-                   </div>
+                  <div 
+                    key={tag.id}
+                    className="px-3 py-1.5 rounded-lg border border-border bg-muted/60 flex items-center gap-2 hover:border-primary/40 transition-colors"
+                  >
+                    <span className="text-xs text-muted-foreground font-mono">#{tag.id.slice(-4)}</span>
+                    <span className="font-semibold text-xs text-foreground">{tag.name}</span>
+                  </div>
                 ))}
               </div>
             )}

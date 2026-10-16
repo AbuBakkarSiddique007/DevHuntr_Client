@@ -20,26 +20,26 @@ export function StatsSection() {
   }, []);
 
   const items = [
-    { label: "Community Members", value: stats?.totalUsers || "1.2k+", icon: Users, color: "text-[#298f9b]" },
-    { label: "Products Launched", value: stats?.totalProducts || "450+", icon: Rocket, color: "text-[#298f9b]" },
-    { label: "Upvotes Given", value: stats?.totalVotes || "8.5k+", icon: ThumbsUp, color: "text-[#298f9b]" },
-    { label: "Discussion Posts", value: stats?.totalComments || "2.1k+", icon: MessageCircle, color: "text-[#298f9b]" },
+    { label: "Community Members", value: stats?.totalUsers || "1.2k+", icon: Users },
+    { label: "Products Launched", value: stats?.totalProducts || "450+", icon: Rocket },
+    { label: "Upvotes Given", value: stats?.totalVotes || "8.5k+", icon: ThumbsUp },
+    { label: "Discussion Posts", value: stats?.totalComments || "2.1k+", icon: MessageCircle },
   ];
 
   return (
-    <section className="py-20 relative overflow-hidden">
+    <section className="py-20 relative overflow-hidden bg-background">
       <div className="container mx-auto px-4 relative z-10">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5 sm:gap-6 lg:gap-8">
           {items.map((item, i) => (
-            <div key={i} className="flex flex-col items-center text-center space-y-3 group">
-              <div className={`p-4 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 group-hover:scale-110 group-hover:bg-slate-50 dark:group-hover:bg-white/10 transition-all duration-500 shadow-md dark:shadow-none`}>
-                <item.icon className={`h-6 w-6 ${item.color}`} />
+            <div key={i} className="flex flex-col items-center text-center space-y-2.5 sm:space-y-3 group p-4 sm:p-6 rounded-2xl bg-card border border-border shadow-xs hover:border-primary/30 transition-all">
+              <div className="p-2.5 sm:p-3.5 rounded-xl bg-primary/10 border border-primary/20 text-primary group-hover:scale-105 transition-transform duration-300">
+                <item.icon className="h-5 w-5 sm:h-6 sm:w-6" />
               </div>
-              <div>
-                <p className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+              <div className="space-y-1">
+                <p className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-foreground font-heading">
                   {typeof item.value === 'number' ? item.value.toLocaleString() : item.value}
                 </p>
-                <p className="text-sm font-medium text-slate-600 dark:text-muted-foreground uppercase tracking-wider">{item.label}</p>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{item.label}</p>
               </div>
             </div>
           ))}

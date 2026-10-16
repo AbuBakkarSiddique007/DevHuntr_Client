@@ -97,50 +97,50 @@ export default function CouponsManagementPage() {
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div>
-        <h1 className="text-3xl font-black tracking-tight flex items-center gap-3">
-          <Ticket className="h-8 w-8 text-blue-400" />
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight flex items-center gap-3 text-foreground">
+          <Ticket className="h-7 w-7 text-primary" />
           Discount Coupons
         </h1>
-        <p className="text-muted-foreground mt-2 text-lg">Create entirely configurable discount codes for platform monetization.</p>
+        <p className="text-muted-foreground mt-1.5 text-base">Create and manage configurable discount codes for platform monetization.</p>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
         {/* Creation Form */}
-        <div className="xl:col-span-1 border border-white/5 bg-white/2 rounded-[2rem] p-6 h-fit backdrop-blur-xl">
-          <h3 className="font-bold text-lg mb-6 flex items-center gap-2">
-            <Plus className="h-5 w-5 text-blue-400" /> Generate New Coupon
+        <div className="xl:col-span-1 border border-border bg-card rounded-2xl p-6 h-fit shadow-xs">
+          <h3 className="font-semibold text-lg mb-5 flex items-center gap-2 text-foreground">
+            <Plus className="h-5 w-5 text-primary" /> Generate New Coupon
           </h3>
 
-          <form onSubmit={handleCreate} className="space-y-5">
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest ml-1">Coupon Code</label>
+          <form onSubmit={handleCreate} className="space-y-4">
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider ml-0.5">Coupon Code</label>
               <Input
                 placeholder="e.g. LAUNCH100"
                 value={formData.code}
                 onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
                 pattern="[A-Za-z0-9\-_]+"
                 title="Letters, numbers, underscores and hyphens only"
-                className="h-12 bg-white/5 border-white/10 rounded-xl px-4 font-mono uppercase text-sm"
+                className="h-11 bg-muted/40 border-border rounded-xl px-4 font-mono uppercase text-sm"
                 required
               />
             </div>
 
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest ml-1">Description</label>
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider ml-0.5">Description</label>
               <Input
                 placeholder="e.g. 50% Off First Product"
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="h-12 bg-white/5 border-white/10 rounded-xl px-4 text-sm"
+                className="h-11 bg-muted/40 border-border rounded-xl px-4 text-sm"
                 required
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest ml-1">Discount %</label>
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider ml-0.5">Discount %</label>
                 <div className="relative">
                   <Input
                     type="number"
@@ -149,21 +149,21 @@ export default function CouponsManagementPage() {
                     placeholder="25"
                     value={formData.discountPercentage}
                     onChange={(e) => setFormData({ ...formData, discountPercentage: e.target.value })}
-                    className="h-12 bg-white/5 border-white/10 rounded-xl px-4 pl-8"
+                    className="h-11 bg-muted/40 border-border rounded-xl px-4 pl-8 text-sm"
                     required
                   />
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-bold">%</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-semibold text-sm">%</span>
                 </div>
               </div>
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest ml-1">Valid For (Days)</label>
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider ml-0.5">Valid For (Days)</label>
                 <Input
                   type="number"
                   min="1"
                   placeholder="30"
                   value={formData.expiryDays}
                   onChange={(e) => setFormData({ ...formData, expiryDays: e.target.value })}
-                  className="h-12 bg-white/5 border-white/10 rounded-xl px-4 text-center"
+                  className="h-11 bg-muted/40 border-border rounded-xl px-4 text-center text-sm"
                   required
                 />
               </div>
@@ -172,7 +172,7 @@ export default function CouponsManagementPage() {
             <Button
               type="submit"
               disabled={isCreating}
-              className="w-full h-12 rounded-xl bg-blue-600 hover:bg-blue-700 font-bold mt-4 shadow-lg shadow-blue-500/20"
+              className="w-full h-11 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold mt-3 shadow-xs"
             >
               {isCreating ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Ticket className="h-4 w-4 mr-2" />}
               Activate Promotion
@@ -181,49 +181,59 @@ export default function CouponsManagementPage() {
         </div>
 
         {/* Live List */}
-        <div className="xl:col-span-2 border border-white/5 bg-white/2 rounded-[2rem] p-0 overflow-hidden backdrop-blur-xl flex flex-col min-h-[500px]">
-          <div className="p-6 border-b border-white/5">
-            <h3 className="font-bold text-lg flex items-center gap-2">
-              Active Promotional List <span className="text-xs px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">{coupons.length}</span>
+        <div className="xl:col-span-2 border border-border bg-card rounded-2xl p-0 overflow-hidden shadow-xs flex flex-col min-h-[500px]">
+          <div className="p-5 sm:p-6 border-b border-border flex items-center justify-between">
+            <h3 className="font-semibold text-lg flex items-center gap-2 text-foreground">
+              Active Promotional List
             </h3>
+            <span className="text-xs px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-semibold">
+              {coupons.length} {coupons.length === 1 ? 'campaign' : 'campaigns'}
+            </span>
           </div>
 
-          <div className="flex-1 p-6 overflow-y-auto">
+          <div className="flex-1 p-5 sm:p-6 overflow-y-auto">
             {loading ? (
               <div className="flex h-full items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
               </div>
             ) : coupons.length === 0 ? (
-              <div className="flex flex-col h-full items-center justify-center text-center opacity-60">
-                <CheckCircle2 className="h-12 w-12 text-muted-foreground mb-4" />
-                <p className="font-bold text-lg">No active campaigns</p>
-                <p className="text-sm">Create a coupon code from the panel to get started.</p>
+              <div className="flex flex-col h-full items-center justify-center text-center p-8">
+                <CheckCircle2 className="h-12 w-12 text-muted-foreground/40 mb-3" />
+                <p className="font-semibold text-base text-foreground">No active campaigns</p>
+                <p className="text-sm text-muted-foreground mt-1">Create a coupon code from the panel to get started.</p>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {coupons.map((coupon) => {
                   const isExpired = new Date(coupon.expiryDate) < new Date();
                   return (
                     <div
                       key={coupon.id}
-                      className={`p-4 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all ${isExpired ? 'bg-white/5 border-white/5 opacity-50' : 'bg-blue-500/5 border-blue-500/20 hover:bg-blue-500/10'}`}
+                      className={`p-4 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all ${
+                        isExpired 
+                          ? 'bg-muted/40 border-border opacity-60' 
+                          : 'bg-card border-border hover:border-primary/40 hover:shadow-xs'
+                      }`}
                     >
                       <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className={`px-2 py-0.5 rounded textxs font-black uppercase tracking-widest ${isExpired ? 'bg-white/10 text-white/50' : 'bg-blue-500 text-white'}`}>
+                        <div className="flex items-center gap-2 mb-1.5">
+                          <span className={`px-2.5 py-0.5 rounded-lg text-xs font-semibold uppercase tracking-wider font-mono ${
+                            isExpired ? 'bg-muted text-muted-foreground' : 'bg-primary text-primary-foreground'
+                          }`}>
                             {coupon.code}
                           </span>
-                          <span className="text-sm font-bold ml-2">-{coupon.discountPercentage}% OFF</span>
+                          <span className="text-sm font-semibold ml-1 text-foreground">-{coupon.discountPercentage}% OFF</span>
                         </div>
                         <p className="text-xs text-muted-foreground">{coupon.description}</p>
-                        <p className="text-[10px] mt-2 font-mono text-muted-foreground">Expires: {new Date(coupon.expiryDate).toLocaleDateString()}</p>
+                        <p className="text-xs mt-1.5 font-mono text-muted-foreground">Expires: {new Date(coupon.expiryDate).toLocaleDateString()}</p>
                       </div>
                       <Button
                         onClick={() => setCouponToDelete(coupon)}
                         disabled={deletingId === coupon.id}
                         variant="ghost"
                         size="sm"
-                        className="h-10 w-10 p-0 text-red-400 hover:text-red-300 hover:bg-red-500/10 shrink-0"
+                        aria-label={`Delete coupon ${coupon.code}`}
+                        className="h-9 w-9 p-0 text-destructive hover:text-destructive hover:bg-destructive/10 shrink-0 rounded-lg"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -238,41 +248,42 @@ export default function CouponsManagementPage() {
 
       {/* DELETE CONFIRMATION MODAL */}
       {couponToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
-          <div className="w-full max-w-sm bg-[#0d1117] border border-white/10 rounded-[2rem] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+        <div className="fixed inset-0 z-modal flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="w-full max-w-sm bg-card border border-border rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 relative">
             <div className="p-6 text-center space-y-4">
-              <div className="mx-auto w-16 h-16 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-2">
-                <AlertTriangle className="h-8 w-8 text-red-500" />
+              <div className="mx-auto w-12 h-12 rounded-xl bg-destructive/10 border border-destructive/20 flex items-center justify-center">
+                <AlertTriangle className="h-6 w-6 text-destructive" />
               </div>
               <div>
-                <h3 className="text-xl font-bold">Delete Coupon?</h3>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Are you sure you want to delete <span className="text-red-400 font-mono font-bold">{couponToDelete.code}</span>? This action cannot be undone.
+                <h3 className="text-lg font-semibold text-foreground">Delete Coupon?</h3>
+                <p className="text-sm text-muted-foreground mt-1.5">
+                  Are you sure you want to delete <span className="text-destructive font-mono font-semibold">{couponToDelete.code}</span>? This action cannot be undone.
                 </p>
               </div>
               <div className="flex gap-3 pt-2">
                 <Button
                   variant="outline"
-                  className="flex-1 rounded-xl border-white/10"
+                  className="flex-1 rounded-xl border-border"
                   onClick={() => setCouponToDelete(null)}
                   disabled={!!deletingId}
                 >
                   Cancel
                 </Button>
                 <Button
-                  className="flex-1 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold"
+                  className="flex-1 rounded-xl bg-destructive hover:bg-destructive/90 text-destructive-foreground font-semibold"
                   onClick={handleDelete}
                   disabled={!!deletingId}
                 >
-                  {deletingId ? <Loader2 className="h-4 w-4 animate-spin" /> : "Delete Now"}
+                  {deletingId ? <Loader2 className="h-4 w-4 animate-spin" /> : "Delete"}
                 </Button>
               </div>
             </div>
             <button
               onClick={() => setCouponToDelete(null)}
-              className="absolute top-4 right-4 text-muted-foreground hover:text-white transition-colors"
+              aria-label="Close modal"
+              className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors p-1 rounded-lg"
             >
-              <X className="h-5 w-5" />
+              <X className="h-4 w-4" />
             </button>
           </div>
         </div>

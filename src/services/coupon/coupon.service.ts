@@ -1,3 +1,5 @@
+import { safeFetch } from "@/lib/api.utils";
+
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://devhuntrserver.onrender.com/api/v1";
 
 export interface Coupon {
@@ -12,22 +14,18 @@ export type CreateCouponInput = Omit<Coupon, 'id'>;
 
 export const CouponService = {
   getCoupons: async (): Promise<Coupon[]> => {
-    const res = await fetch(`${API_BASE}/coupons`, {
-      method: "GET",
-      credentials: "include",
-    });
-
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => ({}));
-      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
-    }
-
-    const result = await res.json();
-    return result.data || result;
+    return safeFetch<Coupon[]>(
+      `${API_BASE}/coupons`,
+      {
+        method: "GET",
+        credentials: "include",
+      },
+      []
+    );
   },
 
   createCoupon: async (payload: CreateCouponInput): Promise<Coupon> => {
-    const res = await fetch(`${API_BASE}/coupons`, {
+    return safeFetch<Coupon>(`${API_BASE}/coupons`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -35,25 +33,12 @@ export const CouponService = {
       body: JSON.stringify(payload),
       credentials: "include",
     });
-
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => ({}));
-      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
-    }
-
-    const result = await res.json();
-    return result.data || result;
   },
 
   deleteCoupon: async (id: string): Promise<void> => {
-    const res = await fetch(`${API_BASE}/coupons/${id}`, {
+    await safeFetch(`${API_BASE}/coupons/${id}`, {
       method: "DELETE",
       credentials: "include",
     });
-
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => ({}));
-      throw new Error(errorData.error || errorData.message || `HTTP ${res.status}`);
-    }
   },
 };

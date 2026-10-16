@@ -2,23 +2,24 @@
 
 import { useEffect, useState, useCallback } from "react";
 import {
-   Users,
-   Package,
-   MessageSquare,
-   ThumbsUp,
-   Zap,
-   Loader2,
-   Activity,
-   Star,
-   AlertCircle,
-   CheckCircle,
-   XCircle,
-   RefreshCw,
-   Info
+  Users,
+  Package,
+  MessageSquare,
+  ThumbsUp,
+  Loader2,
+  Activity,
+  Star,
+  AlertCircle,
+  CheckCircle,
+  XCircle,
+  RefreshCw,
+  Info,
+  ShieldAlert
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { StatisticsService } from "@/services/statistics/statistics.service";
+import Link from "next/link";
 
 type PublicStats = {
   totalUsers?: number;
@@ -38,98 +39,99 @@ type AdminStats = {
 };
 
 export function AdminDashboardContent() {
-   const [publicStats, setPublicStats] = useState<PublicStats | null>(null);
-   const [adminStats, setAdminStats] = useState<AdminStats | null>(null);
-   const [loading, setLoading] = useState(true);
-   const [refreshKey, setRefreshKey] = useState(0);
+  const [publicStats, setPublicStats] = useState<PublicStats | null>(null);
+  const [adminStats, setAdminStats] = useState<AdminStats | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0);
 
-   const fetchAllStats = useCallback(async () => {
-      setLoading(true);
-      try {
-         const [publicData, adminData] = await Promise.all([
-            StatisticsService.getStatistics(),
-            StatisticsService.getAdminStatistics(),
-         ]);
+  const fetchAllStats = useCallback(async () => {
+    setLoading(true);
+    try {
+      const [publicData, adminData] = await Promise.all([
+        StatisticsService.getStatistics(),
+        StatisticsService.getAdminStatistics(),
+      ]);
 
-         setPublicStats(publicData);
-         setAdminStats(adminData as AdminStats);
+      setPublicStats(publicData);
+      setAdminStats(adminData as AdminStats);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to load dashboard statistics");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-      } catch (err) {
-         console.error(err);
-         toast.error("Failed to load dashboard statistics");
-      } finally {
-         setLoading(false);
-      }
-   }, []);
+  useEffect(() => {
+    fetchAllStats();
+  }, [fetchAllStats, refreshKey]);
 
-   useEffect(() => {
-      fetchAllStats();
-   }, [fetchAllStats, refreshKey]);
+  const primaryCards = [
+    { title: "Total Users", value: publicStats?.totalUsers, Icon: Users, color: "text-blue-500" },
+    { title: "Total Products", value: publicStats?.totalProducts, Icon: Package, color: "text-primary" },
+    { title: "Engagement (Votes)", value: publicStats?.totalVotes, Icon: ThumbsUp, color: "text-emerald-500" },
+    { title: "Discussions", value: publicStats?.totalComments, Icon: MessageSquare, color: "text-pink-500" },
+  ];
 
-   const primaryCards = [
-      { title: "Total Users", value: publicStats?.totalUsers, Icon: Users, color: "text-blue-400", glow: "group-hover:bg-blue-500/10" },
-      { title: "Total Products", value: publicStats?.totalProducts, Icon: Package, color: "text-purple-400", glow: "group-hover:bg-purple-500/10" },
-      { title: "Engagement (Votes)", value: publicStats?.totalVotes, Icon: ThumbsUp, color: "text-green-400", glow: "group-hover:bg-green-500/10" },
-      { title: "Discussions", value: publicStats?.totalComments, Icon: MessageSquare, color: "text-pink-400", glow: "group-hover:bg-pink-500/10" },
-   ];
+  const secondaryCards = [
+    { title: "Featured Products", value: adminStats?.featuredProducts, Icon: Star, color: "text-amber-500" },
+    { title: "Pending Reviews", value: adminStats?.products?.pending, Icon: AlertCircle, color: "text-orange-500" },
+    { title: "Accepted Products", value: adminStats?.products?.accepted, Icon: CheckCircle, color: "text-emerald-500" },
+    { title: "Rejected Products", value: adminStats?.products?.rejected, Icon: XCircle, color: "text-rose-500" },
+    { title: "Total Reports", value: adminStats?.totalReports, Icon: Activity, color: "text-destructive" },
+  ];
 
-   const secondaryCards = [
-      { title: "Featured Products", value: adminStats?.featuredProducts, Icon: Star, color: "text-yellow-400", border: "border-l-yellow-500/50" },
-      { title: "Pending Reviews", value: adminStats?.products?.pending, Icon: AlertCircle, color: "text-orange-400", border: "border-l-orange-500/50" },
-      { title: "Accepted Products", value: adminStats?.products?.accepted, Icon: CheckCircle, color: "text-green-400", border: "border-l-green-500/50" },
-      { title: "Rejected Products", value: adminStats?.products?.rejected, Icon: XCircle, color: "text-red-400", border: "border-l-red-500/50" },
-      { title: "Total Reports", value: adminStats?.totalReports, Icon: Activity, color: "text-red-500", border: "border-l-red-600/50" },
-   ];
+  if (loading) {
+    return (
+      <div className="flex h-[60vh] items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
-   if (loading) {
-      return (
-         <div className="flex h-[80vh] items-center justify-center">
-            <Loader2 className="h-10 w-10 animate-spin text-purple-500" />
-         </div>
-      );
-   }
+  const hasData = publicStats || adminStats;
 
-   const hasData = publicStats || adminStats;
-
-   return (
-    <div className="space-y-16 max-w-7xl mx-auto animate-in fade-in duration-700">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+  return (
+    <div className="space-y-10 animate-in fade-in duration-300">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter text-slate-900 dark:text-white leading-tight flex items-center gap-4">
-            <Zap className="h-10 w-10 text-yellow-500 fill-yellow-500/20" />
-            Nexus Core
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground flex items-center gap-2.5">
+            <ShieldAlert className="h-7 w-7 text-primary" />
+            Admin Overview
           </h1>
-          <p className="text-slate-500 dark:text-muted-foreground mt-2 text-lg md:text-xl">Unified platform intelligence and governance.</p>
+          <p className="text-muted-foreground text-sm mt-1">Platform analytics, user moderation, and system telemetry.</p>
         </div>
-        <Button
-          variant="outline"
-          className="rounded-2xl border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 h-14 px-6 flex items-center gap-3 font-black uppercase tracking-widest text-[10px] hover:bg-slate-50 dark:hover:bg-white/10 transition-all shadow-sm"
-          onClick={() => setRefreshKey(k => k + 1)}
-          disabled={loading}
-        >
-          <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} /> Sync Intelligence
-        </Button>
+        <div className="flex items-center gap-2">
+          <Link href="/admin-dashboard/users">
+            <Button variant="outline" size="sm" className="rounded-xl h-9 text-xs">
+              Manage Users
+            </Button>
+          </Link>
+          <Button
+            size="sm"
+            className="rounded-xl h-9 text-xs font-semibold gap-2"
+            onClick={() => setRefreshKey(k => k + 1)}
+            disabled={loading}
+          >
+            <RefreshCw className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} /> Refresh
+          </Button>
+        </div>
       </div>
 
       {hasData ? (
         <>
-          {/* Primary Stats */}
-          <div className="space-y-8">
-            <div className="flex items-center gap-4">
-              <div className="h-px flex-1 bg-linear-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent"></div>
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 dark:text-muted-foreground/60">Platform Equilibrium</p>
-              <div className="h-px flex-1 bg-linear-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent"></div>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="space-y-3">
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Platform Metrics</h2>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
               {primaryCards.map((stat) => (
-                <div key={stat.title} className="p-8 rounded-[2.5rem] border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900/40 backdrop-blur-xl hover:border-purple-200 dark:hover:border-purple-500/30 transition-all group relative overflow-hidden shadow-sm dark:shadow-none">
-                  <div className={`absolute top-0 right-0 -z-10 h-32 w-32 rounded-full bg-slate-100 dark:bg-white/5 blur-3xl ${stat.glow} transition-colors`} />
-                  <div className={`p-4 w-fit rounded-2xl bg-slate-50 dark:bg-white/5 ${stat.glow} transition-colors mb-6 border border-slate-100 dark:border-white/10`}>
-                    <stat.Icon className={`h-6 w-6 ${stat.color}`} />
+                <div key={stat.title} className="p-5 sm:p-6 rounded-2xl border border-border bg-card shadow-xs flex flex-col justify-between">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{stat.title}</span>
+                    <div className="p-2 rounded-xl bg-muted text-foreground">
+                      <stat.Icon className={`h-4 w-4 ${stat.color}`} />
+                    </div>
                   </div>
-                  <h3 className="text-[10px] font-black text-slate-400 dark:text-muted-foreground uppercase tracking-[0.2em] mb-2 leading-none">{stat.title}</h3>
-                  <p className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+                  <p className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
                     {typeof stat.value === "number" ? stat.value.toLocaleString() : "—"}
                   </p>
                 </div>
@@ -137,24 +139,16 @@ export function AdminDashboardContent() {
             </div>
           </div>
 
-          {/* Secondary Stats */}
-          <div className="space-y-8">
-             <div className="flex items-center gap-4">
-              <div className="h-px flex-1 bg-linear-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent"></div>
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 dark:text-muted-foreground/60">Governance Matrix</p>
-              <div className="h-px flex-1 bg-linear-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent"></div>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+          <div className="space-y-3">
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Product & Moderation Status</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
               {secondaryCards.map((stat) => (
-                <div key={stat.title} className={`p-6 rounded-[2rem] border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900/40 backdrop-blur-xl border-l-[6px] ${stat.border} hover:bg-slate-50 dark:hover:bg-white/5 transition-all shadow-sm dark:shadow-none group relative overflow-hidden`}>
-                   <div className="absolute top-0 right-0 -z-10 h-16 w-16 rounded-full bg-slate-100/50 dark:bg-white/2 blur-2xl group-hover:bg-slate-200/50 dark:group-hover:bg-white/5 transition-colors" />
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10">
-                      <stat.Icon className={`h-4 w-4 ${stat.color}`} />
-                    </div>
-                    <h3 className="text-[10px] font-black text-slate-400 dark:text-muted-foreground uppercase tracking-widest">{stat.title}</h3>
+                <div key={stat.title} className="p-4 rounded-xl border border-border bg-card shadow-xs flex flex-col justify-between">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider truncate">{stat.title}</span>
+                    <stat.Icon className={`h-3.5 w-3.5 ${stat.color} shrink-0`} />
                   </div>
-                  <p className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+                  <p className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
                     {typeof stat.value === "number" ? stat.value.toLocaleString() : "—"}
                   </p>
                 </div>
@@ -163,15 +157,13 @@ export function AdminDashboardContent() {
           </div>
         </>
       ) : (
-        <div className="rounded-[2.5rem] border-2 border-dashed border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-white/2 p-20 text-center animate-in zoom-in-95 duration-500">
-           <div className="h-20 w-20 rounded-[2rem] bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center mx-auto mb-6">
-              <Info className="h-10 w-10 text-slate-300 dark:text-muted-foreground/20" />
-           </div>
-           <p className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">Signal Lost</p>
-           <p className="text-sm text-slate-500 dark:text-muted-foreground mt-2">Statistics are currently offline or access is restricted.</p>
-           <Button className="mt-8 rounded-xl h-12 px-6 font-black uppercase tracking-widest bg-slate-900 dark:bg-white/10 text-white" onClick={() => setRefreshKey(k => k + 1)}>
-              Reconnect
-           </Button>
+        <div className="rounded-2xl border border-dashed border-border bg-card p-12 text-center">
+          <Info className="h-10 w-10 text-muted-foreground/30 mx-auto mb-3" />
+          <p className="text-lg font-bold text-foreground">No telemetry available</p>
+          <p className="text-xs text-muted-foreground mt-1">Platform metrics could not be fetched. Check database connection.</p>
+          <Button size="sm" className="mt-4 rounded-xl" onClick={() => setRefreshKey(k => k + 1)}>
+            Retry Sync
+          </Button>
         </div>
       )}
     </div>

@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { AIService, AISuggestion } from "@/services/ai/ai.service";
 import { Sparkles, ArrowUpRight } from "lucide-react";
-import Link from "next/link";
 
 export default function RecommendedProducts() {
   const [recommendations, setRecommendations] = useState<AISuggestion[]>([]);
@@ -11,9 +10,14 @@ export default function RecommendedProducts() {
 
   useEffect(() => {
     const fetchRecs = async () => {
-      const data = await AIService.getRecommendations();
-      setRecommendations(data);
-      setIsLoading(false);
+      try {
+        const data = await AIService.getRecommendations();
+        setRecommendations(data || []);
+      } catch (err) {
+        console.error("Failed to load AI recommendations", err);
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchRecs();
   }, []);
@@ -25,45 +29,44 @@ export default function RecommendedProducts() {
       <div className="flex items-center justify-between mb-8">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-purple-500 animate-pulse" />
-            <span className="text-xs font-black uppercase tracking-[0.2em] text-purple-600 dark:text-purple-400">AI Personalized</span>
+            <Sparkles className="h-4 w-4 text-primary" />
+            <span className="text-xs font-semibold uppercase tracking-wider text-primary">
+              AI Personalized
+            </span>
           </div>
-          <h2 className="text-3xl font-black tracking-tighter">Recommended For You</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+            Recommended For You
+          </h2>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {isLoading ? (
           Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="h-64 rounded-[2.5rem] bg-slate-100 dark:bg-white/5 animate-pulse border border-slate-200 dark:border-white/10" />
+            <div key={i} className="skeleton h-64 rounded-2xl" />
           ))
         ) : (
           recommendations.map((item, idx) => (
             <div 
               key={idx}
-              className="group relative p-8 rounded-[2.5rem] bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-white/10 hover:border-purple-500/50 transition-all duration-500 shadow-xl shadow-slate-200/50 dark:shadow-none hover:-translate-y-2 overflow-hidden"
+              className="group relative p-7 rounded-2xl bg-card border border-border hover:border-primary/40 transition-all duration-300 shadow-xs hover:shadow-md overflow-hidden flex flex-col justify-between"
             >
-              <div className="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="h-10 w-10 rounded-full bg-purple-600 text-white flex items-center justify-center shadow-lg shadow-purple-500/40">
-                  <ArrowUpRight className="h-5 w-5" />
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <span className="inline-block px-3 py-1 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 text-[10px] font-black uppercase tracking-widest border border-purple-500/20">
+              <div className="space-y-3">
+                <span className="inline-block px-2.5 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider border border-primary/20">
                   {item.category}
                 </span>
-                <h3 className="text-xl font-bold leading-tight group-hover:text-purple-600 transition-colors uppercase tracking-tight">
+                <h3 className="text-lg font-bold leading-snug group-hover:text-primary transition-colors text-foreground">
                   {item.title}
                 </h3>
-                <p className="text-sm text-slate-500 dark:text-muted-foreground leading-relaxed line-clamp-3">
+                <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
                   {item.description}
                 </p>
               </div>
 
-              <div className="mt-8 pt-6 border-t border-slate-100 dark:border-white/5 flex items-center justify-between">
-                <span className="text-[10px] font-bold text-slate-400 dark:text-muted-foreground/50 uppercase tracking-widest">Powered by Gemini</span>
-                <Link href="/products" className="text-xs font-black text-purple-600 hover:underline">Explore More</Link>
+              <div className="pt-5 mt-4 border-t border-border flex items-center justify-between text-xs font-semibold text-primary">
+                <span className="group-hover:translate-x-1 transition-transform flex items-center gap-1.5">
+                  Explore match <ArrowUpRight className="h-3.5 w-3.5" />
+                </span>
               </div>
             </div>
           ))

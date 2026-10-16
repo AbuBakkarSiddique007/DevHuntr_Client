@@ -61,10 +61,8 @@ export function RegisterForm() {
       });
 
       toast.success("Account created successfully!");
-      toast.success("Registration successful!");
       await checkSession();
       router.push("/user-dashboard");
-
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Registration failed. Try again.");
     } finally {
@@ -74,20 +72,20 @@ export function RegisterForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
 
         {/* Name Fields */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3">
           <FormField
             control={form.control}
             name="firstName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="font-semibold text-foreground/80">First Name</FormLabel>
+                <FormLabel className="text-xs">First Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="First Name" className="h-12 bg-background/50 border-input rounded-xl focus-visible:ring-primary" {...field} />
+                  <Input placeholder="Alex" className="h-10 text-sm" {...field} />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-xs" />
               </FormItem>
             )}
           />
@@ -96,11 +94,11 @@ export function RegisterForm() {
             name="lastName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="font-semibold text-foreground/80">Last Name</FormLabel>
+                <FormLabel className="text-xs">Last Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Last Name" className="h-12 bg-background/50 border-input rounded-xl focus-visible:ring-primary" {...field} />
+                  <Input placeholder="Rivera" className="h-10 text-sm" {...field} />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-xs" />
               </FormItem>
             )}
           />
@@ -112,11 +110,11 @@ export function RegisterForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="font-semibold text-foreground/80">Email Address</FormLabel>
-                <FormControl>
-                  <Input type="email" placeholder="name@email.com" className="h-12 bg-background/50 border-input rounded-xl focus-visible:ring-primary" {...field} />
-                </FormControl>
-              <FormMessage />
+              <FormLabel className="text-xs">Email Address</FormLabel>
+              <FormControl>
+                <Input type="email" placeholder="alex@example.com" className="h-10 text-sm" {...field} />
+              </FormControl>
+              <FormMessage className="text-xs" />
             </FormItem>
           )}
         />
@@ -127,29 +125,30 @@ export function RegisterForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="font-semibold text-foreground/80">Password</FormLabel>
+              <FormLabel className="text-xs">Password</FormLabel>
               <FormControl>
                 <div className="relative">
                   <Input
                     type={showPassword ? "text" : "password"}
                     placeholder="••••••••"
-                    className="h-12 bg-background/50 border-input rounded-xl focus-visible:ring-primary pr-12"
+                    className="h-10 pr-10 text-sm"
                     {...field}
                   />
                   <button
                     type="button"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-white/10 rounded-full transition-colors"
+                    className="absolute right-2.5 top-1/2 transform -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {showPassword ? (
-                      <EyeOff className="w-5 h-5 text-muted-foreground" />
+                      <EyeOff className="w-4 h-4" />
                     ) : (
-                      <Eye className="w-5 h-5 text-muted-foreground" />
+                      <Eye className="w-4 h-4" />
                     )}
                   </button>
                 </div>
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-xs" />
             </FormItem>
           )}
         />
@@ -159,29 +158,37 @@ export function RegisterForm() {
           control={form.control}
           name="agreeToTerms"
           render={({ field }) => (
-            <FormItem className="flex flex-row items-center space-x-3 space-y-0 p-1">
+            <FormItem className="flex flex-row items-center gap-2 space-y-0 pt-1">
               <FormControl>
                 <input
                   type="checkbox"
+                  id="agreeToTerms"
                   checked={field.value}
                   onChange={field.onChange}
-                  className="w-4 h-4 text-primary rounded focus:ring-primary"
+                  className="w-4 h-4 text-primary rounded border-border accent-primary cursor-pointer"
                 />
               </FormControl>
-              <div className="space-y-1 leading-none">
-                <FormLabel className="text-sm font-normal text-muted-foreground">
-                  I agree to the{" "}
-                  <Link href="#" className="text-primary font-medium hover:underline">
-                    Terms & Conditions
-                  </Link>
-                </FormLabel>
-              </div>
+              <FormLabel htmlFor="agreeToTerms" className="text-xs font-normal text-muted-foreground cursor-pointer">
+                I agree to the{" "}
+                <Link href="/terms" className="text-primary font-medium hover:underline">
+                  Terms of Service
+                </Link>{" "}
+                and{" "}
+                <Link href="/privacy" className="text-primary font-medium hover:underline">
+                  Privacy Policy
+                </Link>
+              </FormLabel>
+              <FormMessage className="text-xs" />
             </FormItem>
           )}
         />
 
         {/* Submit Button */}
-        <Button type="submit" disabled={loading} className="w-full h-12 text-md font-semibold rounded-xl bg-primary text-primary-foreground hover:opacity-90 transition-all shadow-lg hover:shadow-primary/20">
+        <Button
+          type="submit"
+          disabled={loading}
+          className="w-full h-10 text-sm font-semibold rounded-xl bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
+        >
           {loading ? "Creating Account..." : "Create Account"}
         </Button>
       </form>

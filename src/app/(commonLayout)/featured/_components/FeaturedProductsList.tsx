@@ -35,15 +35,18 @@ export function FeaturedProductsList() {
   }, [page]);
 
   return (
-    <div className="container mx-auto px-4 py-20 md:py-32 min-h-[calc(100vh-100px)]">
+    <div className="container mx-auto px-4 py-16 md:py-24 min-h-[calc(100vh-100px)]">
 
       {/* Header */}
-      <div className="flex flex-col items-center text-center mb-20 px-4">
-        <h1 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter mb-6 text-slate-900 dark:text-white">
+      <div className="flex flex-col items-center text-center mb-14 px-4">
+        <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 text-xs font-semibold uppercase tracking-wider mb-4">
+          <Star className="h-3.5 w-3.5 fill-current" /> Curated Community Showcase
+        </div>
+        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-4 text-foreground">
           Featured Excellence
         </h1>
-        <p className="text-slate-500 dark:text-muted-foreground text-lg md:text-xl max-w-3xl">
-          Discover handpicked, top-tier products recognized by the community for their outstanding impact and innovation.
+        <p className="text-muted-foreground text-base sm:text-lg max-w-2xl leading-relaxed">
+          Discover handpicked, top-tier products recognized for their outstanding impact, innovation, and craftsmanship.
         </p>
       </div>
 
@@ -51,7 +54,7 @@ export function FeaturedProductsList() {
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-            <div key={i} className="animate-pulse rounded-[2rem] glass h-[320px]" />
+            <div key={i} className="skeleton h-[320px] rounded-2xl" />
           ))}
         </div>
       ) : products.length > 0 ? (
@@ -62,25 +65,26 @@ export function FeaturedProductsList() {
             ))}
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-2 mt-16">
+          <div className="flex flex-wrap items-center justify-center gap-2 mt-14">
             <Button
               variant="outline"
-              className="rounded-full h-10 px-4 disabled:opacity-50 bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-600 dark:text-muted-foreground hover:bg-slate-50 dark:hover:bg-white/10 transition-colors"
+              className="rounded-full bg-card border-border h-9 px-3.5 text-xs text-foreground hover:bg-muted disabled:opacity-50"
               onClick={() => setPage(p => Math.max(1, p - 1))}
               disabled={page <= 1}
             >
-              <ChevronLeft className="mr-1 h-4 w-4" /> Previous
+              <ChevronLeft className="mr-1 h-3.5 w-3.5" /> Previous
             </Button>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
                 <Button
                   key={pageNum}
                   variant={page === pageNum ? "default" : "outline"}
-                  className={`h-10 w-10 rounded-full transition-all border-none ${page === pageNum
-                    ? "bg-purple-600 text-white shadow-lg shadow-purple-500/20 scale-110 font-bold"
-                    : "text-slate-600 dark:text-muted-foreground hover:bg-slate-200 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white"
-                    }`}
+                  className={`h-8 w-8 rounded-full text-xs font-semibold transition-colors ${
+                    page === pageNum
+                      ? "bg-primary text-primary-foreground shadow-xs"
+                      : "border-border bg-card text-foreground hover:bg-muted"
+                  }`}
                   onClick={() => setPage(pageNum)}
                 >
                   {pageNum}
@@ -90,19 +94,21 @@ export function FeaturedProductsList() {
 
             <Button
               variant="outline"
-              className="rounded-full h-10 px-4 disabled:opacity-50 bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-600 dark:text-muted-foreground hover:bg-slate-50 dark:hover:bg-white/10 transition-colors"
+              className="rounded-full bg-card border-border h-9 px-3.5 text-xs text-foreground hover:bg-muted disabled:opacity-50"
               onClick={() => setPage(p => Math.min(totalPages, p + 1))}
               disabled={page >= totalPages}
             >
-              Next <ChevronRight className="ml-1 h-4 w-4" />
+              Next <ChevronRight className="ml-1 h-3.5 w-3.5" />
             </Button>
           </div>
         </>
       ) : (
-        <div className="flex flex-col items-center justify-center py-20 text-center glass rounded-3xl mt-8 border-yellow-500/10">
-          <Star className="h-16 w-16 text-yellow-500/30 mb-4" />
-          <h2 className="text-2xl font-bold mb-2">No featured products yet</h2>
-          <p className="text-muted-foreground">Check back later for curated community picks.</p>
+        <div className="flex flex-col items-center justify-center py-20 text-center rounded-2xl bg-card border border-border p-8">
+          <Star className="h-14 w-14 text-amber-500/40 mb-3" />
+          <h2 className="text-xl font-bold mb-1 text-foreground">No featured products yet</h2>
+          <p className="text-muted-foreground text-sm max-w-sm">
+            Check back later for curated community picks or launch your own product.
+          </p>
         </div>
       )}
     </div>

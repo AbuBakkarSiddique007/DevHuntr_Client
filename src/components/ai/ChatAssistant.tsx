@@ -36,7 +36,14 @@ export default function ChatAssistant() {
     try {
       const res = await AIService.sendMessage(userMsg, messages.slice(1));
 
-      if (!res.ok) throw new Error("Connection failed");
+      if (!res.ok) {
+        let errDetail = "Connection failed";
+        try {
+          const errJson = await res.json();
+          errDetail = errJson.details || errJson.error || errDetail;
+        } catch {}
+        throw new Error(errDetail);
+      }
 
       const reader = res.body?.getReader();
       const decoder = new TextDecoder();
@@ -68,41 +75,42 @@ export default function ChatAssistant() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-[999] flex flex-col items-end gap-4">
-      {/* CHAT WINDOW */}
+    <div 
+      className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[9999] flex flex-col items-end gap-3 sm:gap-4 pointer-events-none"
+      style={{ zIndex: "var(--z-chat, 9999)" }}
+    >
       {isOpen && (
-        <div className="w-[380px] h-[520px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-8 duration-500 backdrop-blur-3xl">
-          {/* HEADER */}
-          <div className="p-6 bg-linear-to-r from-purple-600 to-indigo-600 text-white flex items-center justify-between">
+        <div className="w-[calc(100vw-2rem)] sm:w-[380px] max-w-[380px] h-[min(520px,calc(100dvh-7.5rem))] bg-card border border-border rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300 backdrop-blur-xl pointer-events-auto">
+          <div className="p-5 bg-primary text-primary-foreground flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center">
-                <Sparkles className="h-5 w-5" />
+              <div className="h-9 w-9 rounded-xl bg-primary-foreground/15 flex items-center justify-center">
+                <Sparkles className="h-4 w-4" />
               </div>
               <div>
-                <p className="text-sm font-black uppercase tracking-widest text-white/70">DevHuntr Guide</p>
+                <p className="text-xs font-semibold uppercase tracking-wider text-primary-foreground/80">DevHuntr Guide</p>
                 <div className="flex items-center gap-1.5">
                   <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <p className="text-xs font-bold">Online & Ready</p>
+                  <p className="text-xs font-medium">Online & Ready</p>
                 </div>
               </div>
             </div>
             <button 
               onClick={() => setIsOpen(false)}
-              className="h-8 w-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+              aria-label="Close chat assistant"
+              className="h-8 w-8 rounded-lg bg-primary-foreground/10 hover:bg-primary-foreground/20 flex items-center justify-center transition-colors text-primary-foreground"
             >
               <X className="h-4 w-4" />
             </button>
           </div>
 
-          {/* MESSAGES AREA */}
-          <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar bg-slate-50/50 dark:bg-transparent text-slate-900 dark:text-white">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto p-5 space-y-3 custom-scrollbar bg-muted/20 text-foreground">
             {messages.map((m, idx) => (
               <div key={idx} className={cn("flex w-full", m.role === "user" ? "justify-end" : "justify-start")}>
                 <div className={cn(
-                  "max-w-[80%] p-4 rounded-3xl text-sm whitespace-pre-wrap",
+                  "max-w-[85%] p-3.5 text-sm whitespace-pre-wrap leading-relaxed",
                   m.role === "user" 
-                    ? "bg-purple-600 text-white rounded-tr-none shadow-lg shadow-purple-500/10" 
-                    : "bg-white dark:bg-white/5 text-slate-700 dark:text-muted-foreground rounded-tl-none border border-slate-100 dark:border-white/5"
+                    ? "bg-primary text-primary-foreground rounded-2xl rounded-tr-xs shadow-xs" 
+                    : "bg-card text-foreground rounded-2xl rounded-tl-xs border border-border shadow-xs"
                 )}>
                   {m.text}
                 </div>
@@ -110,16 +118,15 @@ export default function ChatAssistant() {
             ))}
             {isLoading && (
               <div className="flex justify-start animate-in fade-in duration-300">
-                <div className="bg-white dark:bg-white/5 p-4 rounded-3xl rounded-tl-none border border-slate-100 dark:border-white/5 flex items-center gap-2">
-                  <Loader2 className="h-4 w-4 text-purple-500 animate-spin" />
-                  <span className="text-xs text-slate-400 font-bold uppercase tracking-widest">Thinking...</span>
+                <div className="bg-card p-3 rounded-2xl rounded-tl-xs border border-border flex items-center gap-2 shadow-xs">
+                  <Loader2 className="h-4 w-4 text-primary animate-spin" />
+                  <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Thinking...</span>
                 </div>
               </div>
             )}
           </div>
 
-          {/* INPUT AREA */}
-          <div className="p-6 bg-white dark:bg-slate-950/50 border-t border-slate-100 dark:border-white/5">
+          <div className="p-4 bg-card border-t border-border">
             <div className="relative group">
               <input
                 type="text"
@@ -127,12 +134,13 @@ export default function ChatAssistant() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                className="w-full h-12 pl-4 pr-12 rounded-2xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm focus:ring-2 focus:ring-purple-500/50 outline-none transition-all text-slate-900 dark:text-white"
+                className="w-full h-11 pl-4 pr-12 rounded-xl bg-muted/50 border border-border text-sm focus:ring-2 focus:ring-ring outline-hidden transition-all text-foreground placeholder:text-muted-foreground"
               />
               <button
                 onClick={handleSend}
                 disabled={!input.trim() || isLoading}
-                className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 rounded-xl bg-purple-600 text-white flex items-center justify-center shadow-lg shadow-purple-500/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
+                aria-label="Send message"
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 h-8 w-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center shadow-xs hover:bg-primary/90 active:scale-95 transition-all disabled:opacity-50"
               >
                 <Send className="h-4 w-4" />
               </button>
@@ -141,23 +149,22 @@ export default function ChatAssistant() {
         </div>
       )}
 
-      {/* FLOATING ACTION BUTTON */}
       <button 
         onClick={() => setIsOpen(!isOpen)}
+        aria-label={isOpen ? "Close AI chat assistant" : "Open AI chat assistant"}
         className={cn(
-          "h-16 w-16 rounded-[2rem] flex items-center justify-center shadow-2xl transition-all duration-500 hover:scale-110 active:scale-95 group relative overflow-hidden",
+          "h-14 w-14 rounded-2xl flex items-center justify-center shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 group relative overflow-hidden pointer-events-auto cursor-pointer",
           isOpen 
-            ? "bg-slate-900 text-white" 
-            : "bg-linear-to-tr from-purple-600 to-indigo-600 text-white"
+            ? "bg-card text-foreground border border-border" 
+            : "bg-primary text-primary-foreground"
         )}
       >
-        <div className="absolute inset-0 bg-white/10 blur-xl group-hover:bg-white/20 transition-all" />
         {isOpen ? (
-          <X className="h-7 w-7 relative z-10" />
+          <X className="h-6 w-6 relative z-10" />
         ) : (
           <div className="relative z-10 flex flex-col items-center">
-            <MessageSquare className="h-7 w-7" />
-            <div className="absolute -top-1 -right-1 h-3 w-3 bg-emerald-400 rounded-full border-2 border-white dark:border-slate-900" />
+            <MessageSquare className="h-6 w-6" />
+            <div className="absolute -top-1 -right-1 h-2.5 w-2.5 bg-emerald-400 rounded-full border-2 border-background" />
           </div>
         )}
       </button>

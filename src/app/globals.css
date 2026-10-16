@@ -46,13 +46,48 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+  --color-success: var(--color-success);
+  --color-success-foreground: var(--color-success-foreground);
+  --color-success-subtle: var(--color-success-subtle);
+  --color-success-border: var(--color-success-border);
+  --color-warning: var(--color-warning);
+  --color-warning-foreground: var(--color-warning-foreground);
+  --color-warning-subtle: var(--color-warning-subtle);
+  --color-warning-border: var(--color-warning-border);
+  --color-info: var(--color-info);
+  --color-info-foreground: var(--color-info-foreground);
+  --color-info-subtle: var(--color-info-subtle);
+  --color-info-border: var(--color-info-border);
+  --color-upvote: var(--color-upvote);
+  --color-downvote: var(--color-downvote);
+  --color-premium: var(--color-premium);
+
+  --z-dropdown: var(--z-dropdown);
+  --z-index-dropdown: var(--z-dropdown);
+  --z-sticky: var(--z-sticky);
+  --z-index-sticky: var(--z-sticky);
+  --z-header: var(--z-header);
+  --z-index-header: var(--z-header);
+  --z-sidebar: var(--z-sidebar);
+  --z-index-sidebar: var(--z-sidebar);
+  --z-modal: var(--z-modal);
+  --z-index-modal: var(--z-modal);
+  --z-toast: var(--z-toast);
+  --z-index-toast: var(--z-toast);
+  --z-chat: var(--z-chat);
+  --z-index-chat: var(--z-chat);
 }
 
+/* ============================================================
+   LIGHT THEME
+   ============================================================ */
 :root {
   --bg-gradient: none;
+
+  /* Core tokens */
   --background: #f8fafc;
   --foreground: #0f172a;
-  
   --card: #ffffff;
   --card-foreground: #0f172a;
   --popover: #ffffff;
@@ -69,24 +104,66 @@
   --border: #e2e8f0;
   --input: #e2e8f0;
   --ring: oklch(0.65 0.3 290);
+  --radius: 0.75rem;
+
+  /* Chart colors */
   --chart-1: #e11d48;
   --chart-2: #ea580c;
   --chart-3: #2563eb;
   --chart-4: #16a34a;
   --chart-5: #9333ea;
-  --radius: 0.75rem;
+
+  /* ── Semantic Status Tokens ── */
+  --color-success:            #16a34a;
+  --color-success-foreground: #ffffff;
+  --color-success-subtle:     #f0fdf4;
+  --color-success-border:     #bbf7d0;
+
+  --color-warning:            #d97706;
+  --color-warning-foreground: #ffffff;
+  --color-warning-subtle:     #fffbeb;
+  --color-warning-border:     #fde68a;
+
+  --color-info:               #2563eb;
+  --color-info-foreground:    #ffffff;
+  --color-info-subtle:        #eff6ff;
+  --color-info-border:        #bfdbfe;
+
+  /* ── Functional Color Tokens ── */
+  --color-upvote:   #16a34a;
+  --color-downvote: #ef4444;
+  --color-premium:  #d97706;
+
+  /* ── Surface Tokens ── */
+  --surface-elevated: #ffffff;
+  --surface-overlay:  rgba(0, 0, 0, 0.04);
+  --surface-recessed: #f1f5f9;
+
+  /* ── Z-Index Scale ── */
+  --z-base:    0;
+  --z-raised:  10;
+  --z-dropdown: 40;
+  --z-sticky:   50;
+  --z-header:   60;
+  --z-sidebar:  70;
+  --z-modal:    80;
+  --z-toast:    90;
+  --z-chat:     9999;
 }
 
+/* ============================================================
+   DARK THEME
+   ============================================================ */
 .dark {
-  /* Rich immersive dark mode (purplish black theme) */
   --bg-gradient: none;
+
+  /* Core tokens */
   --background: oklch(0.12 0.02 270);
   --foreground: oklch(0.98 0.01 270);
   --card: oklch(0.15 0.03 270);
   --card-foreground: oklch(0.98 0.01 270);
   --popover: oklch(0.15 0.03 270);
   --popover-foreground: oklch(0.98 0.01 270);
-  /* A brilliant glowing primary color */
   --primary: oklch(0.65 0.3 290);
   --primary-foreground: oklch(0.98 0 0);
   --secondary: oklch(0.18 0.05 270);
@@ -99,8 +176,44 @@
   --border: oklch(0.22 0.04 270);
   --input: oklch(0.22 0.04 270);
   --ring: oklch(0.65 0.3 290);
+
+  /* Chart colors (themed for dark mode) */
+  --chart-1: oklch(0.6 0.22 12);
+  --chart-2: oklch(0.65 0.2 45);
+  --chart-3: oklch(0.6 0.2 245);
+  --chart-4: oklch(0.55 0.18 150);
+  --chart-5: oklch(0.65 0.3 290);
+
+  /* ── Semantic Status Tokens ── */
+  --color-success:            oklch(0.55 0.18 150);
+  --color-success-foreground: oklch(0.98 0 0);
+  --color-success-subtle:     oklch(0.2 0.04 150);
+  --color-success-border:     oklch(0.3 0.1 150);
+
+  --color-warning:            oklch(0.7 0.18 60);
+  --color-warning-foreground: oklch(0.15 0.02 60);
+  --color-warning-subtle:     oklch(0.2 0.04 60);
+  --color-warning-border:     oklch(0.35 0.1 60);
+
+  --color-info:               oklch(0.6 0.2 245);
+  --color-info-foreground:    oklch(0.98 0 0);
+  --color-info-subtle:        oklch(0.18 0.05 245);
+  --color-info-border:        oklch(0.3 0.1 245);
+
+  /* ── Functional Color Tokens ── */
+  --color-upvote:   oklch(0.55 0.18 150);
+  --color-downvote: oklch(0.5 0.2 20);
+  --color-premium:  oklch(0.7 0.18 60);
+
+  /* ── Surface Tokens ── */
+  --surface-elevated: oklch(0.17 0.03 270);
+  --surface-overlay:  rgba(255, 255, 255, 0.04);
+  --surface-recessed: oklch(0.14 0.02 270);
 }
 
+/* ============================================================
+   BASE LAYER
+   ============================================================ */
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -118,10 +231,61 @@
   }
 }
 
-/* Glassmorphism custom classes */
+/* ============================================================
+   UTILITIES LAYER
+   ============================================================ */
+@layer utilities {
+  /* Container / wrapper */
+  .wrapper {
+    @apply mx-auto w-full max-w-screen-2xl px-4 md:px-6;
+  }
+
+  /* Skeleton loader — use instead of bg-white/5 */
+  .skeleton {
+    @apply bg-muted animate-pulse rounded-2xl;
+  }
+
+  /* Pause marquee on hover */
+  .pause-animation {
+    animation-play-state: paused;
+  }
+}
+
+/* ============================================================
+   GLASSMORPHISM
+   ============================================================ */
 .glass {
   @apply bg-white/70 border border-white/40 shadow-sm backdrop-blur-xl;
 }
 .dark .glass {
   @apply bg-black/20 border border-white/10 backdrop-blur-md;
+}
+
+/* ============================================================
+   MARQUEE ANIMATION (moved from CategoryBar JSX style tag)
+   ============================================================ */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-33.33%); }
+}
+
+.animate-marquee-slow {
+  animation: marquee 40s linear infinite;
+}
+
+/* ============================================================
+   CUSTOM SCROLLBAR
+   ============================================================ */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
 }

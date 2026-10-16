@@ -39,60 +39,61 @@ const articles = [
 
 export function BlogPreviewSection() {
   return (
-    <section className="py-24 relative z-10 bg-white dark:bg-transparent">
+    <section className="py-24 relative z-10 bg-background border-t border-border">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col items-center text-center mb-16 gap-4">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-xs font-black uppercase tracking-widest">
+        <div className="flex flex-col items-center text-center mb-14 gap-3">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold uppercase tracking-wider">
             <BookOpen className="h-3.5 w-3.5" /> DevJournal
           </div>
-          <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-slate-900 dark:text-white">
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
             Maker Insights & Guides
           </h2>
-          <p className="text-slate-500 dark:text-muted-foreground text-lg max-w-2xl">
+          <p className="text-muted-foreground text-base max-w-xl">
             Level up your building game with tutorials, success stories, and deep dives from the community.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {articles.map((article) => (
             <Link 
               key={article.id} 
               href={article.url} 
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex flex-col h-full"
+              className="group flex flex-col h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/40 shadow-xs hover:shadow-md transition-all duration-300"
             >
-              <div className="relative aspect-video rounded-[2rem] overflow-hidden mb-6 border border-slate-100 dark:border-white/10 shadow-lg">
+              <div className="relative aspect-video rounded-xl overflow-hidden mb-4 border border-border">
                 <Image
                   src={article.image}
                   alt={article.title}
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute top-4 left-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md text-slate-900 dark:text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-xl border border-white/20">
+                <div className="absolute top-3 left-3 bg-card/90 backdrop-blur-md text-foreground text-xs font-semibold uppercase tracking-wider px-2.5 py-1 rounded-lg border border-border">
                   {article.category}
                 </div>
               </div>
 
-              <div className="grow">
-                <div className="flex items-center gap-4 text-slate-500 dark:text-muted-foreground text-xs mb-3 font-semibold uppercase tracking-wider">
-                  <span className="flex items-center gap-1.5 leading-none">
+              <div className="grow flex flex-col">
+                <div className="flex items-center gap-3 text-muted-foreground text-xs mb-2.5 font-medium">
+                  <span className="flex items-center gap-1">
                     <Clock className="h-3.5 w-3.5" /> {article.readTime}
                   </span>
-                  <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-white/20" />
-                  <span className="leading-none">{article.author}</span>
+                  <span className="w-1 h-1 rounded-full bg-border" />
+                  <span>{article.author}</span>
                 </div>
-                <h3 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white mb-4 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors line-clamp-2">
+                <h3 className="text-lg font-bold tracking-tight text-foreground mb-2 group-hover:text-primary transition-colors line-clamp-2">
                   {article.title}
                 </h3>
-                <p className="text-slate-600 dark:text-muted-foreground leading-relaxed line-clamp-2">
+                <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2 grow">
                   {article.excerpt}
                 </p>
-              </div>
 
-              <div className="mt-6 pt-6 border-t border-slate-100 dark:border-white/5 flex items-center text-xs font-black uppercase tracking-widest text-purple-600 dark:text-purple-400 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
-                Read Publication <ArrowRight className="ml-2 h-3.5 w-3.5" />
+                <div className="mt-4 pt-3 border-t border-border flex items-center text-xs font-semibold text-primary">
+                  <span>Read Publication</span>
+                  <ArrowRight className="ml-1.5 h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                </div>
               </div>
             </Link>
           ))}

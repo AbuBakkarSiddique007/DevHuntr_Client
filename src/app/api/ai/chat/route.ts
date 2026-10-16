@@ -19,6 +19,12 @@ GUIDELINES:
 - DO NOT use markdown headers higher than h3.
 `;
 
+const CANDIDATE_MODELS = [
+  "qwen/qwen3.8-27b",
+  "openai/gpt-oss-120b",
+  "openai/gpt-oss-20b"
+];
+
 export async function POST(req: Request) {
   try {
     const { message, history } = await req.json();
@@ -26,9 +32,10 @@ export async function POST(req: Request) {
 
     if (!apiKey) {
       console.error("[Groq API] Missing API Key");
-      return NextResponse.json({ 
-        message: "Key missing. Please add GROQ_API_KEY to .env.local." 
-      });
+      return NextResponse.json(
+        { error: "Key missing. Please add GROQ_API_KEY to .env.local." },
+        { status: 400 }
+      );
     }
 
     // Initialize messages with the system prompt
@@ -49,59 +56,84 @@ export async function POST(req: Request) {
     // Add current user message
     messages.push({ role: "user", content: message });
 
-    const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${apiKey}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        messages,
-        temperature: 0.7,
-        max_tokens: 1024,
-        stream: true
-      })
-    });
+    let groqRes: Response | null = null;
+    let lastErrorDetails = "";
 
-    if (!groqRes.ok) {
-        throw new Error("Groq streaming request failed");
+    // Attempt candidate models with fallback
+    for (const model of CANDIDATE_MODELS) {
+      const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${apiKey}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model,
+          messages,
+          temperature: 0.7,
+          max_tokens: 1024,
+          stream: true
+        })
+      });
+
+      if (res.ok) {
+        groqRes = res;
+        break;
+      }
+
+      const errText = await res.text();
+      lastErrorDetails = `Model ${model} failed (${res.status}): ${errText}`;
+      console.warn(`[Groq API warning]: ${lastErrorDetails}`);
+    }
+
+    if (!groqRes) {
+      throw new Error(lastErrorDetails || "Groq streaming request failed on all candidate models");
     }
 
     const stream = new ReadableStream({
       async start(controller) {
-        const reader = groqRes.body?.getReader();
+        const reader = groqRes?.body?.getReader();
         const encoder = new TextEncoder();
         const decoder = new TextDecoder();
-        
+
         if (!reader) {
           controller.close();
           return;
         }
 
+        let buffer = "";
+
         try {
           while (true) {
             const { done, value } = await reader.read();
-            if (done) break;
+            if (done) {
+              controller.close();
+              break;
+            }
 
-            const chunk = decoder.decode(value);
-            const lines = chunk.split("\n").filter(line => line.trim() !== "");
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split("\n");
+            // Retain the last partial line in buffer
+            buffer = lines.pop() || "";
 
-            for (const line of lines) {
-              const messageLine = line.replace(/^data: /, "");
-              if (messageLine === "[DONE]") {
+            for (const rawLine of lines) {
+              const line = rawLine.trim();
+              if (!line || !line.startsWith("data:")) continue;
+
+              const dataStr = line.replace(/^data:\s*/, "");
+              if (dataStr === "[DONE]") {
                 controller.close();
                 return;
               }
 
               try {
-                const parsed = JSON.parse(messageLine);
-                const content = parsed.choices[0]?.delta?.content || "";
+                const parsed = JSON.parse(dataStr);
+                const content = parsed.choices?.[0]?.delta?.content || "";
                 if (content) {
                   controller.enqueue(encoder.encode(content));
                 }
               } catch {
-                // Ignore parsing errors for empty chunks intentionally
+                // Ignore partial JSON parsing errors
               }
             }
           }
